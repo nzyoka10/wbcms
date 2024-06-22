@@ -85,6 +85,15 @@ CREATE TABLE Reports (
     report_data TEXT
 );
 
+-- Tarrifs table
+CREATE TABLE TariffRates (
+    tariff_id INT PRIMARY KEY AUTO_INCREMENT,
+    tariff_name VARCHAR(100) UNIQUE NOT NULL,
+    rate_per_unit DECIMAL(10,2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 
 
 GO;

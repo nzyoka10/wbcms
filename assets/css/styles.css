@@ -1,0 +1,21 @@
+/* Custom styles */
+
+/* styles.css */
+
+/* Custom Styles for Bootstrap Overrides or Additions */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* .jumbotron {
+    margin-bottom: 0;
+} */
+
+.jumbotron-heading {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+footer p {
+    margin: 0;
+}
