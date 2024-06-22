@@ -5,7 +5,7 @@
 
 ### Features
 
-- **User Registration:** Users can create accounts to access the system.
+- **User Registration:** User create account to access the system, (``Admin``, ``Staff``).
 - **Meter Management:** Tracks water meters, their installation dates, and statuses.
 - **Billing:** Generates monthly bills for customers based on meter readings.
 - **Payment Processing:** Accepts payments via various methods like M-Pesa.
@@ -15,8 +15,8 @@
 
 ### Technologies Used
 
-- `Frontend`: HTML, CSS, JavaScript
-- `Backend`: Node.js, Express.js
-- `Database`: MySQL `or` PostgreSQL
-- `Payment Integration`: M-Pesa API
-- `SMS Gateway`: Twilio, Africa’s Talking
+- `Frontend`: **HTML**, **CSS**, **JavaScript**.
+- `Backend`: **PHP** 
+- `Database`: **MySQL**
+- `Payment Integration`: **M-Pesa API**
+- `SMS Gateway`: **Africa’s Talking**
