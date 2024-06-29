@@ -21,6 +21,7 @@ function registerUser($conn, $username, $email, $password) {
     return $stmt->execute();
 }
 
+
 // Function to verify user credentials for login
 function verifyUser($conn, $email, $password) {
     $query = "SELECT * FROM user_tbl WHERE email=?";
