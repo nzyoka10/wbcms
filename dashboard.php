@@ -65,13 +65,13 @@ if (!isset($_SESSION['user_id'])) {
 
       <ul class="sidebar-list">
         <li class="sidebar-list-item">
-          <a href="./index.html">
+          <a href="./dashboard.php">
             <span class="material-icons-outlined">dashboard</span>&nbsp;&nbsp;Dashboard
           </a>
         </li>
 
         <li class="sidebar-list-item">
-          <a href="./cust/customer.html">
+          <a href="./customer.php">
             <span class="material-icons-outlined">group</span>&nbsp;&nbsp;Customer
           </a>
         </li>
@@ -114,7 +114,7 @@ if (!isset($_SESSION['user_id'])) {
             <p class="text-primary">Customers</p>
             <span class="material-icons-outlined text-blue">group</span>
           </div>
-          <span class="text-primary font-weight-bold">0</span>
+          <span class="text-primary font-weight-bold">3</span>
         </div>
 
         <div class="card">
@@ -122,7 +122,7 @@ if (!isset($_SESSION['user_id'])) {
             <p class="text-primary">Reports</p>
             <span class="material-icons-outlined text-orange">receipt_long</span>
           </div>
-          <span class="text-primary font-weight-bold">0</span>
+          <span class="text-primary font-weight-bold">1</span>
         </div>
 
         <div class="card">
@@ -130,7 +130,7 @@ if (!isset($_SESSION['user_id'])) {
             <p class="text-primary">Total Revenue</p>
             <span class="material-icons-outlined text-green">paid</span>
           </div>
-          <span class="text-primary font-weight-bold">0</span>
+          <span class="text-primary font-weight-bold"><strong>Kes.</strong>500 </span>
         </div>
 
         <div class="card">
