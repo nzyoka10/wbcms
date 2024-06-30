@@ -126,7 +126,7 @@ if (!isset($_SESSION['user_id'])) {
           <div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-12 mt-2">
-              <table id="example" class="table">
+              <table id="example" class="table table-striped">
                 <thead>
                   <tr class="text-capitalize">
                     <th>Sn&nbsp;#</th>

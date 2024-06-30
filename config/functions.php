@@ -223,5 +223,37 @@ function countRegisteredUsers($conn) {
     }
 }
 
+/**
+ * Function to fetch user details by user ID
+ * @param mysqli $conn - MySQLi database connection object
+ * @param int $user_id - User ID to fetch details for
+ * @return array - Associative array containing user details if found, or error message if not found
+ */
+function getUserById($conn, $user_id) {
+    // Sanitize the user_id to prevent SQL injection
+    $user_id = mysqli_real_escape_string($conn, $user_id);
+
+    // SQL query to fetch user details by user_id
+    $sql = "SELECT * FROM users WHERE user_id = '$user_id'";
+
+    // Execute SQL query
+    $result = mysqli_query($conn, $sql);
+
+    // Check if query was successful
+    if ($result) {
+        // Check if user with given user_id exists
+        if (mysqli_num_rows($result) > 0) {
+            // Fetch user details
+            $user = mysqli_fetch_assoc($result);
+            return array('status' => 'success', 'data' => $user);
+        } else {
+            return array('status' => 'error', 'message' => 'User not found.');
+        }
+    } else {
+        // Handle query error
+        return array('status' => 'error', 'message' => 'Query error: ' . mysqli_error($conn));
+    }
+}
+
 
 ?>
