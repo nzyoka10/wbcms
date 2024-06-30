@@ -2,6 +2,8 @@
   include("inc/header.php"); 
   include("inc/sidebar.php"); 
 
+  // $totalUsers = countRegisteredUsers($conn);
+
 ?>
 
   
@@ -18,11 +20,19 @@
         <!-- Cards -->
         <div class="card">
           <div class="card-inner">
-            <p class="text-primary">Customers</p>
+            <p class="text-primary">Total Clients</p>
             <span class="material-icons-outlined text-blue">group</span>
           </div>
           <span class="text-primary font-weight-bold">
-            <strong>0</strong>
+          <strong>
+        <?php
+        // Call the function to get the total number of clients
+        $totalClients = countRegisteredUsers($conn);
+
+        // Display the total number of clients
+          echo $totalClients;
+        ?>
+    </strong>
           </span>
         </div>
 

@@ -163,8 +163,8 @@ if (!isset($_SESSION['user_id'])) {
                       echo '<td>' . $client['meter_id'] . '</td>';
                       echo '<td>' . $client['status'] . '</td>';
                       echo '<td>';
-                      echo '<button data-bs-toggle="modal" data-bs-target="#updateUserModal" class="btn btn-sm btn-info d-flex editbtn" data-id="' . $client['user_id'] . '">Edit</button>';
-                      echo '<button class="btn btn-sm btn-danger deleteBtn" data-id="' . $client['user_id'] . '">Delete</button>';
+                      echo '<button data-bs-toggle="modal" data-bs-target="#updateUserModal" class="btn btn-sm btn-success mx-auto d-block editbtn" data-id="' . $client['user_id'] . '">Edit</button><br>';
+                      echo '<button class="btn btn-sm btn-danger deleteBtn mx-auto d-flex" data-id="' . $client['user_id'] . '">Delete</button>';
                       echo '</td>';
                       echo '</tr>';
 
@@ -291,7 +291,7 @@ if (!isset($_SESSION['user_id'])) {
         <div class="modal-body">
 
 
-          <form id="updateUser" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+          <form id="updateUser" method="get" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <input type="hidden" name="id" id="id" value="">
             <input type="hidden" name="trid" id="trid" value="">
 
@@ -335,7 +335,7 @@ if (!isset($_SESSION['user_id'])) {
               </div>
             </div>
             <div class="text-center">
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-success">Submit</button>
             </div>
           </form>
 
