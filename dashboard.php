@@ -72,7 +72,7 @@ if (!isset($_SESSION['user_id'])) {
 
         <li class="sidebar-list-item">
           <a href="./customer.php">
-            <span class="material-icons-outlined">group</span>&nbsp;&nbsp;Customer
+            <span class="material-icons-outlined">group</span>&nbsp;&nbsp;List of Clients
           </a>
         </li>
 
