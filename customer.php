@@ -290,9 +290,25 @@ if (!isset($_SESSION['user_id'])) {
         </div>
         <div class="modal-body">
 
+          <?php
+          // Check if user_id is provided in GET request
+          if (isset($_GET['id'])) {
+            $user_id = $_GET['id'];
 
-          <form id="updateUser" method="get" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-            <input type="hidden" name="id" id="id" value="">
+            // Fetch user details by user_id
+            $result = getUserById($conn, $user_id);
+
+            // Check result status
+            if ($result['status'] === 'success') {
+              // User found, retrieve user data
+              $user = $result['data'];
+            }
+          }
+          ?>
+
+
+          <form id="updateUser" method="POST" action="./customer/update_customer.php">
+            <input type="hidden" name="id" id="id" value="<?php echo isset($user['user_id']) ? htmlspecialchars($user['user_id']) : ''; ?>">
             <input type="hidden" name="trid" id="trid" value="">
 
             <div class="mb-3 row">
@@ -340,12 +356,13 @@ if (!isset($_SESSION['user_id'])) {
           </form>
 
 
+
         </div>
-       
+
       </div>
     </div>
   </div>
-<!-- 
+  <!-- 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       document.querySelectorAll('.editbtn').forEach(button => {
@@ -452,12 +469,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
 
   // Execute SQL query
   if (mysqli_query($con, $sql)) {
-      // Redirect to client.php with success message
-      header("Location: customer.php?message=User information updated successfully.");
-      exit();
+    // Redirect to client.php with success message
+    header("Location: customer.php?message=User information updated successfully.");
+    exit();
   } else {
-      // Handle database update error
-      $error_message = "Error updating user information: " . mysqli_error($con);
+    // Handle database update error
+    $error_message = "Error updating user information: " . mysqli_error($con);
   }
 } else {
   // Handle invalid or empty form submission

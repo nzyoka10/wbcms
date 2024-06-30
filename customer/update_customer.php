@@ -1,6 +1,6 @@
 <?php
 // Include database connection
-include('connection.php');
+include('./config/functions.php');
 
 // Check if form is submitted and 'id' is set in POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
