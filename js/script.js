@@ -1,26 +1,27 @@
 $(document).ready(function () {
+    // Initialize DataTable
     var table = $('#example').DataTable({
         "createdRow": function (row, data, dataIndex) {
-            $(row).attr('id', data[0]);
+            $(row).attr('id', data[0]); // Set row ID attribute
         },
-        'serverSide': true,
-        'processing': true,
-        'paging': true,
-        'order': [],
+        'serverSide': true, // Enable server-side processing
+        'processing': true, // Show processing indicator
+        'paging': true, // Enable pagination
+        'order': [], // Disable initial ordering
         'ajax': {
-            'url': 'fetch_data.php',
-            'type': 'post',
+            'url': 'fetch_data.php', // URL to fetch data from server
+            'type': 'post' // Use POST method
         },
         "columnDefs": [{
-            "targets": [6],
-            "orderable": false,
-            "searchable": false,
+            "targets": [6], // Column index for Options column
+            "orderable": false, // Disable sorting
+            "searchable": false // Disable searching
         }]
     });
 
     // Event listener for form submission to add a new user
     $(document).on('submit', '#addUser', function (e) {
-        e.preventDefault();
+        e.preventDefault(); // Prevent default form submission
         var name = $('#addUserField').val();
         var email = $('#addEmailField').val();
         var mobile = $('#addMobileField').val();
@@ -28,9 +29,11 @@ $(document).ready(function () {
         var meter_id = $('#addMeterIdField').val();
         var status = $('#addStatusField').val();
 
-        if (name != '' && email != '' && mobile != '' && address != '' && meter_id != '' && status != '') {
+        // Validate if all fields are filled
+        if (name !== '' && email !== '' && mobile !== '' && address !== '' && meter_id !== '' && status !== '') {
+            // AJAX request to add a new client
             $.ajax({
-                url: "add_user.php",
+                url: "add_customer.php",
                 type: "post",
                 data: {
                     name: name,
@@ -41,24 +44,25 @@ $(document).ready(function () {
                     status: status
                 },
                 success: function (data) {
-                    console.log(data); // Check response in console
+                    console.log(data); // Log response data to console
                     var json = JSON.parse(data);
                     var status = json.status;
-                    if (status == 'true') {
-                        table.ajax.reload();
-                        $('#addUserModal').modal('hide');
+                    // Check if addition was successful
+                    if (status === 'true') {
+                        table.ajax.reload(); // Reload DataTable
+                        $('#addUserModal').modal('hide'); // Hide modal
                         $('#addUser')[0].reset(); // Clear form fields
                     } else {
-                        alert('Failed to add user.');
+                        alert('Failed to add user.'); // Alert if addition fails
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.error(xhr.responseText); // Log any AJAX errors
-                    alert('Error adding user. Please try again later.');
+                    console.error(xhr.responseText); // Log AJAX errors to console
+                    alert('Error adding user. Please try again later.'); // Alert on error
                 }
             });
         } else {
-            alert('Fill all the required fields');
+            alert('Fill all the required fields'); // Alert if fields are empty
         }
     });
 
@@ -66,11 +70,11 @@ $(document).ready(function () {
     $('#example').on('click', '.editbtn', function (event) {
         var trid = $(this).closest('tr').attr('id');
         var id = $(this).data('id');
-        $('#exampleModal').modal('show');
+        $('#exampleModal').modal('show'); // Show modal for editing
 
-        // AJAX request to get single user data
+        // AJAX request to fetch single client data
         $.ajax({
-            url: "get_single_data.php",
+            url: "get_single_customer.php",
             data: {
                 id: id
             },
@@ -90,7 +94,7 @@ $(document).ready(function () {
         });
     });
 
-    // Event listener for form submission to update user data
+    // Event listener for form submission to update client data
     $(document).on('submit', '#updateUser', function (e) {
         e.preventDefault(); // Prevent default form submission
         var name = $('#nameField').val();
@@ -102,11 +106,11 @@ $(document).ready(function () {
         var trid = $('#trid').val();
         var id = $('#id').val();
 
-        // Check if all fields are filled
-        if (name != '' && email != '' && mobile != '' && address != '' && meter_id != '' && status != '') {
-            // AJAX request to update user
+        // Validate if all fields are filled
+        if (name !== '' && email !== '' && mobile !== '' && address !== '' && meter_id !== '' && status !== '') {
+            // AJAX request to update client data
             $.ajax({
-                url: "update_user.php",
+                url: "update_customer.php",
                 type: "post",
                 data: {
                     name: name,
@@ -121,11 +125,11 @@ $(document).ready(function () {
                     var json = JSON.parse(data);
                     var status = json.status;
                     // Check if update was successful
-                    if (status == 'true') {
+                    if (status === 'true') {
                         table.ajax.reload(); // Reload DataTable
                         $('#exampleModal').modal('hide'); // Hide modal
                     } else {
-                        alert('Failed to update user.');
+                        alert('Failed to update user.'); // Alert if update fails
                     }
                 }
             });
@@ -140,9 +144,9 @@ $(document).ready(function () {
         var id = $(this).data('id');
         // Confirm delete action
         if (confirm("Are you sure you want to delete this User?")) {
-            // AJAX request to delete user
+            // AJAX request to delete client
             $.ajax({
-                url: "delete_user.php",
+                url: "delete_customer.php",
                 data: {
                     id: id
                 },
@@ -151,10 +155,10 @@ $(document).ready(function () {
                     var json = JSON.parse(data);
                     var status = json.status;
                     // Check if deletion was successful
-                    if (status == 'success') {
+                    if (status === 'success') {
                         table.ajax.reload(); // Reload DataTable
                     } else {
-                        alert('Failed to delete user.');
+                        alert('Failed to delete user.'); // Alert if deletion fails
                     }
                 }
             });
