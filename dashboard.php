@@ -65,6 +65,7 @@
 
   </div>
 
+  <!-- Analysis charts -->
   <div class="charts">
 
     <div class="charts-card">
