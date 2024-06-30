@@ -126,7 +126,6 @@ if (!isset($_SESSION['user_id'])) {
           <div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-12 mt-2">
-
               <table id="example" class="table">
                 <thead>
                   <tr class="text-capitalize">
@@ -142,7 +141,6 @@ if (!isset($_SESSION['user_id'])) {
                 </thead>
                 <tbody>
                   <?php
-
                   // Fetch all clients
                   $result = getAllClients();
 
@@ -150,10 +148,14 @@ if (!isset($_SESSION['user_id'])) {
                   if ($result['status'] === 'true') {
                     $clients = $result['data'];
 
+                    // Initialize counter for serial number
+                    $sn = 1;
+                    // private $user_id;
+
                     // Loop through clients and display in table rows
                     foreach ($clients as $client) {
                       echo '<tr>';
-                      echo '<td>' . $client['user_id'] . '</td>';
+                      echo '<td>' . $sn . '</td>'; // Display serial number
                       echo '<td>' . $client['username'] . '</td>';
                       echo '<td>' . $client['email'] . '</td>';
                       echo '<td>' . $client['contact'] . '</td>';
@@ -161,32 +163,30 @@ if (!isset($_SESSION['user_id'])) {
                       echo '<td>' . $client['meter_id'] . '</td>';
                       echo '<td>' . $client['status'] . '</td>';
                       echo '<td>';
-                      echo '<button data-bs-toggle="modal" data-bs-target="#updateUerModal" class="btn btn-sm btn-info d-flex editbtn" data-id="' . $client['user_id'] . '">Edit</button>';
+                      echo '<button data-bs-toggle="modal" data-bs-target="#updateUserModal" class="btn btn-sm btn-info d-flex editbtn" data-id="' . $client['user_id'] . '">Edit</button>';
                       echo '<button class="btn btn-sm btn-danger deleteBtn" data-id="' . $client['user_id'] . '">Delete</button>';
-
-                 
                       echo '</td>';
                       echo '</tr>';
+
+                      // Increment counter for serial number
+                      $sn++;
                     }
                   } else {
                     // Handle error from getAllClients
                     echo '<tr><td colspan="8">';
 
                     if (isset($result['message'])) {
-
                       // Display error message if available
-                      echo $result['message']; 
+                      echo $result['message'];
                     } else {
-                      
                       echo 'An error occurred while fetching clients.';
                     }
                     echo '</td></tr>';
                   }
-
                   ?>
-
                 </tbody>
               </table>
+
 
             </div>
             <div class="col-md-2"></div>
@@ -219,7 +219,7 @@ if (!isset($_SESSION['user_id'])) {
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add New Client</h5>
+          <h5 class="modal-title text-green" id="exampleModalLabel">Add New Client</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
@@ -276,53 +276,68 @@ if (!isset($_SESSION['user_id'])) {
           </form>
         </div>
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
       </div>
     </div>
   </div>
 
   <!-- Modal to Update user -->
-  <div class="modal fade" id="updateUerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="updateUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Update User</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Update Client Information</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="updateUser">
-            <input type="hidden" name="id" id="id" value="">
+
+        <form id="updateUser" method="POST" action="update_user.php">
+            <input type="hidden" name="id" id="id" value="<?php echo $user['user_id']; ?>">
             <input type="hidden" name="trid" id="trid" value="">
+
             <div class="mb-3 row">
-              <label for="nameField" class="col-md-3 form-label">Name</label>
+              <label for="nameField" class="col-md-3 form-label">Full Name</label>
               <div class="col-md-9">
-                <input type="text" class="form-control" id="nameField" name="name">
+                <input type="text" class="form-control" id="nameField" name="name" value="<?php echo $user['username']; ?>" required>
               </div>
             </div>
             <div class="mb-3 row">
               <label for="emailField" class="col-md-3 form-label">Email</label>
               <div class="col-md-9">
-                <input type="email" class="form-control" id="emailField" name="email">
+                <input type="email" class="form-control" id="emailField" name="email" value="<?php echo $user['email']; ?>" required>
               </div>
             </div>
             <div class="mb-3 row">
-              <label for="mobileField" class="col-md-3 form-label">Mobile</label>
+              <label for="mobileField" class="col-md-3 form-label">Contact&nbsp;#</label>
               <div class="col-md-9">
-                <input type="text" class="form-control" id="mobileField" name="mobile">
+                <input type="text" class="form-control" id="mobileField" name="mobile" value="<?php echo $user['mobile']; ?>" required>
               </div>
             </div>
             <div class="mb-3 row">
-              <label for="cityField" class="col-md-3 form-label">City</label>
+              <label for="addressField" class="col-md-3 form-label">Address</label>
               <div class="col-md-9">
-                <input type="text" class="form-control" id="cityField" name="City">
+              <input type="text" class="form-control" id="addressField" name="address" value="<?php echo $user['address']; ?>" required>
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="meterIdField" class="col-md-3 form-label">Meter ID</label>
+              <div class="col-md-9">
+              <input type="text" class="form-control" id="meterIdField" name="meter_id" value="<?php echo $user['meter_id']; ?>" required>
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="statusField" class="col-md-3 form-label">Status</label>
+              <div class="col-md-9">
+                <select name="status" id="statusField" class="form-control" required>
+                  <option value="inactive" <?php if($user['status'] == 'inactive') echo 'selected'; ?>>Inactive</option>
+                  <option value="active" <?php if($user['status'] == 'active') echo 'selected'; ?>>Active</option>
+                </select>
               </div>
             </div>
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Submit</button>
             </div>
           </form>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -336,13 +351,15 @@ if (!isset($_SESSION['user_id'])) {
 
 </html>
 
+<!--  -->
+
 <?php
 // Initialize response array
 $response = array();
 
 // Check if POST data is received
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
- 
+
 
   // Sanitize input data
   $name = mysqli_real_escape_string($conn, $_POST['name']);
@@ -373,4 +390,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Return JSON response
 header('Content-Type: application/json');
 echo json_encode($response);
+
+
+// update user informations
+// Get the user ID from the GET request
+$user_id = $_GET['id'];
+
+// Fetch user data from the database
+$sql = "SELECT * FROM users WHERE user_id = '$user_id'";
+$query = mysqli_query($conn, $sql);
+$user = mysqli_fetch_assoc($query);
 ?>
