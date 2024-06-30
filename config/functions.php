@@ -38,4 +38,122 @@ function verifyUser($conn, $email, $password) {
     return false;
 }
 
+/**
+ ** Function to add a new client
+ * @param string $name
+ * @param string $email
+ * @param string $mobile
+ * @param string $address
+ * @param string $meter_id
+ * @param string $first_reading
+ * @param string $status
+ * @return array
+ */
+function addClient($name, $email, $mobile, $address, $meter_id, $first_reading, $status) {
+    global $conn;
+
+    // Escape variables to prevent SQL injection
+    $name = mysqli_real_escape_string($conn, $name);
+    $email = mysqli_real_escape_string($conn, $email);
+    $mobile = mysqli_real_escape_string($conn, $mobile);
+    $address = mysqli_real_escape_string($conn, $address);
+    $meter_id = mysqli_real_escape_string($conn, $meter_id);
+    $first_reading = mysqli_real_escape_string($conn, $first_reading);
+    $status = mysqli_real_escape_string($conn, $status);
+
+    // SQL query to insert client data into 'users' table
+    $sql = "INSERT INTO users (username, email, contact, address, meter_id, first_reading, status) 
+            VALUES ('$name', '$email', '$mobile', '$address', '$meter_id', '$first_reading', '$status')";
+
+    // Execute SQL query
+    if (mysqli_query($conn, $sql)) {
+        return array('status' => 'true', 'message' => 'Client added successfully.');
+    } else {
+        return array('status' => 'false', 'message' => 'Failed to add client: ' . mysqli_error($conn));
+    }
+}
+
+/**
+ * Function to fetch all clients
+ * @return array
+ */
+function getAllClients() {
+    global $conn;
+
+    // SQL query to fetch all clients from 'users' table
+    $sql = "SELECT * FROM users";
+
+    // Execute SQL query
+    $result = mysqli_query($conn, $sql);
+
+    // Check if query returned any results
+    if (mysqli_num_rows($result) > 0) {
+        $clients = array();
+        // Fetch and store each row in the $clients array
+        while ($row = mysqli_fetch_assoc($result)) {
+            $clients[] = $row;
+        }
+        return array('status' => 'true', 'data' => $clients);
+    } else {
+        return array('status' => 'false', 'message' => 'No clients found.');
+    }
+}
+
+/**
+ * Function to search clients by name, email, mobile, or address
+ * @param string $searchTerm
+ * @return array
+ */
+function searchClients($searchTerm) {
+    global $conn;
+
+    // Escape search term to prevent SQL injection
+    $searchTerm = mysqli_real_escape_string($conn, $searchTerm);
+
+    // SQL query to search for clients based on name, email, mobile, or address
+    $sql = "SELECT * FROM users 
+            WHERE username LIKE '%$searchTerm%' 
+            OR email LIKE '%$searchTerm%' 
+            OR contact LIKE '%$searchTerm%' 
+            OR address LIKE '%$searchTerm%'";
+
+    // Execute SQL query
+    $result = mysqli_query($conn, $sql);
+
+    // Check if query returned any results
+    if (mysqli_num_rows($result) > 0) {
+        $clients = array();
+        // Fetch and store each row in the $clients array
+        while ($row = mysqli_fetch_assoc($result)) {
+            $clients[] = $row;
+        }
+        return array('status' => 'true', 'data' => $clients);
+    } else {
+        return array('status' => 'false', 'message' => 'No clients found.');
+    }
+}
+
+/**
+ * Function to delete a client by ID
+ * @param int $id
+ * @return array
+ */
+function deleteClient($id) {
+    global $conn;
+
+    // Escape ID to prevent SQL injection
+    $id = mysqli_real_escape_string($conn, $id);
+
+    // SQL query to delete a client from 'users' table based on ID
+    $sql = "DELETE FROM users WHERE id = '$id'";
+
+    // Execute SQL query
+    if (mysqli_query($conn, $sql)) {
+        return array('status' => 'true', 'message' => 'Client deleted successfully.');
+    } else {
+        return array('status' => 'false', 'message' => 'Failed to delete client: ' . mysqli_error($conn));
+    }
+}
+
+
 ?>
