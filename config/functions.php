@@ -204,5 +204,24 @@ function updateClient($user_id, $username, $email, $mobile, $address, $meter_id,
     return $data;
 }
 
+// Function to count all registered users
+function countRegisteredUsers($conn) {
+    // SQL query to count users
+    $sql = "SELECT COUNT(*) as total_users FROM users";
+
+    // Execute SQL query
+    $result = mysqli_query($conn, $sql);
+
+    if ($result) {
+        // Fetch the count
+        $row = mysqli_fetch_assoc($result);
+        $totalUsers = $row['total_users'];
+        return $totalUsers;
+    } else {
+        // Handle query error
+        return "Error: " . mysqli_error($conn);
+    }
+}
+
 
 ?>
