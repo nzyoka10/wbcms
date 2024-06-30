@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     // Execute SQL query
     if (mysqli_query($con, $sql)) {
         // Redirect to client.php with success message
-        header("Location: client.php?message=User information updated successfully.");
+        header("Location: ../customer.php?message=User information updated successfully.");
         exit();
     } else {
         // Handle database update error
@@ -38,6 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
 }
 
 // Redirect to client.php with error message if any
-header("Location: customer.php?error=" . urlencode($error_message));
+header("Location: ../customer.php?error=" . urlencode($error_message));
 exit();
 ?>
