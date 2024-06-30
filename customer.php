@@ -290,46 +290,47 @@ if (!isset($_SESSION['user_id'])) {
         </div>
         <div class="modal-body">
 
-        <form id="updateUser" method="POST" action="update_user.php">
-            <input type="hidden" name="id" id="id" value="<?php echo $user['user_id']; ?>">
+
+          <form id="updateUser" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <input type="hidden" name="id" id="id" value="">
             <input type="hidden" name="trid" id="trid" value="">
 
             <div class="mb-3 row">
               <label for="nameField" class="col-md-3 form-label">Full Name</label>
               <div class="col-md-9">
-                <input type="text" class="form-control" id="nameField" name="name" value="<?php echo $user['username']; ?>" required>
+                <input type="text" class="form-control" id="nameField" name="name" value="<?php echo isset($user['username']) ? htmlspecialchars($user['username']) : ''; ?>" required>
               </div>
             </div>
             <div class="mb-3 row">
               <label for="emailField" class="col-md-3 form-label">Email</label>
               <div class="col-md-9">
-                <input type="email" class="form-control" id="emailField" name="email" value="<?php echo $user['email']; ?>" required>
+                <input type="email" class="form-control" id="emailField" name="email" value="<?php echo isset($user['email']) ? htmlspecialchars($user['email']) : ''; ?>" required>
               </div>
             </div>
             <div class="mb-3 row">
               <label for="mobileField" class="col-md-3 form-label">Contact&nbsp;#</label>
               <div class="col-md-9">
-                <input type="text" class="form-control" id="mobileField" name="mobile" value="<?php echo $user['mobile']; ?>" required>
+                <input type="text" class="form-control" id="mobileField" name="mobile" value="<?php echo isset($user['contact']) ? htmlspecialchars($user['contact']) : ''; ?>" required>
               </div>
             </div>
             <div class="mb-3 row">
               <label for="addressField" class="col-md-3 form-label">Address</label>
               <div class="col-md-9">
-              <input type="text" class="form-control" id="addressField" name="address" value="<?php echo $user['address']; ?>" required>
+                <input type="text" class="form-control" id="addressField" name="address" value="<?php echo isset($user['address']) ? htmlspecialchars($user['address']) : ''; ?>" required>
               </div>
             </div>
             <div class="mb-3 row">
               <label for="meterIdField" class="col-md-3 form-label">Meter ID</label>
               <div class="col-md-9">
-              <input type="text" class="form-control" id="meterIdField" name="meter_id" value="<?php echo $user['meter_id']; ?>" required>
+                <input type="text" class="form-control" id="meterIdField" name="meter_id" value="<?php echo isset($user['meter_id']) ? htmlspecialchars($user['meter_id']) : ''; ?>" required>
               </div>
             </div>
             <div class="mb-3 row">
               <label for="statusField" class="col-md-3 form-label">Status</label>
               <div class="col-md-9">
                 <select name="status" id="statusField" class="form-control" required>
-                  <option value="inactive" <?php if($user['status'] == 'inactive') echo 'selected'; ?>>Inactive</option>
-                  <option value="active" <?php if($user['status'] == 'active') echo 'selected'; ?>>Active</option>
+                  <option value="inactive" <?php if (isset($user['status']) && $user['status'] == 'inactive') echo 'selected'; ?>>Inactive</option>
+                  <option value="active" <?php if (isset($user['status']) && $user['status'] == 'active') echo 'selected'; ?>>Active</option>
                 </select>
               </div>
             </div>
@@ -338,13 +339,39 @@ if (!isset($_SESSION['user_id'])) {
             </div>
           </form>
 
+
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
+       
       </div>
     </div>
   </div>
+<!-- 
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll('.editbtn').forEach(button => {
+        button.addEventListener('click', function() {
+          const userId = this.getAttribute('data-id');
+          fetchUserData(userId);
+        });
+      });
+    });
+
+    function fetchUserData(userId) {
+      fetch('get_user.php?id=' + userId)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('id').value = data.user_id;
+          document.getElementById('nameField').value = data.username;
+          document.getElementById('emailField').value = data.email;
+          document.getElementById('mobileField').value = data.contact;
+          document.getElementById('addressField').value = data.address;
+          document.getElementById('meterIdField').value = data.meter_id;
+          document.getElementById('statusField').value = data.status;
+        })
+        .catch(error => console.error('Error fetching user data:', error));
+    }
+  </script> -->
+
 
 
 </body>
@@ -400,4 +427,44 @@ $user_id = $_GET['id'];
 $sql = "SELECT * FROM users WHERE user_id = '$user_id'";
 $query = mysqli_query($conn, $sql);
 $user = mysqli_fetch_assoc($query);
+
+
+// Check if form is submitted and 'id' is set in POST request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+  // Sanitize and validate input data
+  $id = $_POST['id'];
+  $name = mysqli_real_escape_string($con, $_POST['name']);
+  $email = mysqli_real_escape_string($con, $_POST['email']);
+  $mobile = mysqli_real_escape_string($con, $_POST['mobile']);
+  $address = mysqli_real_escape_string($con, $_POST['address']);
+  $meter_id = mysqli_real_escape_string($con, $_POST['meter_id']);
+  $status = mysqli_real_escape_string($con, $_POST['status']);
+
+  // SQL query to update user information
+  $sql = "UPDATE users SET 
+          username = '$name', 
+          email = '$email', 
+          contact = '$mobile', 
+          address = '$address', 
+          meter_id = '$meter_id', 
+          status = '$status' 
+          WHERE user_id = '$id'";
+
+  // Execute SQL query
+  if (mysqli_query($con, $sql)) {
+      // Redirect to client.php with success message
+      header("Location: customer.php?message=User information updated successfully.");
+      exit();
+  } else {
+      // Handle database update error
+      $error_message = "Error updating user information: " . mysqli_error($con);
+  }
+} else {
+  // Handle invalid or empty form submission
+  $error_message = "Invalid request. Please provide user ID.";
+}
+
+// Redirect to client.php with error message if any
+header("Location: customer.php?error=" . urlencode($error_message));
+exit();
 ?>
