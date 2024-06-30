@@ -27,6 +27,7 @@ if (!isset($_SESSION['user_id'])) {
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/customer.css">
 </head>
 <body>
   <div class="grid-container">
@@ -103,8 +104,42 @@ if (!isset($_SESSION['user_id'])) {
 
     <!-- Main -->
     <main class="main-container">
-      <div class="main-title">
+      <!-- <div class="main-title">
         <p class="font-weight-bold">DASHBOARD</p>
+      </div> -->
+
+      <nav>
+        <ul>
+          <li><a href="" class="lnk">New Customer</a></li>
+          <li><a href="" class="lnk">View All</a></li>
+          <li><a href="" class="lnk">Meter A/C</a></li>
+        </ul>
+      </nav>
+
+      <div class="container">
+
+        <!-- register new customer -->
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+            <div class="input-box">
+                <input type="text" name="email" class="input-field" placeholder="Email id" autocomplete="off" required>
+            </div>
+            <div class="input-box">
+                <input type="password" name="password" class="input-field" placeholder="Password" autocomplete="off" required>
+            </div>
+            <div class="forgot">
+                <section>
+                    <input type="checkbox" id="check">
+                    <label for="check">Remember me</label>
+                </section>
+                <section>
+                    <a href="#">Forgot password</a>
+                </section>
+            </div>
+            <div class="input-submit">
+                <button class="submit-btn" id="submit"></button>
+                <label for="submit">Sign In</label>
+            </div>
+        </form>
       </div>
 
       
