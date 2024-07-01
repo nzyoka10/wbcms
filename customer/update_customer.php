@@ -5,7 +5,7 @@ include('./config/functions.php');
 // Check if form is submitted and 'id' is set in POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     // Sanitize and validate input data
-    $id = $_POST['id'];
+    $id = $_POST['user_id'];
     $name = mysqli_real_escape_string($con, $_POST['name']);
     $email = mysqli_real_escape_string($con, $_POST['email']);
     $mobile = mysqli_real_escape_string($con, $_POST['mobile']);

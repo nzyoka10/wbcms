@@ -292,14 +292,16 @@ if (!isset($_SESSION['user_id'])) {
 
           <?php
           // Check if user_id is provided in GET request
-          if (isset($_GET['id'])) {
-            $user_id = $_GET['id'];
+          if (isset($_GET['user_id'])) {
+
+            $user_id = $_GET['user_id'];
 
             // Fetch user details by user_id
             $result = getUserById($conn, $user_id);
 
             // Check result status
             if ($result['status'] === 'success') {
+
               // User found, retrieve user data
               $user = $result['data'];
             }
@@ -362,7 +364,7 @@ if (!isset($_SESSION['user_id'])) {
       </div>
     </div>
   </div>
-  <!-- 
+  
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       document.querySelectorAll('.editbtn').forEach(button => {
@@ -387,7 +389,7 @@ if (!isset($_SESSION['user_id'])) {
         })
         .catch(error => console.error('Error fetching user data:', error));
     }
-  </script> -->
+  </script>
 
 
 
@@ -447,10 +449,10 @@ $user = mysqli_fetch_assoc($query);
 
 
 // Check if form is submitted and 'id' is set in POST request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
   // Sanitize and validate input data
-  $id = $_POST['id'];
-  $name = mysqli_real_escape_string($con, $_POST['name']);
+  $id = $_POST['user_id'];
+  $name = mysqli_real_escape_string($con, $_POST['username']);
   $email = mysqli_real_escape_string($con, $_POST['email']);
   $mobile = mysqli_real_escape_string($con, $_POST['mobile']);
   $address = mysqli_real_escape_string($con, $_POST['address']);
