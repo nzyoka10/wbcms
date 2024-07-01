@@ -2,7 +2,7 @@
 // Include the database config file
 require 'config.php';
 
-// Function to check if username or email already exists
+// Function to check if user's username or email already exists
 function userExists($conn, $username, $email) {
     $query = "SELECT * FROM user_tbl WHERE username=? OR email=?";
     $stmt = $conn->prepare($query);
@@ -138,14 +138,14 @@ function searchClients($searchTerm) {
  * @param int $id
  * @return array
  */
-function deleteClient($id) {
+function deleteClient($user_id) {
     global $conn;
 
     // Escape ID to prevent SQL injection
-    $id = mysqli_real_escape_string($conn, $id);
+    $user_id = mysqli_real_escape_string($conn, $user_id);
 
     // SQL query to delete a client from 'users' table based on ID
-    $sql = "DELETE FROM users WHERE id = '$id'";
+    $sql = "DELETE FROM users WHERE user_id = '$user_id'";
 
     // Execute SQL query
     if (mysqli_query($conn, $sql)) {
@@ -240,7 +240,7 @@ function getUserById($conn, $user_id) {
     $result = mysqli_query($conn, $sql);
 
     // Check if query was successful
-    if ($result) {
+    if ($result == true) {
         // Check if user with given user_id exists
         if (mysqli_num_rows($result) > 0) {
             // Fetch user details
