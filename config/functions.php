@@ -2,7 +2,7 @@
 // Include the database config file
 require 'config.php';
 
-// Function to check if user's username or email already exists
+// Function to check if users username or email already exists
 function userExists($conn, $username, $email) {
     $query = "SELECT * FROM user_tbl WHERE username=? OR email=?";
     $stmt = $conn->prepare($query);
@@ -39,7 +39,7 @@ function verifyUser($conn, $email, $password) {
 }
 
 /**
- ** Function to add a new client
+ * Function to add a new client
  * @param string $name
  * @param string $email
  * @param string $mobile
@@ -47,7 +47,7 @@ function verifyUser($conn, $email, $password) {
  * @param string $meter_id
  * @param string $first_reading
  * @param string $status
- * @return array
+ * @return string
  */
 function addClient($name, $email, $mobile, $address, $meter_id, $first_reading, $status) {
     global $conn;
@@ -67,11 +67,18 @@ function addClient($name, $email, $mobile, $address, $meter_id, $first_reading, 
 
     // Execute SQL query
     if (mysqli_query($conn, $sql)) {
-        return array('status' => 'true', 'message' => 'Client added successfully.');
+        return '<script>alert("Client added successfully.");</script>';
     } else {
-        return array('status' => 'false', 'message' => 'Failed to add client: ' . mysqli_error($conn));
+        return '<script>alert("Failed to add client: ' . mysqli_error($conn) . '");</script>';
     }
 }
+
+
+
+
+
+
+
 
 /**
  * Function to fetch all clients
