@@ -2,7 +2,7 @@
   <aside id="sidebar">
       <div class="sidebar-title">
         <div class="sidebar-brand">
-          <span class="material-icons-outlined">water_drop</span> AquaBill
+        <span class="material-icons-outlined">water_drop</span> WBCM
         </div>
         <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
       </div>
@@ -21,7 +21,7 @@
         </li>
 
         <li class="sidebar-list-item">
-          <a href="#">
+          <a href="./billAccount.php">
             <span class="material-icons-outlined">paid</span>&nbsp;&nbsp;Billing
           </a>
         </li>
