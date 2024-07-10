@@ -89,7 +89,7 @@ if (isset($_GET['id'])) {
         <span class="material-icons-outlined">menu</span>
       </div>
       <div class="header-left">
-        <h4 class="text-secondary"><strong>WBCM</strong>&nbsp;&nbsp;-&nbsp;&nbsp;Clients</h4>
+        <h4 class="text-secondary"><strong>WBCM</strong>&nbsp;&nbsp;-&nbsp;&nbsp;Listing of Clients</h4>
       </div>
       <div class="header-right text-primary">
         <!-- Message Notification banner -->
@@ -110,7 +110,7 @@ if (isset($_GET['id'])) {
     <aside id="sidebar">
       <div class="sidebar-title">
         <div class="sidebar-brand">
-          <span class="material-icons-outlined">water_drop</span> AquaBill
+        <span class="material-icons-outlined">water_drop</span> WBCM
         </div>
         <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
       </div>
@@ -124,12 +124,12 @@ if (isset($_GET['id'])) {
 
         <li class="sidebar-list-item">
           <a href="./customer.php">
-            <span class="material-icons-outlined">group</span>&nbsp;&nbsp;List of Clients
+            <span class="material-icons-outlined">group</span>&nbsp;&nbsp;Clients
           </a>
         </li>
 
         <li class="sidebar-list-item">
-          <a href="#">
+          <a href="./billAccount.php">
             <span class="material-icons-outlined">paid</span>&nbsp;&nbsp;Billing
           </a>
         </li>
@@ -168,17 +168,17 @@ if (isset($_GET['id'])) {
           <div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-12 mt-2">
-              <table id="example" class="table table-striped">
+              <table id="example" class="table table-hover table-bordered">
                 <thead>
                   <tr class="text-capitalize">
                     <th>Sn&nbsp;#</th>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>Contact</th>
-                    <th>Address</th>
-                    <th>Meter ID</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th class="col-md-3 col-xs-3">Full Name</th>
+                    <th class="col-md-3 col-xs-3">Email</th>
+                    <th class="col-md-3 col-xs-3">Contact</th>
+                    <th class="col-md-3 col-xs-3">Address</th>
+                    <th class="col-md-3 col-xs-3">Meter ID</th>
+                    <th class="col-md-3 col-xs-3">Status</th>
+                    <th class="col-md-3 col-xs-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
