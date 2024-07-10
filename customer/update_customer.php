@@ -3,7 +3,7 @@
 include('./config/functions.php');
 
 // Check if form is submitted and 'id' is set in POST request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
     // Sanitize and validate input data
     $id = $_POST['user_id'];
     $name = mysqli_real_escape_string($con, $_POST['name']);
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
 
     // Execute SQL query
     if (mysqli_query($con, $sql)) {
-        // Redirect to client.php with success message
+        // Redirect to customer.php with success message
         header("Location: ../customer.php?message=User information updated successfully.");
         exit();
     } else {
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $error_message = "Invalid request. Please provide user ID.";
 }
 
-// Redirect to client.php with error message if any
+// Redirect to customer.php with error message if any
 header("Location: ../customer.php?error=" . urlencode($error_message));
 exit();
 ?>
