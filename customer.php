@@ -3,11 +3,53 @@ session_start();
 
 include("./config/functions.php");
 
-
 // Check if the user is logged in, if not redirect to the login page
 if (!isset($_SESSION['user_id'])) {
   header("Location: index.php");
   exit();
+}
+
+// Process form submission for adding or editing clients
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  if (isset($_POST['id'])) {
+    // Edit existing user details
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $mobile = $_POST['mobile'];
+    $address = $_POST['address'];
+    $meter_id = $_POST['meter_id'];
+    $first_reading = $_POST['first_reading'];
+    $status = $_POST['status'];
+
+    // Call the editClient function and display the result
+    echo editClient($id, $name, $email, $mobile, $address, $meter_id, $first_reading, $status);
+  } else {
+    // Add new client
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $mobile = $_POST['mobile'];
+    $address = $_POST['address'];
+    $meter_id = $_POST['meter_id'];
+    $first_reading = $_POST['first_reading'];
+    $status = $_POST['status'];
+
+    // Call the addClient function and display the result
+    echo addClient($name, $email, $mobile, $address, $meter_id, $first_reading, $status);
+  }
+}
+
+// Fetch user data to pre-fill the form if editing
+if (isset($_GET['id'])) {
+  $id = mysqli_real_escape_string($conn, $_GET['id']);
+  $result = mysqli_query($conn, "SELECT * FROM users WHERE id='$id'");
+
+  if ($result && mysqli_num_rows($result) > 0) {
+    $user = mysqli_fetch_assoc($result);
+  } else {
+    echo '<div class="alert alert-danger" role="alert">User not found.</div>';
+    exit;
+  }
 }
 ?>
 
@@ -111,14 +153,14 @@ if (!isset($_SESSION['user_id'])) {
     </aside>
     <!-- End Sidebar -->
 
-    <!-- Main -->
+    <!-- Main section -->
     <main class="main-container">
 
       <div class="row">
         <div class="container">
 
           <!-- Add account modal -->
-          <div class="btnAdd">
+          <div class="btnAdd float-right">
             <a href="#!" data-id="" data-bs-toggle="modal" data-bs-target="#addUserModal" class="btn btn-success btn-sm">New Client</a>
           </div>
 
@@ -195,10 +237,6 @@ if (!isset($_SESSION['user_id'])) {
         </div>
       </div>
 
-
-
-
-
     </main>
     <!-- End Main -->
 
@@ -211,7 +249,8 @@ if (!isset($_SESSION['user_id'])) {
   <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="js/dt-1.10.25datatables.min.js"></script>
   <script src="js/scripts.js"></script>
-  <!-- <script src="js/script.js"></script> -->
+
+
 
 
   <!-- Add user Modal -->
@@ -292,19 +331,20 @@ if (!isset($_SESSION['user_id'])) {
 
           <?php
           // Check if user_id is provided in GET request
-          if (isset($_GET['user_id'])) {
+          // Check if ID is provided to fetch user details
+          if (isset($_GET['id'])) {
+            $id = mysqli_real_escape_string($conn, $_GET['user_id']);
+            $result = mysqli_query($conn, "SELECT * FROM users WHERE user_id='$id'");
 
-            $user_id = $_GET['user_id'];
-
-            // Fetch user details by user_id
-            $result = getUserById($conn, $user_id);
-
-            // Check result status
-            if ($result['status'] === 'success') {
-
-              // User found, retrieve user data
-              $user = $result['data'];
+            if ($result && mysqli_num_rows($result) > 0) {
+              $user = mysqli_fetch_assoc($result);
+            } else {
+              echo '<div class="alert alert-danger" role="alert">User not found.</div>';
+              exit;
             }
+          } else {
+            echo '<div class="alert alert-danger" role="alert">No user ID provided.</div>';
+            exit;
           }
           ?>
 
@@ -353,7 +393,7 @@ if (!isset($_SESSION['user_id'])) {
               </div>
             </div>
             <div class="text-center">
-              <button type="submit" class="btn btn-success">Submit</button>
+              <button type="submit" class="btn btn-success">Update Record!</button>
             </div>
           </form>
 
@@ -364,126 +404,9 @@ if (!isset($_SESSION['user_id'])) {
       </div>
     </div>
   </div>
-  
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      document.querySelectorAll('.editbtn').forEach(button => {
-        button.addEventListener('click', function() {
-          const userId = this.getAttribute('data-id');
-          fetchUserData(userId);
-        });
-      });
-    });
-
-    function fetchUserData(userId) {
-      fetch('get_user.php?id=' + userId)
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById('id').value = data.user_id;
-          document.getElementById('nameField').value = data.username;
-          document.getElementById('emailField').value = data.email;
-          document.getElementById('mobileField').value = data.contact;
-          document.getElementById('addressField').value = data.address;
-          document.getElementById('meterIdField').value = data.meter_id;
-          document.getElementById('statusField').value = data.status;
-        })
-        .catch(error => console.error('Error fetching user data:', error));
-    }
-  </script>
-
 
 
 </body>
 
 </html>
 
-<!--  -->
-
-<?php
-// Initialize response array
-$response = array();
-
-// Check if POST data is received
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-
-  // Sanitize input data
-  $name = mysqli_real_escape_string($conn, $_POST['name']);
-  $email = mysqli_real_escape_string($conn, $_POST['email']);
-  $mobile = mysqli_real_escape_string($conn, $_POST['mobile']);
-  $address = mysqli_real_escape_string($conn, $_POST['address']);
-  $meter_id = mysqli_real_escape_string($conn, $_POST['meter_id']);
-  $first_reading = mysqli_real_escape_string($conn, $_POST['first_reading']);
-  $status = mysqli_real_escape_string($conn, $_POST['status']);
-
-  // Call addClient function to add user
-  $result = addClient($name, $email, $mobile, $address, $meter_id, $first_reading, $status);
-
-  // Set response based on addClient result
-  if ($result['status'] === 'true') {
-    $response['status'] = 'success';
-    $response['message'] = $result['message'];
-  } else {
-    $response['status'] = 'error';
-    $response['message'] = $result['message'];
-  }
-} else {
-  // If POST data not received
-  $response['status'] = 'error';
-  $response['message'] = 'No data received.';
-}
-
-// Return JSON response
-header('Content-Type: application/json');
-echo json_encode($response);
-
-
-// update user informations
-// Get the user ID from the GET request
-$user_id = $_GET['id'];
-
-// Fetch user data from the database
-$sql = "SELECT * FROM users WHERE user_id = '$user_id'";
-$query = mysqli_query($conn, $sql);
-$user = mysqli_fetch_assoc($query);
-
-
-// Check if form is submitted and 'id' is set in POST request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
-  // Sanitize and validate input data
-  $id = $_POST['user_id'];
-  $name = mysqli_real_escape_string($con, $_POST['username']);
-  $email = mysqli_real_escape_string($con, $_POST['email']);
-  $mobile = mysqli_real_escape_string($con, $_POST['mobile']);
-  $address = mysqli_real_escape_string($con, $_POST['address']);
-  $meter_id = mysqli_real_escape_string($con, $_POST['meter_id']);
-  $status = mysqli_real_escape_string($con, $_POST['status']);
-
-  // SQL query to update user information
-  $sql = "UPDATE users SET 
-          username = '$name', 
-          email = '$email', 
-          contact = '$mobile', 
-          address = '$address', 
-          meter_id = '$meter_id', 
-          status = '$status' 
-          WHERE user_id = '$id'";
-
-  // Execute SQL query
-  if (mysqli_query($con, $sql)) {
-    // Redirect to client.php with success message
-    header("Location: customer.php?message=User information updated successfully.");
-    exit();
-  } else {
-    // Handle database update error
-    $error_message = "Error updating user information: " . mysqli_error($con);
-  }
-} else {
-  // Handle invalid or empty form submission
-  $error_message = "Invalid request. Please provide user ID.";
-}
-
-// Redirect to client.php with error message if any
-header("Location: customer.php?error=" . urlencode($error_message));
-exit();
-?>
