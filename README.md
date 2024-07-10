@@ -4,13 +4,13 @@
 - It allows users to register for water connections, record monthly meter readings, generate bills, process payments, and generate detailed reports.
 
 
-<img src="img/login.png" alt="Login form" width="200px" style="float: left">&nbsp;&nbsp;
-<img src="img/dashboard.png" alt="Dashboard" width="200px" style="float: rigt">
+<img src="img/login.png" alt="Login form" width="250px" style="float: left">&nbsp;&nbsp;
+<img src="img/dashboard.png" alt="Dashboard" width="250px" style="float: rigt">
 
 &nbsp;&nbsp;
 
-<img src="img/register.png" alt="Dashboard" width="200px" style="float: left">&nbsp;&nbsp;
-<img src="img/dashboard.png" alt="Dashboard" width="200px" style="float: rigt">
+<img src="img/register.png" alt="Dashboard" width="250px" style="float: left">&nbsp;&nbsp;
+<img src="img/dashboard.png" alt="Dashboard" width="250px" style="float: rigt">
 
 ### Features
 
