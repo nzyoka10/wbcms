@@ -78,6 +78,7 @@ if (isset($_GET['id'])) {
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/customer.css">
+  <link rel="stylesheet" href="css/bill.css">
 </head>
 
 <body>
@@ -164,6 +165,11 @@ if (isset($_GET['id'])) {
             <a href="#!" data-id="" data-bs-toggle="modal" data-bs-target="#addUserModal" class="btn btn-success btn-sm">New Client</a>
           </div>
 
+          <div class="form-group pull-right mt-2">
+            <input type="text" class="search form-control" placeholder="Search by Name, Meter ID...">
+          </div>
+
+          <span class="counter pull-right"></span>
           <!-- Data table -->
           <div class="row">
             <div class="col-md-4"></div>
@@ -173,10 +179,10 @@ if (isset($_GET['id'])) {
                   <tr class="text-capitalize">
                     <th>Sn&nbsp;#</th>
                     <th class="col-md-3 col-xs-3">Full Name</th>
+                    <th class="col-md-3 col-xs-3">Meter ID</th>
                     <th class="col-md-3 col-xs-3">Email</th>
                     <th class="col-md-3 col-xs-3">Contact</th>
                     <th class="col-md-3 col-xs-3">Address</th>
-                    <th class="col-md-3 col-xs-3">Meter ID</th>
                     <th class="col-md-3 col-xs-3">Status</th>
                     <th class="col-md-3 col-xs-3">Actions</th>
                   </tr>
@@ -199,16 +205,34 @@ if (isset($_GET['id'])) {
                       echo '<tr>';
                       echo '<td>' . $sn . '</td>'; // Display serial number
                       echo '<td>' . $client['username'] . '</td>';
+                      echo '<td>' . $client['meter_id'] . '</td>';
                       echo '<td>' . $client['email'] . '</td>';
                       echo '<td>' . $client['contact'] . '</td>';
                       echo '<td>' . $client['address'] . '</td>';
-                      echo '<td>' . $client['meter_id'] . '</td>';
                       echo '<td>' . $client['status'] . '</td>';
                       echo '<td>';
-                      echo '<button data-bs-toggle="modal" data-bs-target="#updateUserModal" class="btn btn-sm btn-success mx-auto d-block editbtn" data-id="' . $client['user_id'] . '">Edit</button><br>';
-                      echo '<button class="btn btn-sm btn-danger deleteBtn mx-auto d-flex" data-id="' . $client['user_id'] . '">Delete</button>';
+                      echo '<div class="btn-group">
+                              <button type="button" class="btn btn-sm btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                Action
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li><a class="dropdown-item btn-success mx-auto" data-bs-toggle="modal" data-bs-target="#updateUserModal" href="#">Edit</a></li>
+                                <li><a class="dropdown-item" href="#">Delete</a></li>
+                              </ul>
+                            </div>';
+
+                      // echo '<button data-bs-toggle="modal" data-bs-target="#updateUserModal" 
+                      //   class="btn btn-sm btn-success mx-auto d-block editbtn" data-id="' . $client['user_id'] . '">Edit</button><br>';
+
+
+                      // echo '<button class="btn btn-sm btn-danger deleteBtn mx-auto d-flex" data-id="' 
+                      //   . $client['user_id'] . '">Delete</button>';
+
+
                       echo '</td>';
                       echo '</tr>';
+
+                      
 
                       // Increment counter for serial number
                       $sn++;
@@ -243,12 +267,13 @@ if (isset($_GET['id'])) {
   </div>
 
 
-  <!-- ApexCharts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
-  <script src="js/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-  <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="js/dt-1.10.25datatables.min.js"></script>
-  <script src="js/scripts.js"></script>
+   <!-- Script files -->
+   <script src="js/bill.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+    <script src="js/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/dt-1.10.25datatables.min.js"></script>
+    <script src="js/scripts.js"></script>
 
 
 
