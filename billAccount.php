@@ -48,7 +48,7 @@ if (!isset($_SESSION['user_id'])) {
                 <span class="material-icons-outlined">menu</span>
             </div>
             <div class="header-left">
-                <h4 class="text-secondary"><strong>WBCM</strong>&nbsp;&nbsp;-&nbsp;&nbsp;Accounts Billing</h4>
+                <h4 class="text-secondary"><strong>WBCM</strong>&nbsp;&nbsp;-&nbsp;&nbsp;Listing of Account Billing</h4>
             </div>
             <div class="header-right text-primary">
                 <!-- Message Notification banner -->
@@ -127,8 +127,8 @@ if (!isset($_SESSION['user_id'])) {
                         <thead>
                             <tr>
                                 <th>Sn.</th>
-                                <th class="col-md-3 col-xs-3">Meter ID</th>
                                 <th class="col-md-2 col-xs-3">Account Name</th>
+                                <th class="col-md-3 col-xs-3">Meter ID</th>
                                 <th class="col-md-2 col-xs-2">Previsous Reading</th>
                                 <th class="col-md-3 col-xs-2">Current Reading</th>
                                 <th class="col-md-2 col-xs-2">Total Amount</th>
@@ -140,32 +140,32 @@ if (!isset($_SESSION['user_id'])) {
                         <tbody>
                             <tr>
                                 <th scope="row">1</th>
-                                <td>1001</th>
                                 <td>Vatanay Özbeyli</td>
+                                <td>1001</th>
                                 <td>0</td>
                                 <td>10</td>
                                 <td><strong class="text-success">Kes.&nbsp;</strong>0</td>
                             </tr>
                             <tr>
                                 <th scope="row">2</th>
-                                <td>1002</th>
                                 <td>Burak Özkan</td>
+                                <td>1002</th>
                                 <td>0</td>
                                 <td>15</td>
                                 <td><strong class="text-success">Kes.&nbsp;</strong>0</td>
                             </tr>
                             <tr>
                                 <th scope="row">3</th>
-                                <td>1003</th>
                                 <td>Egemen Özbeyli</td>
+                                <td>1003</th>
                                 <td>5</td>
                                 <td>22</td>
                                 <td><strong class="text-success">Kes.&nbsp;</strong>100</td>
                             </tr>
                             <tr>
                                 <th scope="row">4</th>
-                                <td>1004</th>
                                 <td>Engin Kızıl</td>
+                                <td>1004</th>
                                 <td>0</td>
                                 <td>45</td>
                                 <td><strong class="text-success">Kes.&nbsp;</strong>0</td>
