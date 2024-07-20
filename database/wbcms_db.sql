@@ -1,8 +1,9 @@
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
+-- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 29, 2024 at 11:49 AM
+-- Generation Time: Jul 16, 2024 at 09:37 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -120,14 +121,29 @@ CREATE TABLE `tariffrates` (
 CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `phone` varchar(20) DEFAULT NULL,
+  `contact` varchar(20) DEFAULT NULL,
   `address` text DEFAULT NULL,
-  `role` enum('customer','admin') DEFAULT 'customer',
+  `meter_id` int(10) NOT NULL,
+  `first_reading` int(20) NOT NULL,
+  `status` enum('inactive','active') DEFAULT 'inactive',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `username`, `email`, `contact`, `address`, `meter_id`, `first_reading`, `status`, `created_at`, `updated_at`) VALUES
+(60, 'Test  User 1', 'test@app.com', '98263723', 'Kisuma', 1001, 0, 'active', '2024-06-30 12:36:45', '2024-07-10 07:21:25'),
+(62, 'Bob Kenya', 'app@mail.com', '123456', 'Kavoko', 1002, 0, 'inactive', '2024-06-30 13:35:57', '2024-07-10 07:19:42'),
+(65, 'Sukulu Timbo', 'test3@app.com', '97364383', 'KenKi DT', 1003, 0, 'inactive', '2024-07-01 05:42:25', '2024-07-10 07:21:54'),
+(99, 'Paul Amen', 'mapyfono@mailinator.com', '52633', 'Kimboo Upy', 1004, 0, 'active', '2024-07-10 06:03:19', '2024-07-10 07:20:06'),
+(102, 'Dj Lois Duffy', 'hokep@mailinator.com', '3627343', 'Kinoo DT', 1005, 0, 'active', '2024-07-10 06:03:58', '2024-07-10 07:20:24'),
+(103, 'Oliver Kakumi', 'sato@mailinator.com', '1127343', 'Gen Z DownTown', 1006, 0, 'inactive', '2024-07-10 06:04:22', '2024-07-10 07:20:37'),
+(106, 'Martha Kiio', 'rebo@mailinator.com', '3627343', 'Lower Kimbo DT', 1007, 0, 'inactive', '2024-07-10 06:08:28', '2024-07-10 07:20:47'),
+(107, 'Eric NZYOKA', 'admin@test.com', '123456789', '208, Syokimau', 1008, 0, 'active', '2024-07-10 07:22:53', '2024-07-10 07:22:53');
 
 -- --------------------------------------------------------
 
@@ -259,7 +275,7 @@ ALTER TABLE `tariffrates`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT for table `user_tbl`

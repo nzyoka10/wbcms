@@ -3,10 +3,11 @@
 require 'config.php';
 
 /**
- ** Function to check if users username or email already exists
+ ** Function to check if user's username or email already exists
+ * @param mysqli $conn
  * @param string $username
  * @param string $email
- * @return string
+ * @return bool
  */
 function userExists($conn, $username, $email) {
     $query = "SELECT * FROM user_tbl WHERE username=? OR email=?";
@@ -18,11 +19,12 @@ function userExists($conn, $username, $email) {
 }
 
 /**
- ** function to add new account user
+ ** Function to add a new account user
+ * @param mysqli $conn
  * @param string $username
  * @param string $email
  * @param string $password
- * @return string
+ * @return bool
  */
 function registerUser($conn, $username, $email, $password) {
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
@@ -32,7 +34,13 @@ function registerUser($conn, $username, $email, $password) {
     return $stmt->execute();
 }
 
-// Function to verify user credentials for login
+/**
+ ** Function to verify user credentials for login
+ * @param mysqli $conn
+ * @param string $email
+ * @param string $password
+ * @return mixed
+ */
 function verifyUser($conn, $email, $password) {
     $query = "SELECT * FROM user_tbl WHERE email=?";
     $stmt = $conn->prepare($query);
@@ -49,7 +57,7 @@ function verifyUser($conn, $email, $password) {
 }
 
 /**
- ** Function to add a new client user
+ ** Function to add a new client user (Customer)
  * @param string $name
  * @param string $email
  * @param string $mobile
@@ -60,42 +68,25 @@ function verifyUser($conn, $email, $password) {
  * @return string
  */
 function addClient($name, $email, $mobile, $address, $meter_id, $first_reading, $status) {
-    global $conn;
+    $conn = connectDB();
 
-    // Escape variables to prevent SQL injection
-    $name = mysqli_real_escape_string($conn, $name);
-    $email = mysqli_real_escape_string($conn, $email);
-    $mobile = mysqli_real_escape_string($conn, $mobile);
-    $address = mysqli_real_escape_string($conn, $address);
-    $meter_id = mysqli_real_escape_string($conn, $meter_id);
-    $first_reading = mysqli_real_escape_string($conn, $first_reading);
-    $status = mysqli_real_escape_string($conn, $status);
-
-    // Check if username already exists
-    // $checkUsernameSql = "SELECT * FROM users WHERE username='$name'";
-    // $usernameResult = mysqli_query($conn, $checkUsernameSql);
-
-    // if (mysqli_num_rows($usernameResult) > 0) {
-    //     return '<script>alert("Username already exists. Please choose a different username.");</script>';
-    // }
-
-    // Check if meter_id already exists
-    $checkMeterIdSql = "SELECT * FROM users WHERE meter_id='$meter_id'";
-    $meterIdResult = mysqli_query($conn, $checkMeterIdSql);
-
-    if (mysqli_num_rows($meterIdResult) > 0) {
-        return '<script>alert("Heyy, Meter A/C is already allocated. Allocated user new account!");</script>';
+    $query = "SELECT * FROM users WHERE meter_id=?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $meter_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        return '<script>alert("Hey, Meter A/C is already allocated. Allocate user new account!");</script>';
     }
 
-    // SQL query to insert client data into 'users' table
-    $sql = "INSERT INTO users (username, email, contact, address, meter_id, first_reading, status) 
-            VALUES ('$name', '$email', '$mobile', '$address', '$meter_id', '$first_reading', '$status')";
-
-    // Execute SQL query
-    if (mysqli_query($conn, $sql)) {
+    $query = "INSERT INTO users (username, email, contact, address, meter_id, first_reading, status) 
+              VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("sssssss", $name, $email, $mobile, $address, $meter_id, $first_reading, $status);
+    if ($stmt->execute()) {
         return '<script>alert("Client added successfully.");</script>';
     } else {
-        return '<script>alert("Failed to add client: ' . mysqli_error($conn) . '");</script>';
+        return '<script>alert("Failed to add client.");</script>';
     }
 }
 
@@ -104,18 +95,12 @@ function addClient($name, $email, $mobile, $address, $meter_id, $first_reading, 
  * @return array
  */
 function getAllClients() {
-    global $conn;
+    $conn = connectDB();
 
-    // SQL query to fetch all clients from 'users' table
-    $sql = "SELECT * FROM users";
-
-    // Execute SQL query
-    $result = mysqli_query($conn, $sql);
-
-    // Check if query returned any results
-    if (mysqli_num_rows($result) > 0) {
+    $query = "SELECT * FROM users";
+    $result = mysqli_query($conn, $query);
+    if ($result) {
         $clients = array();
-        // Fetch and store each row in the $clients array
         while ($row = mysqli_fetch_assoc($result)) {
             $clients[] = $row;
         }
@@ -138,35 +123,17 @@ function getAllClients() {
  * @return string
  */
 function editClient($id, $name, $email, $mobile, $address, $meter_id, $first_reading, $status) {
-    global $conn;
+    $conn = connectDB();
 
-    // Sanitize input data
-    $id = mysqli_real_escape_string($conn, $id);
-    $name = mysqli_real_escape_string($conn, $name);
-    $email = mysqli_real_escape_string($conn, $email);
-    $mobile = mysqli_real_escape_string($conn, $mobile);
-    $address = mysqli_real_escape_string($conn, $address);
-    $meter_id = mysqli_real_escape_string($conn, $meter_id);
-    $first_reading = mysqli_real_escape_string($conn, $first_reading);
-    $status = mysqli_real_escape_string($conn, $status);
-
-    // SQL query to update client details
-    $sql = "UPDATE users SET 
-            username = '$name',
-            email = '$email',
-            contact = '$mobile',
-            address = '$address',
-            meter_id = '$meter_id',
-            first_reading = '$first_reading',
-            status = '$status'
-            WHERE user_id = '$id'";
-
-    if (mysqli_query($conn, $sql)) {
+    $query = "UPDATE users SET 
+              username=?, email=?, contact=?, address=?, meter_id=?, first_reading=?, status=?
+              WHERE user_id=?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("sssssssi", $name, $email, $mobile, $address, $meter_id, $first_reading, $status, $id);
+    if ($stmt->execute()) {
         return '<script>alert("Client data updated successfully!");</script>';
-        // return '<div class="alert alert-success" role="alert">Client updated successfully!</div>';
     } else {
-        return '<script>alert("Error updating client data: ' . mysqli_error($conn) . '");</script>';
-        // return '<div class="alert alert-danger" role="alert">Error updating client: ' . mysqli_error($conn) . '</div>';
+        return '<script>alert("Error updating client data.");</script>';
     }
 }
 
@@ -176,19 +143,15 @@ function editClient($id, $name, $email, $mobile, $address, $meter_id, $first_rea
  * @return array
  */
 function deleteClient($user_id) {
-    global $conn;
+    $conn = connectDB();
 
-    // Escape ID to prevent SQL injection
-    $user_id = mysqli_real_escape_string($conn, $user_id);
-
-    // SQL query to delete a client from 'users' table based on ID
-    $sql = "DELETE FROM users WHERE user_id = '$user_id'";
-
-    // Execute SQL query
-    if (mysqli_query($conn, $sql)) {
+    $query = "DELETE FROM users WHERE user_id=?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    if ($stmt->execute()) {
         return array('status' => 'true', 'message' => 'Client deleted successfully.');
     } else {
-        return array('status' => 'false', 'message' => 'Failed to delete client: ' . mysqli_error($conn));
+        return array('status' => 'false', 'message' => 'Failed to delete client.');
     }
 }
 
@@ -198,25 +161,20 @@ function deleteClient($user_id) {
  * @return array
  */
 function searchClients($searchTerm) {
-    global $conn;
+    $conn = connectDB();
 
-    // Escape search term to prevent SQL injection
-    $searchTerm = mysqli_real_escape_string($conn, $searchTerm);
-
-    // SQL query to search for clients based on name, email, mobile, or address
-    $sql = "SELECT * FROM users 
-            WHERE username LIKE '%$searchTerm%' 
-            OR email LIKE '%$searchTerm%' 
-            OR contact LIKE '%$searchTerm%' 
-            OR address LIKE '%$searchTerm%'";
-
-    // Execute SQL query
-    $result = mysqli_query($conn, $sql);
-
-    // Check if query returned any results
-    if (mysqli_num_rows($result) > 0) {
+    $query = "SELECT * FROM users 
+              WHERE username LIKE ? 
+              OR email LIKE ? 
+              OR contact LIKE ? 
+              OR address LIKE ?";
+    $likeSearchTerm = "%$searchTerm%";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("ssss", $likeSearchTerm, $likeSearchTerm, $likeSearchTerm, $likeSearchTerm);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
         $clients = array();
-        // Fetch and store each row in the $clients array
         while ($row = mysqli_fetch_assoc($result)) {
             $clients[] = $row;
         }
@@ -226,98 +184,19 @@ function searchClients($searchTerm) {
     }
 }
 
-// Function to count all registered users
+/**
+ ** Function to count all registered users
+ * @param mysqli $conn
+ * @return int|string
+ */
 function countRegisteredUsers($conn) {
-    // SQL query to count users
-    $sql = "SELECT COUNT(*) as total_users FROM users";
-
-    // Execute SQL query
-    $result = mysqli_query($conn, $sql);
-
+    $query = "SELECT COUNT(*) as total_users FROM users";
+    $result = mysqli_query($conn, $query);
     if ($result) {
-        // Fetch the count
         $row = mysqli_fetch_assoc($result);
-        $totalUsers = $row['total_users'];
-        return $totalUsers;
+        return $row['total_users'];
     } else {
-        // Handle query error
         return "Error: " . mysqli_error($conn);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Function to fetch user details by user ID
- * @param mysqli $conn - MySQLi database connection object
- * @param int $user_id - User ID to fetch details for
- * @return array - Associative array containing user details if found, or error message if not found
- */
-// function getUserById($conn, $user_id) {
-//     // Sanitize the user_id to prevent SQL injection
-//     $user_id = mysqli_real_escape_string($conn, $user_id);
-
-//     // SQL query to fetch user details by user_id
-//     $sql = "SELECT * FROM users WHERE user_id = '$user_id'";
-
-//     // Execute SQL query
-//     $result = mysqli_query($conn, $sql);
-
-//     // Check if query was successful
-//     if ($result == true) {
-//         // Check if user with given user_id exists
-//         if (mysqli_num_rows($result) > 0) {
-//             // Fetch user details
-//             $user = mysqli_fetch_assoc($result);
-//             return array('status' => 'success', 'data' => $user);
-//         } else {
-//             return array('status' => 'error', 'message' => 'User not found.');
-//         }
-//     } else {
-//         // Handle query error
-//         return array('status' => 'error', 'message' => 'Query error: ' . mysqli_error($conn));
-//     }
-// }
-
-
 ?>

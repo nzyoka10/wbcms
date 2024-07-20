@@ -126,11 +126,12 @@ if (!isset($_SESSION['user_id'])) {
                     <table class="table table-hover table-bordered results">
                         <thead>
                             <tr>
-                                <th>Sn.</th>
-                                <th class="col-md-2 col-xs-3">Account Name</th>
-                                <th class="col-md-3 col-xs-3">Meter ID</th>
-                                <th class="col-md-2 col-xs-2">Previsous Reading</th>
-                                <th class="col-md-3 col-xs-2">Current Reading</th>
+                                <th>Sn#</th>
+                                <th class="col-md-2 col-xs-3">Invoice Id</th>
+                                <th class="col-md-2 col-xs-3">Account</th>
+                                <th class="col-md-3 col-xs-3">MeterID</th>
+                                <th class="col-md-2 col-xs-2">Last reading</th>
+                                <th class="col-md-3 col-xs-2">Recent reading</th>
                                 <th class="col-md-2 col-xs-2">Total Amount</th>
                             </tr>
                             <tr class="warning no-result">
@@ -140,13 +141,14 @@ if (!isset($_SESSION['user_id'])) {
                         <tbody>
                             <tr>
                                 <th scope="row">1</th>
-                                <td>Vatanay Özbeyli</td>
+                                <td>Inv#0001</td>
+                                <td>Test User</td>
                                 <td>1001</th>
                                 <td>0</td>
                                 <td>10</td>
                                 <td><strong class="text-success">Kes.&nbsp;</strong>0</td>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <th scope="row">2</th>
                                 <td>Burak Özkan</td>
                                 <td>1002</th>
@@ -169,7 +171,7 @@ if (!isset($_SESSION['user_id'])) {
                                 <td>0</td>
                                 <td>45</td>
                                 <td><strong class="text-success">Kes.&nbsp;</strong>0</td>
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>
 

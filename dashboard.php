@@ -39,7 +39,7 @@
         <span class="material-icons-outlined text-orange">receipt_long</span>
       </div>
       <span class="text-primary font-weight-bold">
-        <strong>0</strong>
+        <strong>3</strong>
       </span>
     </div>
 
@@ -49,7 +49,7 @@
         <span class="material-icons-outlined text-green">paid</span>
       </div>
       <span class="text-primary font-weight-bold">
-        <strong>Kes.&nbsp;</strong>0.0
+        <strong>Kes.&nbsp;</strong>507.04
       </span>
     </div>
 
@@ -59,7 +59,7 @@
         <span class="material-icons-outlined text-red">notification_important</span>
       </div>
       <span class="text-primary font-weight-bold">
-        <strong>0</strong>
+        <strong>1</strong>
       </span>
     </div>
 

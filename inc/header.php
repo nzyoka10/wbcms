@@ -1,18 +1,22 @@
 <?php
+// session start
 session_start();
 
+// include("config.php");
 include("config/functions.php");
 
-$totalUsers = countRegisteredUsers($conn);
+// Establish database connection
+$conn = connectDB();
 
 // Check if the user is logged in, if not redirect to the login page
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
 }
+
+// Count total registered users
+$totalUsers = countRegisteredUsers($conn);
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
