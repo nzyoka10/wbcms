@@ -1,16 +1,27 @@
 ## Water Billing and Customer Management System
 
-- This is a web-based application designed to streamline water usage `tracking`, `billing`, and `customer management` processes. 
+- This is a web-based application designed to streamline water usage `tracking`, `billing`, and `customer management` processes.
 - It allows users to register for water connections, record monthly meter readings, generate bills, process payments, and generate detailed reports.
 
+<details>
+<summary>App Screenshots</summary>
 
-<img src="img/login.png" alt="Login form" width="250px" style="float: left">&nbsp;&nbsp;
-<img src="img/dashboard.png" alt="Dashboard" width="250px" style="float: rigt">
+<h3>Desktop View</h3>
+<div style="margin: 10px 0;">
+    <h5>Account Login Page</h5>
+    <img src="img/login.png" alt="Login form" width="250px" style="float: left; margin-right: 10px; margin-bottom: 8px;">
+    <img src="img/dashboard.png" alt="Dashboard" width="250px" style="float: right;">
+</div>
 
-&nbsp;&nbsp;
+<div style="clear: both; margin: 10px 0;"></div>
 
-<img src="img/register.png" alt="Dashboard" width="250px" style="float: left">&nbsp;&nbsp;
-<img src="img/dashboard.png" alt="Dashboard" width="250px" style="float: rigt">
+<div style="margin: 10px 0;">
+    <img src="img/cl-add.png" alt="Register" width="250px" style="float: left; margin-right: 10px;">
+    <img src="img/cl-listing.png" alt="Dashboard" width="250px" style="float: right;">
+</div>
+
+<div style="clear: both;"></div>
+</details>
 
 ### Features
 
@@ -21,11 +32,10 @@
 - **Notification:** Sends billing receipts via SMS to customers.
 - **Reporting:** Provides detailed reports on usage trends and financial performance.
 
-
 ### Technologies Used
 
 - `Frontend`: **HTML**, **CSS**, **JavaScript**.
-- `Backend`: **PHP** 
+- `Backend`: **PHP**
 - `Database`: **MySQL**
 - `Payment Integration`: **M-Pesa API**
 - `SMS Gateway`: **Africa’s Talking**
