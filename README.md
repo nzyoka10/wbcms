@@ -8,7 +8,7 @@
 
 <h3>Desktop View</h3>
 <div style="margin: 10px 0;">
-    <h5>Account Login Page</h5>
+    <!-- <h5>Account Login Page</h5> -->
     <img src="img/login.png" alt="Login form" width="250px" style="float: left; margin-right: 10px; margin-bottom: 8px;">
     <img src="img/dashboard.png" alt="Dashboard" width="250px" style="float: right;">
 </div>
