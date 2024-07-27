@@ -2,53 +2,62 @@
 // Include the functions file
 require 'config/functions.php';
 
-// start session
+// Start session
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $email = htmlspecialchars($_POST['email']);
-  $password = htmlspecialchars($_POST['password']);
+    $email = htmlspecialchars($_POST['email']);
+    $password = htmlspecialchars($_POST['password']);
 
-    //   verify user credentials
-    if($user = verifyUser($conn, $email, $password)){
-
-        // setting session variables
+    // Verify user credentials
+    if ($user = verifyUser($email, $password)) {
+        // Setting session variables
         $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['useraname'];
+        $_SESSION['username'] = $user['username'];
         $_SESSION['email'] = $user['email'];
 
-        // redirect user to dashboard
+        // Redirect user to dashboard
         header('Location: dashboard.php');
         exit();
-    }else{
-        echo "<script>alert('Login failed.');</script>";
+    } else {
+        // Output SweetAlert for login error
+        echo "<script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Login failed',
+                text: 'Please check your email and password.',
+                confirmButtonText: 'OK'
+            }).then(function() {
+                // Optional: Redirect to the login page after closing the alert
+                window.location = 'index.php';
+            });
+        </script>";
     }
-
 }
-
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/login.css"> 
+    <!-- SweetAlert2 CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="css/login.css">
     <title>WBCM | Login</title>
 </head>
-
 <body>
     <div class="login-box">
         <div class="login-header">
             <header>Account Login</header>
         </div>
 
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="input-box">
-                <input type="text" name="email" class="input-field" placeholder="Email id" autocomplete="off" required>
+                <input type="text" name="email" class="input-field" placeholder="Email ID" autocomplete="off" required>
             </div>
             <div class="input-box">
                 <input type="password" name="password" class="input-field" placeholder="Password" autocomplete="off" required>
@@ -63,15 +72,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </section>
             </div>
             <div class="input-submit">
-                <button class="submit-btn" id="submit"></button>
-                <label for="submit">Sign In</label>
+                <button class="submit-btn" id="submit">Sign In</button>
             </div>
         </form>
 
         <div class="sign-up-link">
-            <p>Don't have account? <a href="register.php">Sign Up</a></p>
+            <p>Don't have an account? <a href="register.php">Sign Up</a></p>
         </div>
     </div>
 </body>
-
 </html>
