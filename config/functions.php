@@ -2,6 +2,9 @@
 // Include the database config file
 require 'config.php';
 
+// Start session
+session_start();
+
 /**
  * Check if a username or email already exists in the database.
  *
@@ -11,7 +14,7 @@ require 'config.php';
  */
 function userExists($username, $email) {
     $conn = connectDB();
-    $query = "SELECT 1 FROM user_tbl WHERE username = ? OR email = ?";
+    $query = "SELECT 1 FROM tbl_users WHERE username = ? OR email = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("ss", $username, $email);
     $stmt->execute();
@@ -33,7 +36,7 @@ function userExists($username, $email) {
 function registerUser($username, $email, $password) {
     $conn = connectDB();
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-    $query = "INSERT INTO user_tbl (username, email, password) VALUES (?, ?, ?)";
+    $query = "INSERT INTO tbl_users (username, email, password) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("sss", $username, $email, $hashedPassword);
     $success = $stmt->execute();
@@ -51,7 +54,7 @@ function registerUser($username, $email, $password) {
  */
 function verifyUser($email, $password) {
     $conn = connectDB();
-    $query = "SELECT * FROM user_tbl WHERE email = ?";
+    $query = "SELECT * FROM tbl_users WHERE email = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -70,36 +73,59 @@ function verifyUser($email, $password) {
 }
 
 /**
- * Add a new client to the database.
+ * Register/ADD a new Customer Account to the database.
  *
- * @param string $name Client's name
- * @param string $email Client's email
- * @param string $mobile Client's mobile number
- * @param string $address Client's address
+ * @param string $cust_id Client's ID
  * @param string $meter_id Unique meter ID for the client
- * @param string $first_reading Initial meter reading
- * @param string $status Client's status
+ * @param string $cust_name Client's full name
+ * @param int $first_reading Initial meter reading
+ * @param string $cust_pNumber Client's phone number
+ * @param string $account_status Client's status (active/inactive)
+ * @param string $cust_address Client's address
  * @return string Message indicating success or failure
  */
-function addClient($name, $email, $mobile, $address, $meter_id, $first_reading, $status) {
+function newAccount($cust_id, $meter_id, $cust_name, $first_reading, $cust_pNumber, $account_status, $cust_address) {
     $conn = connectDB();
 
+    // Check if the connection was successful
+    if ($conn === false) {
+        return 'Database connection failed.';
+    }
+
     // Check if meter_id already exists
-    $query = "SELECT 1 FROM users WHERE meter_id = ?";
+    $query = "SELECT 1 FROM tbl_account WHERE meter_id = ?";
     $stmt = $conn->prepare($query);
+    
+    if ($stmt === false) {
+        $conn->close();
+        return 'Failed to prepare statement.';
+    }
+
     $stmt->bind_param("s", $meter_id);
     $stmt->execute();
     $stmt->store_result();
+
     if ($stmt->num_rows > 0) {
         $stmt->close();
         $conn->close();
         return 'Meter ID is already allocated. Please use a new one!';
     }
 
+    $stmt->close();
+
     // Insert new client
-    $query = "INSERT INTO users (username, email, contact, address, meter_id, first_reading, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO tbl_account (cust_id, meter_id, cust_name, first_reading, cust_pNumber, account_status, cust_address) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("sssssss", $name, $email, $mobile, $address, $meter_id, $first_reading, $status);
+    
+    if ($stmt === false) {
+        $conn->close();
+        return 'Failed to prepare statement.';
+    }
+
+    // Bind parameters and execute the statement
+    $stmt->bind_param("sssisss", $cust_id, $meter_id, $cust_name, $first_reading, $cust_pNumber, $account_status, $cust_address);
+
     if ($stmt->execute()) {
         $stmt->close();
         $conn->close();
@@ -119,7 +145,7 @@ function addClient($name, $email, $mobile, $address, $meter_id, $first_reading, 
 function getAllClients() {
     $conn = connectDB();
 
-    $query = "SELECT * FROM users";
+    $query = "SELECT * FROM tbl_account";
     $result = $conn->query($query);
     if ($result) {
         $clients = array();
@@ -138,21 +164,20 @@ function getAllClients() {
  * Update details of an existing client.
  *
  * @param int $id Client ID
- * @param string $name Updated name
- * @param string $email Updated email
- * @param string $mobile Updated mobile number
- * @param string $address Updated address
+ * @param string $cust_name Updated name
+ * @param string $cust_pNumber Updated mobile number
+ * @param string $cust_address Updated address
  * @param string $meter_id Updated meter ID
  * @param string $first_reading Updated first reading
- * @param string $status Updated status
+ * @param string $account_status Updated status
  * @return string Message indicating success or failure
  */
-function editClient($id, $name, $email, $mobile, $address, $meter_id, $first_reading, $status) {
+function editClient($id, $cust_name, $cust_pNumber, $cust_address, $meter_id, $first_reading, $account_status) {
     $conn = connectDB();
 
-    $query = "UPDATE users SET username = ?, email = ?, contact = ?, address = ?, meter_id = ?, first_reading = ?, status = ? WHERE user_id = ?";
+    $query = "UPDATE tbl_account SET cust_name = ?, cust_pNumber = ?, cust_address = ?, meter_id = ?, first_reading = ?, account_status = ? WHERE cust_id = ?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("sssssssi", $name, $email, $mobile, $address, $meter_id, $first_reading, $status, $id);
+    $stmt->bind_param("sssisss", $cust_name, $cust_pNumber, $cust_address, $meter_id, $first_reading, $account_status, $id);
     if ($stmt->execute()) {
         $stmt->close();
         $conn->close();
@@ -167,15 +192,15 @@ function editClient($id, $name, $email, $mobile, $address, $meter_id, $first_rea
 /**
  * Delete a client from the database by their ID.
  *
- * @param int $user_id Client ID to delete
+ * @param int $cust_id Client ID to delete
  * @return array Status and message indicating success or failure
  */
-function deleteClient($user_id) {
+function deleteClient($cust_id) {
     $conn = connectDB();
 
-    $query = "DELETE FROM users WHERE user_id = ?";
+    $query = "DELETE FROM tbl_account WHERE cust_id = ?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $user_id);
+    $stmt->bind_param("i", $cust_id);
     if ($stmt->execute()) {
         $stmt->close();
         $conn->close();
@@ -196,7 +221,7 @@ function deleteClient($user_id) {
 function searchClients($searchTerm) {
     $conn = connectDB();
 
-    $query = "SELECT * FROM users WHERE username LIKE ? OR email LIKE ? OR contact LIKE ? OR address LIKE ?";
+    $query = "SELECT * FROM tbl_account WHERE cust_name LIKE ? OR meter_id LIKE ? OR cust_pNumber LIKE ? OR cust_address LIKE ?";
     $likeSearchTerm = "%$searchTerm%";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("ssss", $likeSearchTerm, $likeSearchTerm, $likeSearchTerm, $likeSearchTerm);
@@ -225,7 +250,7 @@ function searchClients($searchTerm) {
 function countRegisteredUsers() {
     $conn = connectDB();
 
-    $query = "SELECT COUNT(*) as total_users FROM users";
+    $query = "SELECT COUNT(*) as total_users FROM tbl_account";
     $result = $conn->query($query);
     if ($result) {
         $row = $result->fetch_assoc();

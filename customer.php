@@ -1,16 +1,64 @@
 <?php
-session_start();
 
-// Include database connection and functions
 include("./config/functions.php");
 
-// Check if the user is logged in, if not redirect to the login page
 if (!isset($_SESSION['user_id'])) {
-  header("Location: index.php");
-  exit();
+    header("Location: index.php");
+    exit();
 }
 
+// check if user account is created
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  // Ensure form data is being captured correctly
+  $cust_id = htmlspecialchars($_POST['customer_id'] ?? '');
+  $meter_id = htmlspecialchars($_POST['meter_id'] ?? '');
+  $cust_name = htmlspecialchars($_POST['customer_name'] ?? '');
+  $first_reading = htmlspecialchars($_POST['first_reading'] ?? '');
+  $cust_pNumber = htmlspecialchars($_POST['customer_pNumber'] ?? '');
+  $account_status = htmlspecialchars($_POST['account_status'] ?? '');
+  $cust_address = htmlspecialchars($_POST['customer_address'] ?? '');
+
+  // Check if all required fields are not empty
+  if (!empty($cust_id) && !empty($meter_id) && !empty($cust_name) && !empty($first_reading) && !empty($cust_pNumber) && !empty($account_status) && !empty($cust_address)) {
+      if (newAccount($cust_id, $meter_id, $cust_name, $first_reading, $cust_pNumber, $account_status, $cust_address)) {
+          // Registration successful
+          echo "<script>
+              Swal.fire({
+                  icon: 'success',
+                  title: 'Registration successful',
+                  text: 'You can now log in.',
+                  confirmButtonText: 'OK'
+              }).then(function() {
+                  window.location.href = 'index.php';
+              });
+          </script>";
+      } else {
+          // Registration failed
+          echo "<script>
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Registration failed',
+                  text: 'Please try again later.',
+                  confirmButtonText: 'OK'
+              });
+          </script>";
+      }
+  } else {
+      // Missing input
+      echo "<script>
+          Swal.fire({
+              icon: 'error',
+              title: 'Input Error',
+              text: 'Please fill all fields.',
+              confirmButtonText: 'OK'
+          });
+      </script>";
+  }
+}
+
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -132,12 +180,13 @@ if (!isset($_SESSION['user_id'])) {
                 <thead>
                   <tr class="text-capitalize">
                     <th>Sn&nbsp;#</th>
-                    <th class="col-md-3 col-xs-3">Full Name</th>
+                    <th class="col-md-3 col-xs-3">Customer ID</th>
                     <th class="col-md-3 col-xs-3">Meter ID</th>
-                    <th class="col-md-3 col-xs-3">Email</th>
-                    <th class="col-md-3 col-xs-3">Contact</th>
-                    <th class="col-md-3 col-xs-3">Address</th>
+                    <th class="col-md-3 col-xs-3">Full Name</th>
+                    <th class="col-md-3 col-xs-3">Reading</th>
+                    <th class="col-md-3 col-xs-3">Mobile</th>
                     <th class="col-md-3 col-xs-3">Status</th>
+                    <th class="col-md-3 col-xs-3">Address</th>
                     <th class="col-md-3 col-xs-3">Actions</th>
                   </tr>
                 </thead>
@@ -157,20 +206,21 @@ if (!isset($_SESSION['user_id'])) {
                     foreach ($clients as $client) {
                       echo '<tr>';
                       echo '<td>' . $sn . '</td>'; // Display serial number
-                      echo '<td>' . htmlspecialchars($client['username']) . '</td>';
+                      echo '<td>' . htmlspecialchars($client['customer_id']) . '</td>';
                       echo '<td>' . htmlspecialchars($client['meter_id']) . '</td>';
-                      echo '<td>' . htmlspecialchars($client['email']) . '</td>';
-                      echo '<td>' . htmlspecialchars($client['contact']) . '</td>';
-                      echo '<td>' . htmlspecialchars($client['address']) . '</td>';
-                      echo '<td>' . htmlspecialchars($client['status']) . '</td>';
+                      echo '<td>' . htmlspecialchars($client['customer_name']) . '</td>';
+                      echo '<td>' . htmlspecialchars($client['first_reading']) . '</td>';
+                      echo '<td>' . htmlspecialchars($client['customer_pNumber']) . '</td>';
+                      echo '<td>' . htmlspecialchars($client['account_status']) . '</td>';
+                      echo '<td>' . htmlspecialchars($client['customer_address']) . '</td>';
                       echo '<td>';
                       echo '<div class="btn-group">
                                                     <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                                         Action
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <li><a class="dropdown-item btn-success mx-auto" data-bs-toggle="modal" data-bs-target="#updateUserModal" href="#" data-id="' . htmlspecialchars($client['user_id']) . '">Edit</a></li>
-                                                        <li><a class="dropdown-item btn-danger mx-auto" href="#" data-id="' . htmlspecialchars($client['user_id']) . '">Delete</a></li>
+                                                        <li><a class="dropdown-item btn-success mx-auto" data-bs-toggle="modal" data-bs-target="#updateUserModal" href="#" data-id="' . htmlspecialchars($client['id']) . '">Edit</a></li>
+                                                        <li><a class="dropdown-item btn-danger mx-auto" href="#" data-id="' . htmlspecialchars($client['id']) . '">Delete</a></li>
                                                     </ul>
                                                 </div>';
                       echo '</td>';
@@ -190,7 +240,6 @@ if (!isset($_SESSION['user_id'])) {
     </main>
     <!-- End Main section -->
 
-    <!-- Modals -->
     <!-- Add Client Modal -->
     <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
@@ -205,47 +254,47 @@ if (!isset($_SESSION['user_id'])) {
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" class="form-control" name="name" id="name" required>
+                    <label for="customer_Id">Customer ID</label>
+                    <input type="text" class="form-control" name="cust_id" id="customer_Id" placeholder="12345678" required>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" required>
+                    <label for="meter_Id">Meter ID</label>
+                    <input type="text" class="form-control" name="meter_id" id="meter_Id" placeholder="Ac-000/0" required>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="mobile">Mobile</label>
-                    <input type="text" class="form-control" name="mobile" id="mobile" required>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" class="form-control" name="address" id="address" required>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="meter_id">Meter ID</label>
-                    <input type="text" class="form-control" name="meter_id" id="meter_id" required>
+                    <label for="customer_name">Full Name</label>
+                    <input type="text" class="form-control" name="cust_name" id="customer_name" placeholder="Full Name" required>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="first_reading">First Reading</label>
-                    <input type="number" class="form-control" name="first_reading" id="first_reading" required>
+                    <input type="number" class="form-control" name="first_reading" id="first_reading" placeholder="0.0" required>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="status">Status</label>
-                    <select class="form-control" name="status" id="status" required>
+                    <label for="customer_pNumber">Phone Number</label>
+                    <input type="text" class="form-control" name="cust_pNumber" id="customer_pNumber" placeholder="+254 700-090-100" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="cust_account_status">Status</label>
+                    <select class="form-control" name="account_status" id="cust_account_status" required>
                       <option value="active">Active</option>
                       <option value="inactive">Inactive</option>
                     </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="customer_address">Address</label>
+                    <input type="text" class="form-control" name="cust_address" id="customer_address" placeholder="Katani, Syokimau" required>
                   </div>
                 </div>
               </div>
@@ -258,6 +307,7 @@ if (!isset($_SESSION['user_id'])) {
         </div>
       </div>
     </div>
+
 
     <!-- Edit Client Modal -->
     <div class="modal fade" id="updateUserModal" tabindex="-1" aria-labelledby="updateUserModalLabel" aria-hidden="true">
@@ -297,9 +347,8 @@ if (!isset($_SESSION['user_id'])) {
     <script src="js/custom.js"></script>
     <!-- sweet alert cdnjs -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  </div>
 
-  <!-- Custome JavaScript -->
+     <!-- Custome JavaScript -->
   <script>
   document.addEventListener('DOMContentLoaded', function() {
     const addUserModal = document.getElementById('addUserModal');
@@ -311,18 +360,17 @@ if (!isset($_SESSION['user_id'])) {
       const form = addUserModal.querySelector('form');
 
       if (clientId) {
-        form.action = 'updateClient.php'; // PHP script to handle client updates
+        form.action = 'updateAccount.php'; // PHP script to handle client updates
         fetch(`getClientData.php?id=${clientId}`) // Fetch existing client data
           .then(response => response.json())
           .then(data => {
-            document.getElementById('name').value = data.name;
-            document.getElementById('email').value = data.email;
-            document.getElementById('mobile').value = data.mobile;
-            document.getElementById('address').value = data.address;
+            document.getElementById('customer_id').value = data.customer_id;
             document.getElementById('meter_id').value = data.meter_id;
+            document.getElementById('customer_name').value = data.customer_name;
             document.getElementById('first_reading').value = data.first_reading;
-            document.getElementById('status').value = data.status;
-            document.getElementById('clientId').value = clientId;
+            document.getElementById('customer_pNumber').value = data.customer_pNumber;
+            document.getElementById('cust_account_status').value = data.cust_account_status;
+            document.getElementById('customer_address').value = data.customer_address;
           });
       } else {
         form.action = 'addAccount.php'; // PHP script to handle new client addition
@@ -401,11 +449,10 @@ if (!isset($_SESSION['user_id'])) {
     });
   });
 </script>
+  </div>
 
 
-
-
-
+  
 </body>
 
 </html>

@@ -1,71 +1,49 @@
 <?php
-session_start();
-
-// Include database connection and functions
 include("./config/functions.php");
 
-// Check if the user is logged in, if not redirect to the login page
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
 }
 
-// Handle form submission for adding or editing clients
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Retrieve form data
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $mobile = $_POST['mobile'];
-    $address = $_POST['address'];
-    $meter_id = $_POST['meter_id'];
-    $first_reading = $_POST['first_reading'];
-    $status = $_POST['status'];
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve and sanitize form data
+    $cust_id = htmlspecialchars($_POST['cust_id']);
+    $meter_id = htmlspecialchars($_POST['meter_id']);
+    $cust_name = htmlspecialchars($_POST['cust_name']);
+    $first_reading = htmlspecialchars($_POST['first_reading']);
+    $cust_pNumber = htmlspecialchars($_POST['cust_pNumber']);
+    $account_status = htmlspecialchars($_POST['account_status']);
+    $cust_address = htmlspecialchars($_POST['cust_address']);
 
-    // Check if 'id' is set to determine if we are editing an existing client
-    if (isset($_POST['user_id'])) {
-        // Edit existing user details
-        $id = $_POST['user_id'];
-        $result = editClient($id, $name, $email, $mobile, $address, $meter_id, $first_reading, $status);
-        echo json_encode(['status' => $result ? 'success' : 'error']);
+    // Validate input data
+    if (!empty($cust_id) && !empty($meter_id) && !empty($cust_name) && !empty($first_reading) && !empty($cust_pNumber) && !empty($account_status) && !empty($cust_address)) {
+        // Call the function to add the account
+        $message = newAccount($cust_id, $meter_id, $cust_name, $first_reading, $cust_pNumber, $account_status, $cust_address);
+        
+        // Provide feedback to the user
+        echo "<script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '$message',
+                confirmButtonText: 'OK'
+            }).then(function() {
+                window.location.href = 'customer.php'; // Redirect to the customer listing page
+            });
+        </script>";
     } else {
-        // Add new client
-        $result = addClient($name, $email, $mobile, $address, $meter_id, $first_reading, $status);
-        echo json_encode(['status' => $result ? 'success' : 'error']);
-    }
-    exit();
-}
-
-
-// Fetch user data to pre-fill the form if editing
-if (isset($_GET['user_id'])) {
-    $id = mysqli_real_escape_string($conn, $_GET['user_id']);
-    $result = mysqli_query($conn, "SELECT * FROM users WHERE user_id='$id'");
-
-    if ($result && mysqli_num_rows($result) > 0) {
-        $user = mysqli_fetch_assoc($result);
-    } else {
-        echo '<div class="alert alert-danger" role="alert">User not found.</div>';
-        exit;
+        // Missing input
+        echo "<script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Input Error',
+                text: 'Please fill all fields.',
+                confirmButtonText: 'OK'
+            });
+        </script>";
     }
 }
-
-// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//     // Retrieve form data
-//     $name = $_POST['name'];
-//     $email = $_POST['email'];
-//     $mobile = $_POST['mobile'];
-//     $address = $_POST['address'];
-//     $meter_id = $_POST['meter_id'];
-//     $first_reading = $_POST['first_reading'];
-//     $status = $_POST['status'];
-
-//     // Add client to the database
-//     $result = addClient($name, $email, $mobile, $address, $meter_id, $first_reading, $status);
-
-//     if ($result) {
-//         echo json_encode(['status' => 'success']);
-//     } else {
-//         echo json_encode(['status' => 'error']);
-//     }
-// }
 ?>

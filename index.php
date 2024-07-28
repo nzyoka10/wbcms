@@ -2,8 +2,6 @@
 // Include the functions file
 require 'config/functions.php';
 
-// Start session
-session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = htmlspecialchars($_POST['email']);
@@ -77,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
         <div class="sign-up-link">
-            <p>Don't have an account? <a href="register.php">Sign Up</a></p>
+            <p>Don't have an account? <a href="register.php" id="signUpLink">Sign Up</a></p>
         </div>
     </div>
 </body>

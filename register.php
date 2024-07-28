@@ -2,8 +2,6 @@
 // Include the functions file
 require 'config/functions.php';
 
-// Start session
-session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Ensure form data is being captured correctly
