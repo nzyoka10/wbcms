@@ -13,7 +13,7 @@ if (!isset($_SESSION['username'])) {
 }
 
 // Fetch clients for display
-$clients = getClients(); // Assumes a function to fetch all clients
+$clients = getClients(); 
 
 // Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

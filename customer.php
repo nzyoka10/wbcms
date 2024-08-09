@@ -149,8 +149,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="card-header d-flex justify-content-between align-items-center">
               <h5 class="mb-0">Listing of Clients</h5>
               <!-- Button trigger modal -->
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Create New
+              <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                New Client
               </button>
             </div>
 
@@ -208,7 +208,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                               </li>
                               <li>
                                 <a href="edit_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-sm text-success" title="Modify">
-                                  <i class="fas fa-edit"></i> Modify
+                                  <i class="fas fa-edit"></i> Edit
                                 </a>
                               </li>
                               <li>
@@ -314,7 +314,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <p><strong>Status:</strong> <span id="modalClientStatus"></span></p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
