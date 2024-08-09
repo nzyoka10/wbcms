@@ -166,10 +166,62 @@ function getClients()
 
     return $result->fetch_all(MYSQLI_ASSOC);
 }
-
 try {
     $clients = getClients();
 } catch (Exception $e) {
     $error_message = 'An error occurred: ' . $e->getMessage();
+}
+
+/**
+ * updateClient - Update client details in the database
+ * @clientId: The ID of the client to update
+ * @fullName: The updated name of the client
+ * @pNumber: The updated phone number of the client
+ * @address: The updated address of the client
+ * @meterId: The updated meter number of the client
+ * @firstReading: The updated meter reading
+ * @status: The updated status of the client (active/inactive)
+ * Return: true if the update is successful, false otherwise
+ */
+function updateClient($clientId, $fullName, $pNumber, $address, $meterId, $firstReading, $status)
+{
+    global $conn;
+
+    // Prepare the SQL query to update the client's details
+    $query = "UPDATE tbl_clients 
+              SET client_name = ?, contact_number = ?, address = ?, meter_number = ?, meter_reading = ?, status = ? 
+              WHERE client_id = ?";
+    $stmt = $conn->prepare($query);
+    if (!$stmt) {
+        throw new Exception('Database query preparation failed: ' . $conn->error);
+    }
+    $stmt->bind_param("ssssssi", $fullName, $pNumber, $address, $meterId, $firstReading, $status, $clientId);
+
+    // Return true if the update is successful
+    return $stmt->execute();
+}
+
+// Example usage:
+try {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['client_id'])) {
+        $clientId = $_POST['client_id'];
+        $fullName = $_POST['fullName'];
+        $pNumber = $_POST['pNumber'];
+        $address = $_POST['address'];
+        $meterId = $_POST['meter_id'];
+        $firstReading = $_POST['first_reading'];
+        $status = $_POST['status'];
+
+        // Update the client in the database
+        $updateResult = updateClient($clientId, $fullName, $pNumber, $address, $meterId, $firstReading, $status);
+        if ($updateResult) {
+            echo "Client updated successfully.";
+        } else {
+            echo "Failed to update client.";
+        }
+    }
+} catch (Exception $e) {
+    $error_message = 'An error occurred: ' . $e->getMessage();
+    echo $error_message;
 }
 ?>
