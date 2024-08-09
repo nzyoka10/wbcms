@@ -21,7 +21,7 @@
         </li>
 
         <li class="sidebar-list-item">
-          <a href="./billAccount.php">
+          <a href="./billings.php">
             <span class="material-icons-outlined">payments</span>&nbsp;&nbsp;Billings
           </a>
         </li>
