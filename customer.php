@@ -215,53 +215,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             </div>
           </div>
-
-          <!-- Modal -->
-          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Register Client</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                    <div class="mb-3">
-                      <label for="fullName" class="form-label">Client's Name</label>
-                      <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Full name" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="pNumber" class="form-label">Contact</label>
-                      <input type="text" class="form-control" id="pNumber" name="pNumber" placeholder="Phone number" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="address" class="form-label">Address</label>
-                      <input type="text" class="form-control" id="address" name="address" placeholder="1234, Katani" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="meter_id" class="form-label">Meter Number</label>
-                      <input type="text" class="form-control" id="meter_id" name="meter_id" placeholder="Meter number" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="first_reading" class="form-label">Meter Reading</label>
-                      <input type="text" class="form-control" id="first_reading" name="first_reading" placeholder="0.0" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="status" class="form-label">Status</label>
-                      <select id="status" name="status" class="form-select" required>
-                        <option value="" disabled selected>Choose...</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="active">Active</option>
-                      </select>
-                    </div>
-                    <div class="d-flex justify-content-end">
-                      <button type="submit" class="btn btn-primary">Register</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         <!-- JS Dependencies -->
@@ -280,37 +233,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="js/datatables.min.js"></script>
   </div>
 
-  <!-- ***========== new client modal ***========== -->
+  <!-- ==========***  Register new client form  ***========== -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg"> <!-- Adjust modal width here -->
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Register Client</h5>
+          <h5 class="modal-title">Register Client</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-            <div class="mb-3">
+          <form method="post" class="row g-4" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <div class="col-md-6">
               <label for="fullName" class="form-label">Client's Name</label>
               <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Full name" required>
             </div>
-            <div class="mb-3">
+            <div class="col-md-6">
               <label for="pNumber" class="form-label">Contact</label>
               <input type="text" class="form-control" id="pNumber" name="pNumber" placeholder="Phone number" required>
             </div>
-            <div class="mb-3">
+            <div class="col-md-6">
               <label for="address" class="form-label">Address</label>
               <input type="text" class="form-control" id="address" name="address" placeholder="1234, Katani" required>
             </div>
-            <div class="mb-3">
+            <div class="col-md-6">
               <label for="meter_id" class="form-label">Meter Number</label>
               <input type="text" class="form-control" id="meter_id" name="meter_id" placeholder="Meter number" required>
             </div>
-            <div class="mb-3">
+            <div class="col-md-6">
               <label for="first_reading" class="form-label">Meter Reading</label>
               <input type="text" class="form-control" id="first_reading" name="first_reading" placeholder="0.0" required>
             </div>
-            <div class="mb-3">
+            <div class="col-md-6">
               <label for="status" class="form-label">Status</label>
               <select id="status" name="status" class="form-select" required>
                 <option value="" disabled selected>Choose...</option>
@@ -319,13 +272,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </select>
             </div>
             <div class="d-flex justify-content-end">
-              <button type="submit" class="btn btn-primary">Register</button>
+              <button type="submit" class="btn btn-primary">Register Client</button>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- ==========***  Register new client form  ***========== -->
+
 
 </body>
 
