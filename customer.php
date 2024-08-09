@@ -9,31 +9,31 @@ $success_message = '';
 
 // Check if the user is logged in
 if (!isset($_SESSION['username'])) {
-    // If not logged in, redirect to the login page
-    header("Location: index.php");
-    exit();
+  // If not logged in, redirect to the login page
+  header("Location: index.php");
+  exit();
 }
 
 // Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
-    $fullName = htmlspecialchars($_POST['fullName']);
-    $pNumber = htmlspecialchars($_POST['pNumber']);
-    $address = htmlspecialchars($_POST['address']);
-    $meterId = htmlspecialchars($_POST['meter_id']);
-    $firstReading = htmlspecialchars($_POST['first_reading']);
-    $status = htmlspecialchars($_POST['status']);
+  // Retrieve form data
+  $fullName = htmlspecialchars($_POST['fullName']);
+  $pNumber = htmlspecialchars($_POST['pNumber']);
+  $address = htmlspecialchars($_POST['address']);
+  $meterId = htmlspecialchars($_POST['meter_id']);
+  $firstReading = htmlspecialchars($_POST['first_reading']);
+  $status = htmlspecialchars($_POST['status']);
 
-    // Register the new client
-    try {
-        if (registerClient($fullName, $pNumber, $address, $meterId, $firstReading, $status)) {
-            $success_message = 'Client registered successfully.';
-        } else {
-            $error_message = 'Error registering client.';
-        }
-    } catch (Exception $e) {
-        $error_message = 'An error occurred: ' . $e->getMessage();
+  // Register the new client
+  try {
+    if (registerClient($fullName, $pNumber, $address, $meterId, $firstReading, $status)) {
+      $success_message = 'Client registered successfully.';
+    } else {
+      $error_message = 'Error registering client.';
     }
+  } catch (Exception $e) {
+    $error_message = 'An error occurred: ' . $e->getMessage();
+  }
 }
 ?>
 
@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <span class="material-icons-outlined">menu</span>
       </div>
       <div class="header-left">
-        <h4 class="text-secondary"><strong>WBCM</strong>&nbsp;&nbsp;-&nbsp;&nbsp;Listing of Clients</h4>
+      <h6 class="text-seconary">Water Billing & Customer Management System - <small class="text-success">CLIENTS</small></h6>
       </div>
       <div class="header-right text-primary">
         <!-- Message Notification banner -->
@@ -139,27 +139,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Main section -->
     <main class="main-container">
       <div class="row">
-        <div class="container">
 
-          <!-- Button trigger modal -->
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Create new
-          </button>
-
-          <!-- <span class="counter pull-right"></span> -->
-
-          <div class="container mt-4">
-        <!-- <h1 class="mb-4">List of Clients</h1> -->
-
-        <?php if (isset($error_message)): ?>
-            <div class="alert alert-danger" role="alert">
-                <?php echo htmlspecialchars($error_message); ?>
+        <div class="container mt-4">
+          <!-- Card Container -->
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Listing of Clients</h5>
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Create New
+              </button>
             </div>
-        <?php endif; ?>
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
+            <!-- Card Body -->
+            <div class="card-body">
+              <!-- Display error message if present -->
+              <?php if (!empty($error_message)) : ?>
+                <div class="alert alert-danger" role="alert">
+                  <?php echo htmlspecialchars($error_message); ?>
+                </div>
+              <?php endif; ?>
+
+              <!-- diplay registered clients -->
+              <table class="table table-striped">
+                <thead>
+                  <tr>
                     <th scope="col">#</th>
                     <th scope="col">Client Name</th>
                     <th scope="col">Contact Number</th>
@@ -167,79 +171,151 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <th scope="col">Meter Number</th>
                     <th scope="col">Meter Reading</th>
                     <th scope="col">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($clients)): ?>
-                    <?php foreach ($clients as $index => $client): ?>
-                        <tr>
-                            <th scope="row"><?php echo htmlspecialchars($index + 1); ?></th>
-                            <td><?php echo htmlspecialchars($client['client_name']); ?></td>
-                            <td><?php echo htmlspecialchars($client['contact_number']); ?></td>
-                            <td><?php echo htmlspecialchars($client['address']); ?></td>
-                            <td><?php echo htmlspecialchars($client['meter_number']); ?></td>
-                            <td><?php echo htmlspecialchars($client['meter_reading']); ?></td>
-                            <td><?php echo htmlspecialchars($client['status']); ?></td>
-                        </tr>
+                    <th scope="col">Actions</th> <!-- New Actions Column -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php if (!empty($clients)) : ?>
+                    <?php foreach ($clients as $index => $client) : ?>
+                      <tr>
+                        <th scope="row"><?php echo htmlspecialchars($index + 1); ?></th>
+                        <td><?php echo htmlspecialchars($client['client_name']); ?></td>
+                        <td><?php echo htmlspecialchars($client['contact_number']); ?></td>
+                        <td><?php echo htmlspecialchars($client['address']); ?></td>
+                        <td><?php echo htmlspecialchars($client['meter_number']); ?></td>
+                        <td><?php echo htmlspecialchars($client['meter_reading']); ?></td>
+                        <td><?php echo htmlspecialchars($client['status']); ?></td>
+                        <td>
+                          <!-- View Button -->
+                          <a href="view_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-info btn-sm" title="View">
+                            <i class="fas fa-eye"></i> View
+                          </a>
+                          <!-- Modify Button -->
+                          <a href="edit_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-warning btn-sm" title="Modify">
+                            <i class="fas fa-edit"></i> Modify
+                          </a>
+                          <!-- Delete Button -->
+                          <a href="delete_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-danger btn-sm" title="Delete" onclick="return confirm('Are you sure you want to delete this client?');">
+                            <i class="fas fa-trash"></i> Delete
+                          </a>
+                        </td>
+                      </tr>
                     <?php endforeach; ?>
-                <?php else: ?>
+                  <?php else : ?>
                     <tr>
-                        <td colspan="7" class="text-center">No clients found.</td>
+                      <td colspan="8" class="text-center">No clients found.</td>
                     </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
+                  <?php endif; ?>
+                </tbody>
+              </table>
 
+
+            </div>
+          </div>
+
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Register Client</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                    <div class="mb-3">
+                      <label for="fullName" class="form-label">Client's Name</label>
+                      <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Full name" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="pNumber" class="form-label">Contact</label>
+                      <input type="text" class="form-control" id="pNumber" name="pNumber" placeholder="Phone number" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="address" class="form-label">Address</label>
+                      <input type="text" class="form-control" id="address" name="address" placeholder="1234, Katani" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="meter_id" class="form-label">Meter Number</label>
+                      <input type="text" class="form-control" id="meter_id" name="meter_id" placeholder="Meter number" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="first_reading" class="form-label">Meter Reading</label>
+                      <input type="text" class="form-control" id="first_reading" name="first_reading" placeholder="0.0" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="status" class="form-label">Status</label>
+                      <select id="status" name="status" class="form-select" required>
+                        <option value="" disabled selected>Choose...</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="active">Active</option>
+                      </select>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                      <button type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- JS Dependencies -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>
+
+
+
+
       </div>
     </main>
     <!-- End Main section -->
 
     <!-- JS Dependencies -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/datatables.min.js"></script>
   </div>
 
   <!-- ***========== new client modal ***========== -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg"> <!-- Adjust modal width here -->
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5">Register Client</h1>
+          <h5 class="modal-title" id="exampleModalLabel">Register Client</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="row g-3">
-            <div class="col-md-6">
-              <label for="inputEmail4" class="form-label">Client's Name</label>
-              <input type="text" class="form-control" name="fullName" placeholder="Full name" required>
+          <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <div class="mb-3">
+              <label for="fullName" class="form-label">Client's Name</label>
+              <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Full name" required>
             </div>
-            <div class="col-md-6">
-              <label for="inputPassword4" class="form-label">Contact</label>
-              <input type="text" class="form-control" name="pNumber" placeholder="Phone number" required>
+            <div class="mb-3">
+              <label for="pNumber" class="form-label">Contact</label>
+              <input type="text" class="form-control" id="pNumber" name="pNumber" placeholder="Phone number" required>
             </div>
-            <div class="col-12">
-              <label for="inputAddress" class="form-label">Address</label>
-              <input type="text" class="form-control" name="address" placeholder="1234, Katani" required>
+            <div class="mb-3">
+              <label for="address" class="form-label">Address</label>
+              <input type="text" class="form-control" id="address" name="address" placeholder="1234, Katani" required>
             </div>
-            <div class="col-md-6">
-              <label for="inputEmail4" class="form-label">Meter number</label>
-              <input type="text" class="form-control" name="meter_id" placeholder="Meter number" required>
+            <div class="mb-3">
+              <label for="meter_id" class="form-label">Meter Number</label>
+              <input type="text" class="form-control" id="meter_id" name="meter_id" placeholder="Meter number" required>
             </div>
-            <div class="col-md-6">
-              <label for="inputPassword4" class="form-label">Meter Reading</label>
-              <input type="text" class="form-control" name="first_reading" placeholder="0.0" required>
+            <div class="mb-3">
+              <label for="first_reading" class="form-label">Meter Reading</label>
+              <input type="text" class="form-control" id="first_reading" name="first_reading" placeholder="0.0" required>
             </div>
-            <div class="col-md-6">
+            <div class="mb-3">
               <label for="status" class="form-label">Status</label>
-              <select name="status" class="form-select" required>
+              <select id="status" name="status" class="form-select" required>
                 <option value="" disabled selected>Choose...</option>
                 <option value="inactive">Inactive</option>
                 <option value="active">Active</option>
               </select>
             </div>
-            <div class="col-12 d-flex justify-content-end">
+            <div class="d-flex justify-content-end">
               <button type="submit" class="btn btn-primary">Register</button>
             </div>
           </form>
@@ -247,6 +323,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
     </div>
   </div>
+
 </body>
 
 </html>
