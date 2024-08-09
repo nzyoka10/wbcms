@@ -105,11 +105,11 @@ section a{
     color: white;
     transform: scale(1.05,1);
 }
-.sign-up-link{
+.sign-up-link,
+.login-link{
     text-align: center;
     font-size: 15px;
     margin-top: 20px;
-    /* color: red; */
 }
 .sign-up-link p a{
     /* color: #eeecec; */

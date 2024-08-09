@@ -3,21 +3,18 @@
 // include("config.php");
 include("config/functions.php");
 
-// Establish database connection
-$conn = connectDB();
+// Check if the user is logged in
+if (!isset($_SESSION['username'])) {
+  // If not logged in, redirect to the login page
+  header("Location: index.php");
+  exit();
+}
 
-// // Check if the user is logged in, if not redirect to the login page
-// if (!isset($_SESSION['user_id'])) {
-//     header("Location: index.php");
-//     exit();
-// }
-
-// // Count total registered users
-// $totalUsers = countRegisteredUsers($conn);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -28,12 +25,13 @@ $conn = connectDB();
 
   <!-- Material Icons -->
   <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
   <div class="grid-container">
 
