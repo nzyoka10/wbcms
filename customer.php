@@ -190,14 +190,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <td><?php echo htmlspecialchars($client['status']); ?></td>
                         <td>
                           <div class="dropdown">
-                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-success btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                               Click
                             </button>
                             <ul class="dropdown-menu">
                               <li>
-                                <a href="view_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-sm text-primary" title="View">
+                                <button type="button" class="btn btn-sm" data-bs-toggle="modal"
+                                  data-bs-target="#viewClientModal"
+                                  onclick="populateModal('<?php echo htmlspecialchars($client['client_name']); ?>', 
+                                                    '<?php echo htmlspecialchars($client['contact_number']); ?>', 
+                                                    '<?php echo htmlspecialchars($client['address']); ?>', 
+                                                    '<?php echo htmlspecialchars($client['meter_number']); ?>', 
+                                                    '<?php echo htmlspecialchars($client['meter_reading']); ?>', 
+                                                    '<?php echo htmlspecialchars($client['status']); ?>')">
                                   <i class="fas fa-eye"></i> View
-                                </a>
+                                </button>
                               </li>
                               <li>
                                 <a href="edit_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-sm text-success" title="Modify">
@@ -205,9 +212,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </a>
                               </li>
                               <li>
-                              <a href="delete_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-sm text-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this client?');">
-                            <i class="fas fa-trash"></i> Delete
-                          </a>
+                                <a href="delete_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-sm text-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this client?');">
+                                  <i class="fas fa-trash"></i> Delete
+                                </a>
                               </li>
                             </ul>
                           </div>
@@ -290,7 +297,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
   </div>
 
-  <!-- ==========***  Register new client form  ***========== -->
+  <!-- View Client Details Modal -->
+  <div class="modal fade" id="viewClientModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="viewClientModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewClientModalLabel">Client Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Full Name:</strong> <span id="modalClientName"></span></p>
+          <p><strong>Contact:</strong> <span id="modalClientContact"></span></p>
+          <p><strong>Address:</strong> <span id="modalClientAddress"></span></p>
+          <p><strong>Meter Number:</strong> <span id="modalClientMeterNumber"></span></p>
+          <p><strong>Meter Reading:</strong> <span id="modalClientMeterReading"></span></p>
+          <p><strong>Status:</strong> <span id="modalClientStatus"></span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function populateModal(name, contact, address, meterNumber, meterReading, status) {
+      document.getElementById('modalClientName').textContent = name;
+      document.getElementById('modalClientContact').textContent = contact;
+      document.getElementById('modalClientAddress').textContent = address;
+      document.getElementById('modalClientMeterNumber').textContent = meterNumber;
+      document.getElementById('modalClientMeterReading').textContent = meterReading;
+      document.getElementById('modalClientStatus').textContent = status;
+    }
+  </script>
 
 
 </body>
