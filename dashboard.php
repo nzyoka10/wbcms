@@ -10,7 +10,7 @@
 
 
   <div class="main-title">
-    <p class="font-weight-bold">DASHBOARD</p>
+    <!-- <p class="font-weight-bold">DASHBOARD</p> -->
   </div>
 
   <div class="main-cards">

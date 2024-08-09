@@ -45,6 +45,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>WBCM | Clint Listing</title>
 
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+
   <!-- Montserrat Font -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
@@ -72,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <span class="material-icons-outlined">menu</span>
       </div>
       <div class="header-left">
-      <h6 class="text-seconary">Water Billing & Customer Management System - <small class="text-success">CLIENTS</small></h6>
+        <h6 class="text-seconary">Water Billing & Customer Management System - <small class="text-success">CLIENTS</small></h6>
       </div>
       <div class="header-right text-primary">
         <!-- Message Notification banner -->
