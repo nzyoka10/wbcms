@@ -6,14 +6,14 @@ include("config/functions.php");
 // Establish database connection
 $conn = connectDB();
 
-// Check if the user is logged in, if not redirect to the login page
-if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
-    exit();
-}
+// // Check if the user is logged in, if not redirect to the login page
+// if (!isset($_SESSION['user_id'])) {
+//     header("Location: index.php");
+//     exit();
+// }
 
-// Count total registered users
-$totalUsers = countRegisteredUsers($conn);
+// // Count total registered users
+// $totalUsers = countRegisteredUsers($conn);
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +53,7 @@ $totalUsers = countRegisteredUsers($conn);
         <a href="#">
           <span class="material-icons-outlined">email</span>
         </a>
-        <a href="#">
+        <a href="./logout.php">
           <span class="material-icons-outlined">account_circle</span>
         </a>
       </div>

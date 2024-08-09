@@ -109,14 +109,11 @@ section a{
     text-align: center;
     font-size: 15px;
     margin-top: 20px;
+    /* color: red; */
 }
 .sign-up-link p a{
-    color: #eeecec;
-    color: #000;
+    /* color: #eeecec; */
+    color: red;
+    /* color: #000; */
     font-weight: 600;
-}
-
-p a#signUpLink{
-    background-color: red;
-
 }

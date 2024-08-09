@@ -21,13 +21,13 @@
         <span class="material-icons-outlined text-blue">group</span>
       </div>
       <span class="text-primary font-weight-bold">
-        <strong>
+        <strong> 0
           <?php
           // Call the function to get the total number of clients
-          $totalClients = countRegisteredUsers($conn);
+          // $totalClients = countRegisteredUsers($conn);
 
           // Display the total number of clients
-          echo $totalClients;
+          // echo $totalClients;
           ?>
         </strong>
       </span>

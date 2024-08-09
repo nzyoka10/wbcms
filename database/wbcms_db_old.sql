@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 30, 2024 at 05:06 AM
+-- Generation Time: Jul 16, 2024 at 09:37 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -115,36 +115,10 @@ CREATE TABLE `tariffrates` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_account`
+-- Table structure for table `users`
 --
 
-CREATE TABLE `tbl_account` (
-  `id` int(11) NOT NULL,
-  `customer_id` varchar(50) NOT NULL,
-  `meter_id` varchar(50) NOT NULL,
-  `customer_name` varchar(100) NOT NULL,
-  `first_reading` double NOT NULL,
-  `customer_pNumber` varchar(20) NOT NULL,
-  `account_status` enum('active','inactive') NOT NULL,
-  `customer_address` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tbl_account`
---
-
-INSERT INTO `tbl_account` (`id`, `customer_id`, `meter_id`, `customer_name`, `first_reading`, `customer_pNumber`, `account_status`, `customer_address`, `created_at`) VALUES
-(1, '12456789', 'AC-0001/24', 'Test User', 0, '0789184567', 'inactive', 'Kinoo, KE', '2024-07-27 12:30:52'),
-(2, '22400789', 'AC-0002/24', 'User Two', 0, '078191800', 'inactive', 'Rural, Kenya', '2024-07-27 12:30:57');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbl_accounts`
---
-
-CREATE TABLE `tbl_accounts` (
+CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
@@ -157,13 +131,27 @@ CREATE TABLE `tbl_accounts` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `username`, `email`, `contact`, `address`, `meter_id`, `first_reading`, `status`, `created_at`, `updated_at`) VALUES
+(60, 'Test  User 1', 'test@app.com', '98263723', 'Kisuma', 1001, 0, 'active', '2024-06-30 12:36:45', '2024-07-10 07:21:25'),
+(62, 'Bob Kenya', 'app@mail.com', '123456', 'Kavoko', 1002, 0, 'inactive', '2024-06-30 13:35:57', '2024-07-10 07:19:42'),
+(65, 'Sukulu Timbo', 'test3@app.com', '97364383', 'KenKi DT', 1003, 0, 'inactive', '2024-07-01 05:42:25', '2024-07-10 07:21:54'),
+(99, 'Paul Amen', 'mapyfono@mailinator.com', '52633', 'Kimboo Upy', 1004, 0, 'active', '2024-07-10 06:03:19', '2024-07-10 07:20:06'),
+(102, 'Dj Lois Duffy', 'hokep@mailinator.com', '3627343', 'Kinoo DT', 1005, 0, 'active', '2024-07-10 06:03:58', '2024-07-10 07:20:24'),
+(103, 'Oliver Kakumi', 'sato@mailinator.com', '1127343', 'Gen Z DownTown', 1006, 0, 'inactive', '2024-07-10 06:04:22', '2024-07-10 07:20:37'),
+(106, 'Martha Kiio', 'rebo@mailinator.com', '3627343', 'Lower Kimbo DT', 1007, 0, 'inactive', '2024-07-10 06:08:28', '2024-07-10 07:20:47'),
+(107, 'Eric NZYOKA', 'admin@test.com', '123456789', '208, Syokimau', 1008, 0, 'active', '2024-07-10 07:22:53', '2024-07-10 07:22:53');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_users`
+-- Table structure for table `user_tbl`
 --
 
-CREATE TABLE `tbl_users` (
+CREATE TABLE `user_tbl` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
@@ -171,12 +159,12 @@ CREATE TABLE `tbl_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_users`
+-- Dumping data for table `user_tbl`
 --
 
-INSERT INTO `tbl_users` (`id`, `username`, `email`, `password`) VALUES
-(8, 'Admin', 'admin@app.com', '$2y$10$wEQeOyH1tIN0z/cyECE8OuESsbRaapvf9HN4gHK5pXqewcY5fLHMO'),
-(9, 'Test User', 'test@app.com', '$2y$10$xDfSahXCmsfNQI9mTHPw8.RB4v8BmgZsd6PiAU9ClZMGKNmbqHUN.');
+INSERT INTO `user_tbl` (`id`, `username`, `email`, `password`) VALUES
+(1, 'Test', 'test@app.com', '$2y$10$TZj.aDq/e5qpC8XfeBeSPuBr3gkjC/KQ7TgtwakK.YsQPttU4eJzi'),
+(2, 'Admin', 'admin@app.com', '$2y$10$eTvNpnPmT6WkQX49YGbL4.1sT3uAKlbs5tooNbmUgfvC1D1ovZTma');
 
 --
 -- Indexes for dumped tables
@@ -228,23 +216,17 @@ ALTER TABLE `tariffrates`
   ADD UNIQUE KEY `tariff_name` (`tariff_name`);
 
 --
--- Indexes for table `tbl_account`
+-- Indexes for table `users`
 --
-ALTER TABLE `tbl_account`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `tbl_accounts`
---
-ALTER TABLE `tbl_accounts`
+ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`),
   ADD UNIQUE KEY `username` (`username`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Indexes for table `tbl_users`
+-- Indexes for table `user_tbl`
 --
-ALTER TABLE `tbl_users`
+ALTER TABLE `user_tbl`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`),
   ADD UNIQUE KEY `email` (`email`);
@@ -290,22 +272,16 @@ ALTER TABLE `tariffrates`
   MODIFY `tariff_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `tbl_account`
+-- AUTO_INCREMENT for table `users`
 --
-ALTER TABLE `tbl_account`
+ALTER TABLE `users`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+
+--
+-- AUTO_INCREMENT for table `user_tbl`
+--
+ALTER TABLE `user_tbl`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `tbl_accounts`
---
-ALTER TABLE `tbl_accounts`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
-
---
--- AUTO_INCREMENT for table `tbl_users`
---
-ALTER TABLE `tbl_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
@@ -315,14 +291,14 @@ ALTER TABLE `tbl_users`
 -- Constraints for table `invoices`
 --
 ALTER TABLE `invoices`
-  ADD CONSTRAINT `invoices_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_accounts` (`user_id`),
+  ADD CONSTRAINT `invoices_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   ADD CONSTRAINT `invoices_ibfk_2` FOREIGN KEY (`meter_id`) REFERENCES `meters` (`meter_id`);
 
 --
 -- Constraints for table `meters`
 --
 ALTER TABLE `meters`
-  ADD CONSTRAINT `meters_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_accounts` (`user_id`);
+  ADD CONSTRAINT `meters_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
 --
 -- Constraints for table `meter_readings`
@@ -334,7 +310,7 @@ ALTER TABLE `meter_readings`
 -- Constraints for table `notifications`
 --
 ALTER TABLE `notifications`
-  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_accounts` (`user_id`);
+  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
 --
 -- Constraints for table `payments`

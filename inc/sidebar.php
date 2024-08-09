@@ -2,7 +2,7 @@
   <aside id="sidebar">
       <div class="sidebar-title">
         <div class="sidebar-brand">
-        <span class="material-icons-outlined">water_drop</span> WBCM
+        <span class="material-icons-outlined">water_drop</span>&nbsp;WBCM
         </div>
         <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
       </div>
@@ -10,24 +10,24 @@
       <ul class="sidebar-list">
         <li class="sidebar-list-item">
           <a href="./dashboard.php">
-            <span class="material-icons-outlined">dashboard</span>&nbsp;&nbsp;Dashboard
+            <span class="material-icons-outlined">speed</span>&nbsp;&nbsp;Dashboard
           </a>
         </li>
 
         <li class="sidebar-list-item">
           <a href="./customer.php">
-            <span class="material-icons-outlined">group</span>&nbsp;&nbsp;Clients
+            <span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;List of Clients
           </a>
         </li>
 
         <li class="sidebar-list-item">
           <a href="./billAccount.php">
-            <span class="material-icons-outlined">paid</span>&nbsp;&nbsp;Billing
+            <span class="material-icons-outlined">payments</span>&nbsp;&nbsp;Billings
           </a>
         </li>
         <li class="sidebar-list-item">
           <a href="#">
-            <span class="material-icons-outlined">poll</span>&nbsp;&nbsp;Reports
+            <span class="material-icons-outlined">receipt_long</span>&nbsp;&nbsp;Monthly Report
           </a>
         </li>
         <li class="sidebar-list-item">

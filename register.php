@@ -3,49 +3,7 @@
 require 'config/functions.php';
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ensure form data is being captured correctly
-    $username = htmlspecialchars($_POST['username']);
-    $email = htmlspecialchars($_POST['email']);
-    $password = htmlspecialchars($_POST['password']);
 
-    // Check if username, email, and password are not empty
-    if (!empty($username) && !empty($email) && !empty($password)) {
-        if (registerUser($username, $email, $password)) {
-            // Registration successful
-            echo "<script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Registration successful',
-                    text: 'You can now log in.',
-                    confirmButtonText: 'OK'
-                }).then(function() {
-                    window.location.href = 'index.php';
-                });
-            </script>";
-        } else {
-            // Registration failed
-            echo "<script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Registration failed',
-                    text: 'Please try again later.',
-                    confirmButtonText: 'OK'
-                });
-            </script>";
-        }
-    } else {
-        // Missing input
-        echo "<script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Input Error',
-                text: 'Please fill all fields.',
-                confirmButtonText: 'OK'
-            });
-        </script>";
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -54,10 +12,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/login.css">
-    <!-- SweetAlert2 CSS and JS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="css/login.css">   
     <title>WBCM | Register</title>
 </head>
 <body>
@@ -82,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
         <div class="login-link">
-            <p>Already have an account? <a href="index.php">Log In</a></p>
+            <p>Already have an account? <a href="index.php">Login</a></p>
         </div>
     </div>
 </body>

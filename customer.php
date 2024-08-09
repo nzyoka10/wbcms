@@ -344,7 +344,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- JS Dependencies -->
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/datatables.min.js"></script>
-    <script src="js/custom.js"></script>
     <!-- sweet alert cdnjs -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

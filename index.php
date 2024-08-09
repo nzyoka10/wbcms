@@ -3,35 +3,6 @@
 require 'config/functions.php';
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = htmlspecialchars($_POST['email']);
-    $password = htmlspecialchars($_POST['password']);
-
-    // Verify user credentials
-    if ($user = verifyUser($email, $password)) {
-        // Setting session variables
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['email'] = $user['email'];
-
-        // Redirect user to dashboard
-        header('Location: dashboard.php');
-        exit();
-    } else {
-        // Output SweetAlert for login error
-        echo "<script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Login failed',
-                text: 'Please check your email and password.',
-                confirmButtonText: 'OK'
-            }).then(function() {
-                // Optional: Redirect to the login page after closing the alert
-                window.location = 'index.php';
-            });
-        </script>";
-    }
-}
 ?>
 
 
@@ -75,7 +46,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
         <div class="sign-up-link">
-            <p>Don't have an account? <a href="register.php" id="signUpLink">Sign Up</a></p>
+        <p>Don't have an account?  <a href="register.php" style="color: red;">Register</a></p>
+            <!-- <p>Don't have an account? <a href="register.php" id="signUpLink">Sign Up</a></p> -->
         </div>
     </div>
 </body>
