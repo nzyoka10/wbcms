@@ -174,7 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <th scope="col">Meter Number</th>
                     <th scope="col">Meter Reading</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Actions</th> <!-- New Actions Column -->
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -189,18 +189,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <td><?php echo htmlspecialchars($client['meter_reading']); ?></td>
                         <td><?php echo htmlspecialchars($client['status']); ?></td>
                         <td>
-                          <!-- View Button -->
-                          <a href="view_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-info btn-sm" title="View">
-                            <i class="fas fa-eye"></i> View
-                          </a>
-                          <!-- Modify Button -->
-                          <a href="edit_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-warning btn-sm" title="Modify">
-                            <i class="fas fa-edit"></i> Modify
-                          </a>
-                          <!-- Delete Button -->
-                          <a href="delete_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-danger btn-sm" title="Delete" onclick="return confirm('Are you sure you want to delete this client?');">
+                          <div class="dropdown">
+                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Click
+                            </button>
+                            <ul class="dropdown-menu">
+                              <li>
+                                <a href="view_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-sm text-primary" title="View">
+                                  <i class="fas fa-eye"></i> View
+                                </a>
+                              </li>
+                              <li>
+                                <a href="edit_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-sm text-success" title="Modify">
+                                  <i class="fas fa-edit"></i> Modify
+                                </a>
+                              </li>
+                              <li>
+                              <a href="delete_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-sm text-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this client?');">
                             <i class="fas fa-trash"></i> Delete
                           </a>
+                              </li>
+                            </ul>
+                          </div>
                         </td>
                       </tr>
                     <?php endforeach; ?>
