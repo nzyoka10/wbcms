@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $firstReading = htmlspecialchars($_POST['first_reading']);
   $status = htmlspecialchars($_POST['status']);
 
-  // Register the new client
+  // register new client
   try {
     if (registerClient($fullName, $pNumber, $address, $meterId, $firstReading, $status)) {
       $success_message = 'Client registered successfully.';
@@ -38,7 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Edit existing client details
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  // Retrieve form data
+
+  // get form data
   $userId = $_POST['user_id'];
   $fullName = htmlspecialchars($_POST['fullName']);
   $pNumber = htmlspecialchars($_POST['pNumber']);
@@ -47,16 +48,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $firstReading = htmlspecialchars($_POST['first_reading']);
   $status = htmlspecialchars($_POST['status']);
 
-  // Try to edit the client
+  // try to edit details
   try {
-      if (editClient($userId, $fullName, $pNumber, $address, $meterId, $firstReading, $status)) {
-          $success_message = 'Client details updated successfully.';
-          // echo "Client details updated successfully.";
-      } else {
-          echo "Failed to update client details.";
-      }
+    if (editClient($userId, $fullName, $pNumber, $address, $meterId, $firstReading, $status)) {
+      $success_message = 'Client details updated successfully!';
+    } else {
+      $error_message = 'Failed to update client details!';
+    }
   } catch (Exception $e) {
-      echo "An error occurred: " . $e->getMessage();
+    $error_message = 'An error occurred: ' . $e->getMessage();
   }
 }
 
@@ -179,7 +179,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </button>
             </div>
 
-            <!-- Card Body -->
+            <!-- data table to diplay account details -->
             <div class="card-body">
               <!-- Display error message if present -->
               <?php if (!empty($error_message)) : ?>
@@ -203,71 +203,97 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   </tr>
                 </thead>
                 <tbody>
-                  <?php if (!empty($clients)) : ?>
-                    <?php foreach ($clients as $index => $client) : ?>
-                      <tr>
-                        <th scope="row"><?php echo htmlspecialchars($index + 1); ?></th>
-                        <td><?php echo htmlspecialchars($client['client_name']); ?></td>
-                        <td><?php echo htmlspecialchars($client['contact_number']); ?></td>
-                        <td><?php echo htmlspecialchars($client['address']); ?></td>
-                        <td><?php echo htmlspecialchars($client['meter_number']); ?></td>
-                        <td><?php echo htmlspecialchars($client['meter_reading']); ?></td>
-                        <td><?php echo htmlspecialchars($client['status']); ?></td>
-                        <td>
-                          <div class="dropdown">
-                            <button class="btn btn-success btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              Click
-                            </button>
-                            <ul class="dropdown-menu">
-                              <li>
-                                <button type="button" class="btn btn-sm" data-bs-toggle="modal"
-                                  data-bs-target="#viewClientModal"
-                                  onclick="populateViewModal('<?php echo htmlspecialchars($client['client_name']); ?>', 
-                                                    '<?php echo htmlspecialchars($client['contact_number']); ?>', 
-                                                    '<?php echo htmlspecialchars($client['address']); ?>', 
-                                                    '<?php echo htmlspecialchars($client['meter_number']); ?>', 
-                                                    '<?php echo htmlspecialchars($client['meter_reading']); ?>', 
-                                                    '<?php echo htmlspecialchars($client['status']); ?>')">
-                                  <i class="fas fa-eye"></i>&nbsp;View
-                                </button>
-                              </li>
-                              <li>
-                                <button type="button" class="btn btn-sm" data-bs-toggle="modal" 
-                                  data-bs-target="#editClientModal"
-                                  onclick="populateEditModal('<?php echo urlencode($client['user_id']); ?>', 
-                                                                '<?php echo htmlspecialchars($client['client_name']); ?>', 
-                                                                '<?php echo htmlspecialchars($client['contact_number']); ?>', 
-                                                                '<?php echo htmlspecialchars($client['address']); ?>', 
-                                                                '<?php echo htmlspecialchars($client['meter_number']); ?>', 
-                                                                '<?php echo htmlspecialchars($client['meter_reading']); ?>', 
-                                                                '<?php echo htmlspecialchars($client['status']); ?>')">
-                                  <i class="fas fa-edit"></i>&nbsp;Edit
-                                </button>
-                                <!-- <a href="edit_client.php?id=<?php echo urlencode($client['user_id']); ?>" 
-                                  class="btn btn-sm text-success" title="Modify">
-                                  <i class="fas fa-edit"></i> Edit
-                                </a> -->
-                              </li>
-                              <li>
-                                <a href="delete_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-sm text-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this client?');">
-                                  <i class="fas fa-trash"></i>&nbsp;Delete
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                    <?php endforeach; ?>
-                  <?php else : ?>
-                    <tr>
-                      <td colspan="8" class="text-center">No clients found.</td>
-                    </tr>
-                  <?php endif; ?>
+                  <?php
+
+                  // Fetch clients and output HTML
+                  try {
+                    $clients = getClients();
+
+                    if (!empty($clients)) {
+                      foreach ($clients as $index => $client) {
+                        echo "<tr>";
+                        echo "<th scope='row'>" . htmlspecialchars($index + 1) . "</th>";
+                        echo "<td>" . htmlspecialchars($client['client_name']) . "</td>";
+                        echo "<td>" . htmlspecialchars($client['contact_number']) . "</td>";
+                        echo "<td>" . htmlspecialchars($client['address']) . "</td>";
+                        echo "<td>" . htmlspecialchars($client['meter_number']) . "</td>";
+                        echo "<td>" . htmlspecialchars($client['meter_reading']) . "</td>";
+                        echo "<td>" . htmlspecialchars($client['status']) . "</td>";
+                        echo "<td>
+                  <div class='dropdown'>
+                      <button class='btn btn-success btn-sm dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-expanded='false'>Click</button>
+                      <ul class='dropdown-menu'>
+                          <li>
+                              <button type='button' class='btn btn-sm' data-bs-toggle='modal' data-bs-target='#viewClientModal' onclick=\"populateViewModal(
+                                  '" . htmlspecialchars($client['client_name']) . "', 
+                                  '" . htmlspecialchars($client['contact_number']) . "', 
+                                  '" . htmlspecialchars($client['address']) . "', 
+                                  '" . htmlspecialchars($client['meter_number']) . "', 
+                                  '" . htmlspecialchars($client['meter_reading']) . "', 
+                                  '" . htmlspecialchars($client['status']) . "')\">
+                                  <i class='fas fa-eye'></i>&nbsp;View
+                              </button>
+                          </li>
+                          <li>
+                              <button type='button' class='btn btn-sm' data-bs-toggle='modal' data-bs-target='#editClientModal' onclick=\"populateEditModal(
+                                  '" . urlencode($client['user_id']) . "', 
+                                  '" . htmlspecialchars($client['client_name']) . "', 
+                                  '" . htmlspecialchars($client['contact_number']) . "', 
+                                  '" . htmlspecialchars($client['address']) . "', 
+                                  '" . htmlspecialchars($client['meter_number']) . "', 
+                                  '" . htmlspecialchars($client['meter_reading']) . "', 
+                                  '" . htmlspecialchars($client['status']) . "')\">
+                                  <i class='fas fa-edit'></i>&nbsp;Edit
+                              </button>
+                          </li>
+                          <li>
+                              <a href='delete_client.php?id=" . urlencode($client['user_id']) . "' class='btn btn-sm text-danger' title='Delete' onclick=\"return confirm('Are you sure you want to delete this client?');\">
+                                  <i class='fas fa-trash'></i>&nbsp;Delete
+                              </a>
+                          </li>
+                      </ul>
+                  </div>
+                </td>";
+                        echo "</tr>";
+                      }
+                    } else {
+                      echo "<tr><td colspan='8' class='text-center'>No clients found.</td></tr>";
+                    }
+                  } catch (Exception $e) {
+                    echo "<tr><td colspan='8' class='text-center'>An error occurred: " . htmlspecialchars($e->getMessage()) . "</td></tr>";
+                  }
+
+                  ?>
+
                 </tbody>
               </table>
 
-
             </div>
+
+            <script>
+              function refreshClientTable() {
+                // Perform an AJAX request to fetch the latest clients
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', 'fetch_clients.php', true);
+
+                xhr.onreadystatechange = function() {
+                  if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Update the table body with the fetched HTML
+                    document.querySelector('table tbody').innerHTML = xhr.responseText;
+                  }
+                };
+
+                xhr.send();
+              }
+
+              // Set the interval to refresh the table every 5 seconds (5000 ms)
+              setInterval(refreshClientTable, 5000);
+
+              // Call the function initially to load data immediately
+              refreshClientTable();
+            </script>
+
+
           </div>
         </div>
 
@@ -297,6 +323,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="modal-body">
           <form method="post" class="row g-4" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <input type="hidden" id="registerClientId" name="user_id">
             <div class="col-md-6">
               <label for="fullName" class="form-label">Client's Name</label>
               <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Full name" required>
@@ -326,7 +353,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </select>
             </div>
             <div class="d-flex justify-content-end">
-              <button type="submit" class="btn btn-primary">Register Client</button>
+              <button type="submit" class="btn btn-sm btn-success">Register</button>
             </div>
           </form>
         </div>
@@ -343,12 +370,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p><strong>Full Name:</strong> <span id="modalClientName"></span></p>
-          <p><strong>Contact:</strong> <span id="modalClientContact"></span></p>
-          <p><strong>Address:</strong> <span id="modalClientAddress"></span></p>
-          <p><strong>Meter Number:</strong> <span id="modalClientMeterNumber"></span></p>
-          <p><strong>Meter Reading:</strong> <span id="modalClientMeterReading"></span></p>
-          <p><strong>Status:</strong> <span id="modalClientStatus"></span></p>
+          <p><strong>Name&nbsp;:</strong>&nbsp;<span id="modalClientName"></span></p>
+          <p><strong>Contact&nbsp;:</strong>&nbsp;<span id="modalClientContact"></span></p>
+          <p><strong>Address&nbsp;:</strong>&nbsp;<span id="modalClientAddress"></span></p>
+          <p><strong>A/c No&nbsp;:</strong>&nbsp;<span id="modalClientMeterNumber"></span></p>
+          <p><strong>Reading&nbsp;:</strong>&nbsp;<span id="modalClientMeterReading"></span></p>
+          <p><strong>Status&nbsp;:</strong>&nbsp;<span id="modalClientStatus"></span></p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
@@ -380,7 +407,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <label for="editAddress" class="form-label">Address</label>
               <input type="text" class="form-control" id="editAddress" name="address" required>
             </div>
-            <div class="mb-3">
+            <div class="col-md-6">
               <label for="editMeterNumber" class="form-label">Meter Number</label>
               <input type="text" class="form-control" id="editMeterNumber" name="meter_id" required>
             </div>
