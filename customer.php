@@ -35,6 +35,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $error_message = 'An error occurred: ' . $e->getMessage();
   }
 }
+
+// Edit existing client details
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  // Retrieve form data
+  $userId = $_POST['user_id'];
+  $fullName = htmlspecialchars($_POST['fullName']);
+  $pNumber = htmlspecialchars($_POST['pNumber']);
+  $address = htmlspecialchars($_POST['address']);
+  $meterId = htmlspecialchars($_POST['meter_id']);
+  $firstReading = htmlspecialchars($_POST['first_reading']);
+  $status = htmlspecialchars($_POST['status']);
+
+  // Try to edit the client
+  try {
+      if (editClient($userId, $fullName, $pNumber, $address, $meterId, $firstReading, $status)) {
+          $success_message = 'Client details updated successfully.';
+          // echo "Client details updated successfully.";
+      } else {
+          echo "Failed to update client details.";
+      }
+  } catch (Exception $e) {
+      echo "An error occurred: " . $e->getMessage();
+  }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -203,11 +228,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     '<?php echo htmlspecialchars($client['meter_number']); ?>', 
                                                     '<?php echo htmlspecialchars($client['meter_reading']); ?>', 
                                                     '<?php echo htmlspecialchars($client['status']); ?>')">
-                                  <i class="fas fa-eye"></i> View
+                                  <i class="fas fa-eye"></i>&nbsp;View
                                 </button>
                               </li>
                               <li>
-                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editClientModal"
+                                <button type="button" class="btn btn-sm" data-bs-toggle="modal" 
+                                  data-bs-target="#editClientModal"
                                   onclick="populateEditModal('<?php echo urlencode($client['user_id']); ?>', 
                                                                 '<?php echo htmlspecialchars($client['client_name']); ?>', 
                                                                 '<?php echo htmlspecialchars($client['contact_number']); ?>', 
@@ -215,7 +241,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                 '<?php echo htmlspecialchars($client['meter_number']); ?>', 
                                                                 '<?php echo htmlspecialchars($client['meter_reading']); ?>', 
                                                                 '<?php echo htmlspecialchars($client['status']); ?>')">
-                                  <i class="fas fa-edit"></i> Edit
+                                  <i class="fas fa-edit"></i>&nbsp;Edit
                                 </button>
                                 <!-- <a href="edit_client.php?id=<?php echo urlencode($client['user_id']); ?>" 
                                   class="btn btn-sm text-success" title="Modify">
@@ -224,7 +250,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                               </li>
                               <li>
                                 <a href="delete_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-sm text-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this client?');">
-                                  <i class="fas fa-trash"></i> Delete
+                                  <i class="fas fa-trash"></i>&nbsp;Delete
                                 </a>
                               </li>
                             </ul>
@@ -380,7 +406,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </div>
 
   <script>
-    // function
+    // display client details
     function populateViewModal(name, contact, address, meterNumber, meterReading, status) {
       document.getElementById('modalClientName').textContent = name;
       document.getElementById('modalClientContact').textContent = contact;
@@ -390,6 +416,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       document.getElementById('modalClientStatus').textContent = status;
     }
 
+    // edit client details
     function populateEditModal(id, fullName, phoneNumber, address, meterNumber, firstReading, status) {
       document.getElementById('editClientId').value = id;
       document.getElementById('editFullName').value = fullName;

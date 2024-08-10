@@ -100,30 +100,40 @@ function loginUser($username, $password)
 }
 
 /**
- * Check if a client already exists based on unique fields
+ * clientExists - Check if a client already exists based on unique fields
  * @meterId: The meter number to check
  * @contactNumber: The phone number to check
- * Return: true if the client exists, false otherwise
+ * @excludeClientId: The ID of the client to exclude from the check (optional)
+ * Return: true if a conflicting client exists, false otherwise
  */
-function clientExists($meterId, $contactNumber)
+function clientExists($meterId, $contactNumber, $excludeClientId = null)
 {
     global $conn;
 
-    $query = "SELECT * FROM tbl_clients WHERE meter_number = ? OR contact_number = ?";
-    $stmt = $conn->prepare($query);
+    // Prepare the SQL query with or without the client exclusion
+    if ($excludeClientId) {
+        $query = "SELECT * FROM tbl_clients WHERE (meter_number = ? OR contact_number = ?) AND user_id != ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("ssi", $meterId, $contactNumber, $excludeClientId);
+    } else {
+        $query = "SELECT * FROM tbl_clients WHERE meter_number = ? OR contact_number = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("ss", $meterId, $contactNumber);
+    }
+
     if (!$stmt) {
         throw new Exception('Database query preparation failed: ' . $conn->error);
     }
-    $stmt->bind_param("ss", $meterId, $contactNumber);
+
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Return true if a client with the provided meter number or contact number exists
+    // Return true if a conflicting client exists
     return $result->num_rows > 0;
 }
 
 /**
- * Register a new client in the database
+ * registerClient - Register a new client in the database
  * @fullName: The name of the client
  * @pNumber: The phone number of the client
  * @address: The address of the client
@@ -136,21 +146,25 @@ function registerClient($fullName, $pNumber, $address, $meterId, $firstReading, 
 {
     global $conn;
 
-    // Check if the client already exists
+    // Check if the client already exists in the database
     if (clientExists($meterId, $pNumber)) {
         throw new Exception('A client with the same meter number or contact number already exists.');
     }
 
+    // Prepare the SQL query to insert the new client's details
     $query = "INSERT INTO tbl_clients (client_name, contact_number, address, meter_number, meter_reading, status) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
     if (!$stmt) {
         throw new Exception('Database query preparation failed: ' . $conn->error);
     }
+
+    // Bind the parameters to the SQL query
     $stmt->bind_param("ssssss", $fullName, $pNumber, $address, $meterId, $firstReading, $status);
 
-    // Return true if the insertion is successful
+    // Execute the query and return true if the insertion is successful
     return $stmt->execute();
 }
+
 
 // Function to fetch all clients from the database
 function getClients()
@@ -173,6 +187,75 @@ try {
 }
 
 /**
+ * editClient - Edit an existing client's details in the database
+ * @userId: The ID of the client to edit
+ * @fullName: The updated name of the client
+ * @pNumber: The updated phone number of the client
+ * @address: The updated address of the client
+ * @meterId: The updated meter number of the client
+ * @firstReading: The updated meter reading
+ * @status: The updated status of the client (active/inactive)
+ * Return: true if the update is successful, false otherwise
+ */
+function editClient($userId, $fullName, $pNumber, $address, $meterId, $firstReading, $status)
+{
+    global $conn;
+
+    // Check if the meter number or contact number is already in use by another client,
+    // excluding the current client
+    if (clientExists($meterId, $pNumber, $userId)) {
+        throw new Exception('A client with the same meter number or contact number already exists.');
+    }
+
+    // Prepare the SQL query to update the client's information
+    $sql = "UPDATE tbl_clients SET client_name = ?, contact_number = ?, address = ?, meter_number = ?, meter_reading = ?, status = ? WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        throw new Exception('Database query preparation failed: ' . $conn->error);
+    }
+
+    // Bind the parameters to the SQL query
+    $stmt->bind_param("ssssssi", $fullName, $pNumber, $address, $meterId, $firstReading, $status, $userId);
+
+    // Execute the query and return true if the update is successful
+    if ($stmt->execute()) {
+        return true; // Success
+    } else {
+        return false; // Failure
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
  * updateClient - Update client details in the database
  * @clientId: The ID of the client to update
  * @fullName: The updated name of the client
@@ -183,45 +266,45 @@ try {
  * @status: The updated status of the client (active/inactive)
  * Return: true if the update is successful, false otherwise
  */
-function updateClient($clientId, $fullName, $pNumber, $address, $meterId, $firstReading, $status)
-{
-    global $conn;
+// function updateClient($clientId, $fullName, $pNumber, $address, $meterId, $firstReading, $status)
+// {
+//     global $conn;
 
-    // Prepare the SQL query to update the client's details
-    $query = "UPDATE tbl_clients 
-              SET client_name = ?, contact_number = ?, address = ?, meter_number = ?, meter_reading = ?, status = ? 
-              WHERE client_id = ?";
-    $stmt = $conn->prepare($query);
-    if (!$stmt) {
-        throw new Exception('Database query preparation failed: ' . $conn->error);
-    }
-    $stmt->bind_param("ssssssi", $fullName, $pNumber, $address, $meterId, $firstReading, $status, $clientId);
+//     // Prepare the SQL query to update the client's details
+//     $query = "UPDATE tbl_clients 
+//               SET client_name = ?, contact_number = ?, address = ?, meter_number = ?, meter_reading = ?, status = ? 
+//               WHERE client_id = ?";
+//     $stmt = $conn->prepare($query);
+//     if (!$stmt) {
+//         throw new Exception('Database query preparation failed: ' . $conn->error);
+//     }
+//     $stmt->bind_param("ssssssi", $fullName, $pNumber, $address, $meterId, $firstReading, $status, $clientId);
 
-    // Return true if the update is successful
-    return $stmt->execute();
-}
+//     // Return true if the update is successful
+//     return $stmt->execute();
+// }
 
-// Example usage:
-try {
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['client_id'])) {
-        $clientId = $_POST['client_id'];
-        $fullName = $_POST['fullName'];
-        $pNumber = $_POST['pNumber'];
-        $address = $_POST['address'];
-        $meterId = $_POST['meter_id'];
-        $firstReading = $_POST['first_reading'];
-        $status = $_POST['status'];
+// // Example usage:
+// try {
+//     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['client_id'])) {
+//         $clientId = $_POST['client_id'];
+//         $fullName = $_POST['fullName'];
+//         $pNumber = $_POST['pNumber'];
+//         $address = $_POST['address'];
+//         $meterId = $_POST['meter_id'];
+//         $firstReading = $_POST['first_reading'];
+//         $status = $_POST['status'];
 
-        // Update the client in the database
-        $updateResult = updateClient($clientId, $fullName, $pNumber, $address, $meterId, $firstReading, $status);
-        if ($updateResult) {
-            echo "Client updated successfully.";
-        } else {
-            echo "Failed to update client.";
-        }
-    }
-} catch (Exception $e) {
-    $error_message = 'An error occurred: ' . $e->getMessage();
-    echo $error_message;
-}
+//         // Update the client in the database
+//         $updateResult = updateClient($clientId, $fullName, $pNumber, $address, $meterId, $firstReading, $status);
+//         if ($updateResult) {
+//             echo "Client updated successfully.";
+//         } else {
+//             echo "Failed to update client.";
+//         }
+//     }
+// } catch (Exception $e) {
+//     $error_message = 'An error occurred: ' . $e->getMessage();
+//     echo $error_message;
+// }
 ?>
