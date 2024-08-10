@@ -197,7 +197,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                               <li>
                                 <button type="button" class="btn btn-sm" data-bs-toggle="modal"
                                   data-bs-target="#viewClientModal"
-                                  onclick="populateModal('<?php echo htmlspecialchars($client['client_name']); ?>', 
+                                  onclick="populateViewModal('<?php echo htmlspecialchars($client['client_name']); ?>', 
                                                     '<?php echo htmlspecialchars($client['contact_number']); ?>', 
                                                     '<?php echo htmlspecialchars($client['address']); ?>', 
                                                     '<?php echo htmlspecialchars($client['meter_number']); ?>', 
@@ -207,9 +207,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </button>
                               </li>
                               <li>
-                                <a href="edit_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-sm text-success" title="Modify">
+                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editClientModal"
+                                  onclick="populateEditModal('<?php echo urlencode($client['user_id']); ?>', 
+                                                                '<?php echo htmlspecialchars($client['client_name']); ?>', 
+                                                                '<?php echo htmlspecialchars($client['contact_number']); ?>', 
+                                                                '<?php echo htmlspecialchars($client['address']); ?>', 
+                                                                '<?php echo htmlspecialchars($client['meter_number']); ?>', 
+                                                                '<?php echo htmlspecialchars($client['meter_reading']); ?>', 
+                                                                '<?php echo htmlspecialchars($client['status']); ?>')">
                                   <i class="fas fa-edit"></i> Edit
-                                </a>
+                                </button>
+                                <!-- <a href="edit_client.php?id=<?php echo urlencode($client['user_id']); ?>" 
+                                  class="btn btn-sm text-success" title="Modify">
+                                  <i class="fas fa-edit"></i> Edit
+                                </a> -->
                               </li>
                               <li>
                                 <a href="delete_client.php?id=<?php echo urlencode($client['user_id']); ?>" class="btn btn-sm text-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this client?');">
@@ -250,7 +261,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="js/datatables.min.js"></script>
   </div>
 
-  <!-- ==========***  Register new client form  ***========== -->
+  <!-- ==========***  Create new client ***========== -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -297,7 +308,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
   </div>
 
-  <!-- View Client Details Modal -->
+  <!-- View client details modal -->
   <div class="modal fade" id="viewClientModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="viewClientModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -320,14 +331,73 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
   </div>
 
+  <!-- Edit client details modal -->
+  <div class="modal fade" id="editClientModal" tabindex="-1" aria-labelledby="editClientModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editClientModalLabel">Edit Client</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" id="editClientForm" class="row g-4">
+            <input type="hidden" id="editClientId" name="user_id">
+            <div class="col-md-6">
+              <label for="editFullName" class="form-label">Full Name</label>
+              <input type="text" class="form-control" id="editFullName" name="fullName" required>
+            </div>
+            <div class="col-md-6">
+              <label for="editPhoneNumber" class="form-label">Phone Number</label>
+              <input type="text" class="form-control" id="editPhoneNumber" name="pNumber" required>
+            </div>
+            <div class="col-md-6">
+              <label for="editAddress" class="form-label">Address</label>
+              <input type="text" class="form-control" id="editAddress" name="address" required>
+            </div>
+            <div class="mb-3">
+              <label for="editMeterNumber" class="form-label">Meter Number</label>
+              <input type="text" class="form-control" id="editMeterNumber" name="meter_id" required>
+            </div>
+            <div class="col-md-6">
+              <label for="editFirstReading" class="form-label">First Reading</label>
+              <input type="number" class="form-control" id="editFirstReading" name="first_reading" required>
+            </div>
+            <div class="col-md-6">
+              <label for="editStatus" class="form-label">Status</label>
+              <select class="form-select" id="editStatus" name="status" required>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-sm btn-success">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    function populateModal(name, contact, address, meterNumber, meterReading, status) {
+    // function
+    function populateViewModal(name, contact, address, meterNumber, meterReading, status) {
       document.getElementById('modalClientName').textContent = name;
       document.getElementById('modalClientContact').textContent = contact;
       document.getElementById('modalClientAddress').textContent = address;
       document.getElementById('modalClientMeterNumber').textContent = meterNumber;
       document.getElementById('modalClientMeterReading').textContent = meterReading;
       document.getElementById('modalClientStatus').textContent = status;
+    }
+
+    function populateEditModal(id, fullName, phoneNumber, address, meterNumber, firstReading, status) {
+      document.getElementById('editClientId').value = id;
+      document.getElementById('editFullName').value = fullName;
+      document.getElementById('editPhoneNumber').value = phoneNumber;
+      document.getElementById('editAddress').value = address;
+      document.getElementById('editMeterNumber').value = meterNumber;
+      document.getElementById('editFirstReading').value = firstReading;
+      document.getElementById('editStatus').value = status;
     }
   </script>
 
