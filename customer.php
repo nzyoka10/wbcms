@@ -84,6 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <!-- Bootstrap -->
   <link rel="stylesheet" href="css/bootstrap5.0.1.min.css">
   <link rel="stylesheet" type="text/css" href="css/datatables-1.10.25.min.css" />
+  <link rel="stylesheet" href="css/dataTables.dataTables.css">
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/styles.css">
@@ -175,7 +176,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <h5 class="mb-0">Listing of Clients</h5>
               <!-- Button trigger modal -->
               <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                New Client
+              <i class='fas fa-plus'></i>&nbsp;New Client
               </button>
             </div>
 
@@ -189,17 +190,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <?php endif; ?>
 
               <!-- diplay registered clients -->
-              <table class="table table-striped">
+              <table class="table cell-border">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Client Name</th>
-                    <th scope="col">Contact Number</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Meter Number</th>
-                    <th scope="col">Meter Reading</th>
+                    <th scope="col">Sn#</th>
+                    <th scope="col">Data Created</th>
+                    <th scope="col">Meter</th>
+                    <th scope="col">Name</th>
                     <th scope="col">Status</th>
                     <th scope="col">Actions</th>
+                    <!-- <th scope="col"></th> -->
                   </tr>
                 </thead>
                 <tbody>
@@ -213,12 +213,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                       foreach ($clients as $index => $client) {
                         echo "<tr>";
                         echo "<th scope='row'>" . htmlspecialchars($index + 1) . "</th>";
-                        echo "<td>" . htmlspecialchars($client['client_name']) . "</td>";
-                        echo "<td>" . htmlspecialchars($client['contact_number']) . "</td>";
-                        echo "<td>" . htmlspecialchars($client['address']) . "</td>";
+                        echo "<td>" . htmlspecialchars($client['created_at']) . "</td>";
                         echo "<td>" . htmlspecialchars($client['meter_number']) . "</td>";
-                        echo "<td>" . htmlspecialchars($client['meter_reading']) . "</td>";
-                        echo "<td>" . htmlspecialchars($client['status']) . "</td>";
+                        echo "<td>" . htmlspecialchars($client['client_name']) . "</td>";
+
+                        // echo "<td>" . htmlspecialchars($client['meter_number']) . "</td>";
+                        // echo "<td>" . htmlspecialchars($client['meter_reading']) . "</td>";
+                        echo "<td class='text-uppercase'><small>" . htmlspecialchars($client['status']) . "</small></td>";
                         echo "<td>
                   <div class='dropdown'>
                       <button class='btn btn-success btn-sm dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-expanded='false'>Click</button>
@@ -235,7 +236,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                               </button>
                           </li>
                           <li>
-                              <button type='button' class='btn btn-sm' data-bs-toggle='modal' data-bs-target='#editClientModal' onclick=\"populateEditModal(
+                              <button type='button' class='btn btn-sm text-primary' data-bs-toggle='modal' data-bs-target='#editClientModal' onclick=\"populateEditModal(
                                   '" . urlencode($client['user_id']) . "', 
                                   '" . htmlspecialchars($client['client_name']) . "', 
                                   '" . htmlspecialchars($client['contact_number']) . "', 
@@ -243,11 +244,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                   '" . htmlspecialchars($client['meter_number']) . "', 
                                   '" . htmlspecialchars($client['meter_reading']) . "', 
                                   '" . htmlspecialchars($client['status']) . "')\">
-                                  <i class='fas fa-edit'></i>&nbsp;Edit
+                                  <i class='fas fa-edit text-primary'></i>&nbsp;Edit
                               </button>
                           </li>
                           <li>
-                              <a href='delete_client.php?id=" . urlencode($client['user_id']) . "' class='btn btn-sm text-danger' title='Delete' onclick=\"return confirm('Are you sure you want to delete this client?');\">
+                              <a href='delete_client.php?id=" . urlencode($client['user_id']) . "' class='btn btn-sm text-danger' title='Delete' onclick=\"return confirm('Are you sure you want to delete this Client Record?');\">
                                   <i class='fas fa-trash'></i>&nbsp;Delete
                               </a>
                           </li>
@@ -257,7 +258,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo "</tr>";
                       }
                     } else {
-                      echo "<tr><td colspan='8' class='text-center'>No clients found.</td></tr>";
+                      echo "<tr><td colspan='8' class='text-center text-danger'>No clients found.</td></tr>";
                     }
                   } catch (Exception $e) {
                     echo "<tr><td colspan='8' class='text-center'>An error occurred: " . htmlspecialchars($e->getMessage()) . "</td></tr>";
