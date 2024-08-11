@@ -9,9 +9,9 @@
 <main class="main-container">
 
 
-  <div class="main-title">
-    <!-- <p class="font-weight-bold">DASHBOARD</p> -->
-  </div>
+  <!-- <div class="main-title">
+    <p class="font-weight-bold">DASHBOARD</p>
+  </div> -->
 
   <div class="main-cards">
     <!-- Cards -->

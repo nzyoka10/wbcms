@@ -115,18 +115,103 @@ if (!isset($_SESSION['user_id'])) {
     </aside>
     <!-- End Sidebar -->
 
-   <!-- Main section -->
-   <main class="main-container">
+    <!-- Main section -->
+    <main class="main-container">
       <div class="row">
 
-        <div class="container mt-4">
+        <!-- create new billing modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5 text-dark" id="staticBackdropLabel">Create New Bill</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <!-- form -->
+                <form action="" class="col g-4">
+                <div class="row mb-3 mt-0">
+                  <label for="client_name" class="text-dark col-form-label">Client</label>
+                  <div class="col-sm-12">
+                    <select class="form-select" aria-label="Default select example" required>
+                      <option selected>Client Name</option>
+                      <option value="1">John Doe</option>
+                      <option value="2">June Qkala</option>
+                      <option value="3">Mars Three</option>
+                    </select>
+                    <!-- <input type="email" class="form-control" id="inputEmail3"> -->
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="readingDate" class="text-dark col-form-label">Reading date</label>
+                  <div class="col-sm-12">
+                    <input type="date" class="form-control" id="readingDate" required>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="readingDate" class="text-dark col-form-label">Previous reading</label>
+                  <div class="col-sm-12">
+                    <input type="tex" class="form-control" id="readingDate" placeholder="0.0 - from db record" disabled>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="readingDate" class="text-dark col-form-label">Current reading</label>
+                  <div class="col-sm-12">
+                    <input type="number" class="form-control" id="readingDate" placeholder="0.0" required>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="readingDate" class="text-dark col-form-label">Rate per m<sup>3</sup></label>
+                  <div class="col-sm-12">
+                    <input type="number" class="form-control" id="readingDate" placeholder="14" disabled>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="readingDate" class="text-dark col-form-label">Total bill</label>
+                  <div class="col-sm-12">
+                    <input type="text" class="form-control" id="readingDate" placeholder="calculated value" disabled>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="readingDate" class="text-dark col-form-label">Due date</label>
+                  <div class="col-sm-12">
+                    <input type="date" class="form-control" id="readingDate" placeholder="Due date" required>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="status" class="form-label">Status</label>
+                  <select id="status" name="status" class="form-select" required>
+                    <option value="" disabled selected>Select</option>
+                    <option value="inactive" class="text-danger">Pending</option>
+                    <option value="active" class="text-success">Paid</option>
+                  </select>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                </div>
+
+              
+             
+                   
+                    
+                
+                </form>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="container mt-0">
           <!-- Card Container -->
           <div class="card">
             <div class="d-flex justify-content-between align-items-center">
               <h5 class="mb-0 text-dark">Listing of Billings</h5>
               <!-- Button trigger modal -->
-              <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              <i class='fas fa-plus'></i>&nbsp;Create Bill
+              <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                <i class='fas fa-plus'></i>&nbsp;Create Bill
               </button>
             </div>
 
@@ -154,24 +239,28 @@ if (!isset($_SESSION['user_id'])) {
                   </tr>
                 </thead>
                 <tbody>
+
+                <tr>
+                  <td colspan='7' class='text-center text-danger'>No clients billing found.</td>
+                </tr>
                   <?php
 
                   // Fetch clients and output HTML
                   // try {
-                    // $clients = getClients();
+                  // $clients = getClients();
 
-                    // if (!empty($clients)) {
-                    //   foreach ($clients as $index => $client) {
-                    //     echo "<tr>";
-                    //     echo "<th scope='row'>" . htmlspecialchars($index + 1) . "</th>";
-                    //     echo "<td>" . htmlspecialchars($client['created_at']) . "</td>";
-                    //     echo "<td>" . htmlspecialchars($client['meter_number']) . "</td>";
-                    //     echo "<td>" . htmlspecialchars($client['client_name']) . "</td>";
+                  // if (!empty($clients)) {
+                  //   foreach ($clients as $index => $client) {
+                  //     echo "<tr>";
+                  //     echo "<th scope='row'>" . htmlspecialchars($index + 1) . "</th>";
+                  //     echo "<td>" . htmlspecialchars($client['created_at']) . "</td>";
+                  //     echo "<td>" . htmlspecialchars($client['meter_number']) . "</td>";
+                  //     echo "<td>" . htmlspecialchars($client['client_name']) . "</td>";
 
-                    //     // echo "<td>" . htmlspecialchars($client['meter_number']) . "</td>";
-                    //     // echo "<td>" . htmlspecialchars($client['meter_reading']) . "</td>";
-                    //     echo "<td class='text-uppercase'><small>" . htmlspecialchars($client['status']) . "</small></td>";
-                    //     echo "<td>
+                  //     // echo "<td>" . htmlspecialchars($client['meter_number']) . "</td>";
+                  //     // echo "<td>" . htmlspecialchars($client['meter_reading']) . "</td>";
+                  //     echo "<td class='text-uppercase'><small>" . htmlspecialchars($client['status']) . "</small></td>";
+                  //     echo "<td>
                   // <div class='dropdown'>
                   //     <button class='btn btn-success btn-sm dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-expanded='false'>Click</button>
                   //     <ul class='dropdown-menu'>
@@ -205,15 +294,15 @@ if (!isset($_SESSION['user_id'])) {
                   //         </li>
                   //     </ul>
                   // </div>
-                // </td>";
-                //         echo "</tr>";
-                //       }
-                //     } else {
-                //       echo "<tr><td colspan='8' class='text-center text-danger'>No clients found.</td></tr>";
-                //     }
-                //   } catch (Exception $e) {
-                //     echo "<tr><td colspan='8' class='text-center'>An error occurred: " . htmlspecialchars($e->getMessage()) . "</td></tr>";
-                //   }
+                  // </td>";
+                  //         echo "</tr>";
+                  //       }
+                  //     } else {
+                  //       echo "<tr><td colspan='8' class='text-center text-danger'>No clients found.</td></tr>";
+                  //     }
+                  //   } catch (Exception $e) {
+                  //     echo "<tr><td colspan='8' class='text-center'>An error occurred: " . htmlspecialchars($e->getMessage()) . "</td></tr>";
+                  //   }
 
                   ?>
 
@@ -269,13 +358,6 @@ if (!isset($_SESSION['user_id'])) {
   <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="js/dt-1.10.25datatables.min.js"></script>
   <script src="js/scripts.js"></script>
-
-
-
-
-
-
-
 
 </body>
 

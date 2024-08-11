@@ -169,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <main class="main-container">
       <div class="row">
 
-        <div class="container mt-4">
+        <div class="container mt-0">
           <!-- Card Container -->
           <div class="card">
             <div class="d-flex justify-content-between align-items-center">

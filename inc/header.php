@@ -44,7 +44,7 @@ if (!isset($_SESSION['username'])) {
         <span class="material-icons-outlined">menu</span>
       </div>
       <div class="header-left">
-        <h4 class="text-primary">Water Billing & Customer Management System - <span>DASHBOARD</span></h4>
+        <h4 class="text-primary">Water Billing & Customer Management System - <span class="text-success">DASHBOARD</span></h4>
       </div>
       <div class="header-right text-primary">
         <!-- Message Notification banner -->
