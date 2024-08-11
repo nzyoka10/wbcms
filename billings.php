@@ -19,7 +19,7 @@ if (!isset($_SESSION['user_id'])) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>WBCM | Account Billing</title>
+  <title>WBCMS | Billing</title>
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
@@ -51,7 +51,7 @@ if (!isset($_SESSION['user_id'])) {
         <span class="material-icons-outlined">menu</span>
       </div>
       <div class="header-left">
-        <h4 class="text-secondary"><strong>WBCM</strong>&nbsp;&nbsp;-&nbsp;&nbsp;Billings</h4>
+        <h6 class="text-seconary">Water Billing & Customer Management System - <small class="text-success">BILLINGS</small></h6>
       </div>
       <div class="header-right text-primary">
         <!-- Message Notification banner -->
@@ -72,7 +72,7 @@ if (!isset($_SESSION['user_id'])) {
     <aside id="sidebar">
       <div class="sidebar-title">
         <div class="sidebar-brand">
-          <span class="material-icons-outlined">water_drop</span>&nbsp;WBCM
+          <span class="material-icons-outlined">water_drop</span>&nbsp;WBCMS
         </div>
         <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
       </div>
@@ -96,12 +96,12 @@ if (!isset($_SESSION['user_id'])) {
           </a>
         </li>
         <li class="sidebar-list-item">
-          <a href="#">
+          <a href="#reports.php">
             <span class="material-icons-outlined">receipt_long</span>&nbsp;&nbsp;Monthly Report
           </a>
         </li>
         <li class="sidebar-list-item">
-          <a href="#">
+          <a href="#settings.php">
             <span class="material-icons-outlined">settings</span>&nbsp;&nbsp;Settings
           </a>
         </li>
@@ -115,78 +115,149 @@ if (!isset($_SESSION['user_id'])) {
     </aside>
     <!-- End Sidebar -->
 
-    <!-- Main section -->
-    <main class="main-container">
-
+   <!-- Main section -->
+   <main class="main-container">
       <div class="row">
-        <div class="container">
 
-          <div class="form-group pull-right">
-            <input type="text" class="search form-control" placeholder="Search by Name, Meter ID...">
+        <div class="container mt-4">
+          <!-- Card Container -->
+          <div class="card">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0 text-dark">Listing of Billings</h5>
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <i class='fas fa-plus'></i>&nbsp;Create Bill
+              </button>
+            </div>
+
+            <!-- data table to diplay account details -->
+            <div class="card-body">
+              <!-- Display error message if present -->
+              <?php if (!empty($error_message)) : ?>
+                <div class="alert alert-danger" role="alert">
+                  <?php echo htmlspecialchars($error_message); ?>
+                </div>
+              <?php endif; ?>
+
+              <!-- diplay registered clients -->
+              <table class="table cell-border">
+                <thead>
+                  <tr>
+                    <th scope="col">Sn#</th>
+                    <th scope="col">Reading date</th>
+                    <th scope="col">Client</th>
+                    <th scope="col">Amount<sup class="text-success">(Kes.)</sup></th>
+                    <th scope="col">Due date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                    <!-- <th scope="col"></th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+
+                  // Fetch clients and output HTML
+                  // try {
+                    // $clients = getClients();
+
+                    // if (!empty($clients)) {
+                    //   foreach ($clients as $index => $client) {
+                    //     echo "<tr>";
+                    //     echo "<th scope='row'>" . htmlspecialchars($index + 1) . "</th>";
+                    //     echo "<td>" . htmlspecialchars($client['created_at']) . "</td>";
+                    //     echo "<td>" . htmlspecialchars($client['meter_number']) . "</td>";
+                    //     echo "<td>" . htmlspecialchars($client['client_name']) . "</td>";
+
+                    //     // echo "<td>" . htmlspecialchars($client['meter_number']) . "</td>";
+                    //     // echo "<td>" . htmlspecialchars($client['meter_reading']) . "</td>";
+                    //     echo "<td class='text-uppercase'><small>" . htmlspecialchars($client['status']) . "</small></td>";
+                    //     echo "<td>
+                  // <div class='dropdown'>
+                  //     <button class='btn btn-success btn-sm dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-expanded='false'>Click</button>
+                  //     <ul class='dropdown-menu'>
+                  //         <li>
+                  //             <button type='button' class='btn btn-sm' data-bs-toggle='modal' data-bs-target='#viewClientModal' onclick=\"populateViewModal(
+                  //                 '" . htmlspecialchars($client['client_name']) . "', 
+                  //                 '" . htmlspecialchars($client['contact_number']) . "', 
+                  //                 '" . htmlspecialchars($client['address']) . "', 
+                  //                 '" . htmlspecialchars($client['meter_number']) . "', 
+                  //                 '" . htmlspecialchars($client['meter_reading']) . "', 
+                  //                 '" . htmlspecialchars($client['status']) . "')\">
+                  //                 <i class='fas fa-eye'></i>&nbsp;View
+                  //             </button>
+                  //         </li>
+                  //         <li>
+                  //             <button type='button' class='btn btn-sm text-primary' data-bs-toggle='modal' data-bs-target='#editClientModal' onclick=\"populateEditModal(
+                  //                 '" . urlencode($client['user_id']) . "', 
+                  //                 '" . htmlspecialchars($client['client_name']) . "', 
+                  //                 '" . htmlspecialchars($client['contact_number']) . "', 
+                  //                 '" . htmlspecialchars($client['address']) . "', 
+                  //                 '" . htmlspecialchars($client['meter_number']) . "', 
+                  //                 '" . htmlspecialchars($client['meter_reading']) . "', 
+                  //                 '" . htmlspecialchars($client['status']) . "')\">
+                  //                 <i class='fas fa-edit text-primary'></i>&nbsp;Edit
+                  //             </button>
+                  //         </li>
+                  //         <li>
+                  //             <a href='delete_client.php?id=" . urlencode($client['user_id']) . "' class='btn btn-sm text-danger' title='Delete' onclick=\"return confirm('Are you sure you want to delete this Client Record?');\">
+                  //                 <i class='fas fa-trash'></i>&nbsp;Delete
+                  //             </a>
+                  //         </li>
+                  //     </ul>
+                  // </div>
+                // </td>";
+                //         echo "</tr>";
+                //       }
+                //     } else {
+                //       echo "<tr><td colspan='8' class='text-center text-danger'>No clients found.</td></tr>";
+                //     }
+                //   } catch (Exception $e) {
+                //     echo "<tr><td colspan='8' class='text-center'>An error occurred: " . htmlspecialchars($e->getMessage()) . "</td></tr>";
+                //   }
+
+                  ?>
+
+                </tbody>
+              </table>
+
+            </div>
+
+            <script>
+              function refreshClientTable() {
+                // Perform an AJAX request to fetch the latest clients
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', 'fetch_clients.php', true);
+
+                xhr.onreadystatechange = function() {
+                  if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Update the table body with the fetched HTML
+                    document.querySelector('table tbody').innerHTML = xhr.responseText;
+                  }
+                };
+
+                xhr.send();
+              }
+
+              // Set the interval to refresh the table every 5 seconds (5000 ms)
+              setInterval(refreshClientTable, 5000);
+
+              // Call the function initially to load data immediately
+              refreshClientTable();
+            </script>
+
+
           </div>
-
-          <span class="counter pull-right"></span>
-          <table class="table table-hover table-bordered results">
-            <thead>
-              <tr>
-                <th>Sn#</th>
-                <th class="col-md-2 col-xs-3">Invoice Id</th>
-                <th class="col-md-2 col-xs-3">Account</th>
-                <th class="col-md-3 col-xs-3">MeterID</th>
-                <th class="col-md-2 col-xs-2">Last reading</th>
-                <th class="col-md-3 col-xs-2">Recent reading</th>
-                <th class="col-md-2 col-xs-2">Total Amount</th>
-              </tr>
-              <tr class="warning no-result">
-                <td colspan="4"><i class="fa fa-warning"></i> No result</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Inv#0001</td>
-                <td>Test User</td>
-                <td>1001</th>
-                <td>0</td>
-                <td>10</td>
-                <td><strong class="text-success">Kes.&nbsp;</strong>0</td>
-              </tr>
-              <!-- <tr>
-                                <th scope="row">2</th>
-                                <td>Burak Özkan</td>
-                                <td>1002</th>
-                                <td>0</td>
-                                <td>15</td>
-                                <td><strong class="text-success">Kes.&nbsp;</strong>0</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Egemen Özbeyli</td>
-                                <td>1003</th>
-                                <td>5</td>
-                                <td>22</td>
-                                <td><strong class="text-success">Kes.&nbsp;</strong>100</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>Engin Kızıl</td>
-                                <td>1004</th>
-                                <td>0</td>
-                                <td>45</td>
-                                <td><strong class="text-success">Kes.&nbsp;</strong>0</td>
-                            </tr> -->
-            </tbody>
-          </table>
-
-
-
-
-
         </div>
-      </div>
 
+        <!-- JS Dependencies -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+      </div>
     </main>
-    <!-- End Main -->
+    <!-- End Main section -->
 
   </div>
 

@@ -2,7 +2,7 @@
   <aside id="sidebar">
       <div class="sidebar-title">
         <div class="sidebar-brand">
-        <span class="material-icons-outlined">water_drop</span>&nbsp;WBCM
+        <span class="material-icons-outlined">water_drop</span>&nbsp;WBCMS
         </div>
         <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
       </div>

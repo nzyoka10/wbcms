@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>WBCM | Clint Listing</title>
+  <title>WBCMS | Clients</title>
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
@@ -122,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <aside id="sidebar">
       <div class="sidebar-title">
         <div class="sidebar-brand">
-          <span class="material-icons-outlined">water_drop</span>&nbsp;WBCM
+          <span class="material-icons-outlined">water_drop</span>&nbsp;WBCMS
         </div>
         <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
       </div>
@@ -172,8 +172,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="container mt-4">
           <!-- Card Container -->
           <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-              <h5 class="mb-0">Listing of Clients</h5>
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0 text-dark">Listing of Clients</h5>
               <!-- Button trigger modal -->
               <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
               <i class='fas fa-plus'></i>&nbsp;New Client
@@ -219,7 +219,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         // echo "<td>" . htmlspecialchars($client['meter_number']) . "</td>";
                         // echo "<td>" . htmlspecialchars($client['meter_reading']) . "</td>";
-                        echo "<td class='text-uppercase'><small>" . htmlspecialchars($client['status']) . "</small></td>";
+                        echo "<td class='text-capitalize text-bold'><small>" . htmlspecialchars($client['status']) . "</small></td>";
                         echo "<td>
                   <div class='dropdown'>
                       <button class='btn btn-success btn-sm dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-expanded='false'>Click</button>
@@ -264,7 +264,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     echo "<tr><td colspan='8' class='text-center'>An error occurred: " . htmlspecialchars($e->getMessage()) . "</td></tr>";
                   }
 
-                  ?>
+                 ?>
 
                 </tbody>
               </table>
