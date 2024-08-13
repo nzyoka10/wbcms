@@ -8,6 +8,37 @@ if (!isset($_SESSION['user_id'])) {
   header("Location: index.php");
   exit();
 }
+// $previous_reading = fetchPreviousReading($_POST['user_id']);
+// Fetch the clients
+$clients = fetchClients();
+// $rate = fetchRate();
+
+
+
+// Check if the form has been submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  try {
+    // Extract form data
+    $userId = $_POST['user_id'];
+    $readingDate = $_POST['reading_date'];
+    $previousReading = $_POST['previous_reading'];
+    $currentReading = $_POST['current_reading'];
+    $rate = $_POST['rate'];
+    $dueDate = $_POST['due_date'];
+    $status = $_POST['bill_status'];
+
+    // Call the billing function
+    $billingResult = billClient($userId, $readingDate, $previousReading, $currentReading, $rate, $dueDate, $status);
+    if ($billingResult) {
+      echo "Client billed successfully.";
+    } else {
+      echo "Failed to bill client.";
+    }
+  } catch (Exception $e) {
+    $error_message = 'An error occurred: ' . $e->getMessage();
+    echo $error_message;
+  }
+}
 
 ?>
 
@@ -118,92 +149,6 @@ if (!isset($_SESSION['user_id'])) {
     <!-- Main section -->
     <main class="main-container">
       <div class="row">
-
-        <!-- create new billing modal -->
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5 text-dark" id="staticBackdropLabel">Create New Bill</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <!-- form -->
-                <form action="" class="col g-4">
-                <div class="row mb-3 mt-0">
-                  <label for="client_name" class="text-dark col-form-label">Client</label>
-                  <div class="col-sm-12">
-                    <select class="form-select" aria-label="Default select example" required>
-                      <option selected>Client Name</option>
-                      <option value="1">John Doe</option>
-                      <option value="2">June Qkala</option>
-                      <option value="3">Mars Three</option>
-                    </select>
-                    <!-- <input type="email" class="form-control" id="inputEmail3"> -->
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="readingDate" class="text-dark col-form-label">Reading date</label>
-                  <div class="col-sm-12">
-                    <input type="date" class="form-control" id="readingDate" required>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="readingDate" class="text-dark col-form-label">Previous reading</label>
-                  <div class="col-sm-12">
-                    <input type="tex" class="form-control" id="readingDate" placeholder="0.0 - from db record" disabled>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="readingDate" class="text-dark col-form-label">Current reading</label>
-                  <div class="col-sm-12">
-                    <input type="number" class="form-control" id="readingDate" placeholder="0.0" required>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="readingDate" class="text-dark col-form-label">Rate per m<sup>3</sup></label>
-                  <div class="col-sm-12">
-                    <input type="number" class="form-control" id="readingDate" placeholder="14" disabled>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="readingDate" class="text-dark col-form-label">Total bill</label>
-                  <div class="col-sm-12">
-                    <input type="text" class="form-control" id="readingDate" placeholder="calculated value" disabled>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="readingDate" class="text-dark col-form-label">Due date</label>
-                  <div class="col-sm-12">
-                    <input type="date" class="form-control" id="readingDate" placeholder="Due date" required>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="status" class="form-label">Status</label>
-                  <select id="status" name="status" class="form-select" required>
-                    <option value="" disabled selected>Select</option>
-                    <option value="inactive" class="text-danger">Pending</option>
-                    <option value="active" class="text-success">Paid</option>
-                  </select>
-                </div>
-
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-sm btn-primary">Save</button>
-                </div>
-
-              
-             
-                   
-                    
-                
-                </form>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-
         <div class="container mt-0">
           <!-- Card Container -->
           <div class="card">
@@ -240,125 +185,191 @@ if (!isset($_SESSION['user_id'])) {
                 </thead>
                 <tbody>
 
-                <tr>
-                  <td colspan='7' class='text-center text-danger'>No clients billing found.</td>
-                </tr>
-                  <?php
-
-                  // Fetch clients and output HTML
-                  // try {
-                  // $clients = getClients();
-
-                  // if (!empty($clients)) {
-                  //   foreach ($clients as $index => $client) {
-                  //     echo "<tr>";
-                  //     echo "<th scope='row'>" . htmlspecialchars($index + 1) . "</th>";
-                  //     echo "<td>" . htmlspecialchars($client['created_at']) . "</td>";
-                  //     echo "<td>" . htmlspecialchars($client['meter_number']) . "</td>";
-                  //     echo "<td>" . htmlspecialchars($client['client_name']) . "</td>";
-
-                  //     // echo "<td>" . htmlspecialchars($client['meter_number']) . "</td>";
-                  //     // echo "<td>" . htmlspecialchars($client['meter_reading']) . "</td>";
-                  //     echo "<td class='text-uppercase'><small>" . htmlspecialchars($client['status']) . "</small></td>";
-                  //     echo "<td>
-                  // <div class='dropdown'>
-                  //     <button class='btn btn-success btn-sm dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-expanded='false'>Click</button>
-                  //     <ul class='dropdown-menu'>
-                  //         <li>
-                  //             <button type='button' class='btn btn-sm' data-bs-toggle='modal' data-bs-target='#viewClientModal' onclick=\"populateViewModal(
-                  //                 '" . htmlspecialchars($client['client_name']) . "', 
-                  //                 '" . htmlspecialchars($client['contact_number']) . "', 
-                  //                 '" . htmlspecialchars($client['address']) . "', 
-                  //                 '" . htmlspecialchars($client['meter_number']) . "', 
-                  //                 '" . htmlspecialchars($client['meter_reading']) . "', 
-                  //                 '" . htmlspecialchars($client['status']) . "')\">
-                  //                 <i class='fas fa-eye'></i>&nbsp;View
-                  //             </button>
-                  //         </li>
-                  //         <li>
-                  //             <button type='button' class='btn btn-sm text-primary' data-bs-toggle='modal' data-bs-target='#editClientModal' onclick=\"populateEditModal(
-                  //                 '" . urlencode($client['user_id']) . "', 
-                  //                 '" . htmlspecialchars($client['client_name']) . "', 
-                  //                 '" . htmlspecialchars($client['contact_number']) . "', 
-                  //                 '" . htmlspecialchars($client['address']) . "', 
-                  //                 '" . htmlspecialchars($client['meter_number']) . "', 
-                  //                 '" . htmlspecialchars($client['meter_reading']) . "', 
-                  //                 '" . htmlspecialchars($client['status']) . "')\">
-                  //                 <i class='fas fa-edit text-primary'></i>&nbsp;Edit
-                  //             </button>
-                  //         </li>
-                  //         <li>
-                  //             <a href='delete_client.php?id=" . urlencode($client['user_id']) . "' class='btn btn-sm text-danger' title='Delete' onclick=\"return confirm('Are you sure you want to delete this Client Record?');\">
-                  //                 <i class='fas fa-trash'></i>&nbsp;Delete
-                  //             </a>
-                  //         </li>
-                  //     </ul>
-                  // </div>
-                  // </td>";
-                  //         echo "</tr>";
-                  //       }
-                  //     } else {
-                  //       echo "<tr><td colspan='8' class='text-center text-danger'>No clients found.</td></tr>";
-                  //     }
-                  //   } catch (Exception $e) {
-                  //     echo "<tr><td colspan='8' class='text-center'>An error occurred: " . htmlspecialchars($e->getMessage()) . "</td></tr>";
-                  //   }
-
-                  ?>
+                  <tr>
+                    <td colspan='7' class='text-center text-danger'>No clients billing found.</td>
+                  </tr>
 
                 </tbody>
               </table>
 
             </div>
-
-            <script>
-              function refreshClientTable() {
-                // Perform an AJAX request to fetch the latest clients
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', 'fetch_clients.php', true);
-
-                xhr.onreadystatechange = function() {
-                  if (xhr.readyState == 4 && xhr.status == 200) {
-                    // Update the table body with the fetched HTML
-                    document.querySelector('table tbody').innerHTML = xhr.responseText;
-                  }
-                };
-
-                xhr.send();
-              }
-
-              // Set the interval to refresh the table every 5 seconds (5000 ms)
-              setInterval(refreshClientTable, 5000);
-
-              // Call the function initially to load data immediately
-              refreshClientTable();
-            </script>
-
-
           </div>
         </div>
-
-        <!-- JS Dependencies -->
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>
-
-
-
 
       </div>
     </main>
     <!-- End Main section -->
-
   </div>
 
+<!-- Create new billing modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-dark" id="staticBackdropLabel">Create New Bill</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Form -->
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" class="row g-4">
+          <input type="hidden" name="user_id" id="billClientId" value="<?php echo isset($_POST['user_id']) ? htmlspecialchars($_POST['user_id']) : ''; ?>">
 
-  <!-- Script files -->
+          <div class="col-md-6">
+            <label for="client_name" class="text-dark col-form-label">Client</label>
+            <div class="col-sm-12">
+              <select name="user_id" class="form-select" onchange="fetchPreviousReading(this.value)" required>
+                <option value="" disabled selected>Select Client</option>
+                <?php foreach ($clients as $client) : ?>
+                  <option value="<?php echo htmlspecialchars($client['user_id']); ?>">
+                    <?php echo htmlspecialchars($client['client_name']); ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="readingDate" class="text-dark col-form-label">Reading date</label>
+            <div class="col-sm-12">
+              <input name="reading_date" id="reading_date" type="date" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="previous_reading" class="text-dark col-form-label">Previous reading</label>
+            <div class="col-sm-12">
+              <!-- Display the previous reading fetched from the database -->
+              <input type="text" name="previous_reading" id="previous_reading" class="form-control"
+                value="<?php echo htmlspecialchars($previous_reading); ?>" placeholder="0.0" disabled>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="current_reading" class="text-dark col-form-label">Current reading</label>
+            <div class="col-sm-12">
+              <input type="number" name="current_reading" id="current_reading" class="form-control" placeholder="0.0" required oninput="updateTotalBill()">
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="rate" class="text-dark col-form-label">Rate per m<sup>3</sup></label>
+            <div class="col-sm-12">
+              <input type="number" name="rate" id="rate" class="form-control" placeholder="14" disabled>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="total_bill" class="text-dark col-form-label">Total bill</label>
+            <div class="col-sm-12">
+              <input type="text" name="total_bill" id="total_bill" class="form-control" placeholder="calculated value" disabled>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="due_date" class="text-dark col-form-label">Due date</label>
+            <div class="col-sm-12">
+              <input type="date" name="due_date" id="due_date" class="form-control" placeholder="Due date" required>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="bill_status" class="form-label">Status</label>
+            <select id="bill_status" name="bill_status" class="form-select" required>
+              <option value="" disabled selected>Select</option>
+              <option value="inactive" class="text-danger">Pending</option>
+              <option value="active" class="text-success">Paid</option>
+            </select>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Script files -->
+<script>
+  /**
+   * Function to refresh the client table.
+   * Makes an AJAX request to fetch the latest client data and updates the table.
+   */
+  function refreshClientTable() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'fetch_billing.php', true);
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          // Update the table body with the fetched HTML
+          document.querySelector('table tbody').innerHTML = xhr.responseText;
+        } else {
+          console.error('Failed to fetch client data. Status:', xhr.status);
+        }
+      }
+    };
+
+    xhr.send();
+  }
+
+  // Set the interval to refresh the table every 5 seconds (5000 ms)
+  setInterval(refreshClientTable, 5000);
+  refreshClientTable();
+
+  /**
+   * Function to fetch the previous reading for a specific user.
+   * Makes an AJAX request to fetch the previous reading value and updates the input field.
+   * @param {number} user_id - The ID of the user whose previous reading is to be fetched.
+   */
+  function fetchPreviousReading(user_id) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "fetch_previous_reading.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          // Update the previous reading input with the fetched value
+          document.getElementById("previous_reading").value = xhr.responseText;
+          // Optionally update the rate field here if needed
+        } else {
+          console.error('Failed to fetch previous reading. Status:', xhr.status);
+        }
+      }
+    };
+    xhr.send("user_id=" + encodeURIComponent(user_id));
+  }
+
+  /**
+   * Function to calculate and update the total bill based on the current reading and rate.
+   */
+  function updateTotalBill() {
+    var currentReading = parseFloat(document.getElementById("current_reading").value) || 0;
+    var previousReading = parseFloat(document.getElementById("previous_reading").value) || 0;
+    var rate = parseFloat(document.getElementById("rate").value) || 0;
+
+    // Calculate the total bill
+    var totalBill = (currentReading - previousReading) * rate;
+
+    // Update the total bill field
+    document.getElementById("total_bill").value = totalBill.toFixed(2); // Two decimal places
+  }
+</script>
+
+
+
+
+
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>
   <script src="js/bill.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
   <script src="js/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
   <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="js/dt-1.10.25datatables.min.js"></script>
   <script src="js/scripts.js"></script>
-
 </body>
 
 </html>
