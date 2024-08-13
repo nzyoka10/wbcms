@@ -249,18 +249,24 @@ try {
 
 /**
  * billClient - Bill a client based on the current meter reading and other details.
- * @userId: The ID of the client being billed
- * @readingDate: The date of the current meter reading
- * @previousReading: The previous meter reading (from the database)
- * @currentReading: The current meter reading input by the user
- * @rate: The rate per cubic meter of water
- * @dueDate: The due date for the bill payment
- * @status: The payment status (Pending/Active)
- * Return: true if the billing is successful, false otherwise
+ * @param int $userId - The ID of the client being billed
+ * @param string $readingDate - The date of the current meter reading
+ * @param string $dueDate - The due date for the bill payment
+ * @param float $currentReading - The current meter reading input by the user
+ * @param float $previousReading - The previous meter reading (from the database)
+ * @param float $rate - The rate per cubic meter of water
+ * @param float $totalBill - The total amount to be billed
+ * @param string $status - The payment status (Pending/Active)
+ * @return bool - Return true if the billing is successful, false otherwise
  */
 function billClient($userId, $readingDate, $dueDate, $currentReading, $previousReading, $rate, $totalBill, $status)
 {
     global $conn;
+
+    // Convert inputs to float to ensure numeric operations
+    $currentReading = floatval($currentReading);
+    $previousReading = floatval($previousReading);
+    $rate = floatval($rate);
 
     // Calculate the total bill based on the difference in meter readings and the rate
     $totalBill = ($currentReading - $previousReading) * $rate;
@@ -272,11 +278,27 @@ function billClient($userId, $readingDate, $dueDate, $currentReading, $previousR
     if (!$stmt) {
         throw new Exception('Database query preparation failed: ' . $conn->error);
     }
-    $stmt->bind_param("issddiss", $userId, $readingDate, $previousReading, $currentReading, $rate, $totalBill, $dueDate, $status);
+    // Adjust bind_param to match the expected data types
+    $stmt->bind_param("ssddssss", $userId, $readingDate, $previousReading, $currentReading, $rate, $totalBill, $dueDate, $status);
 
     // Return true if the insertion is successful
     return $stmt->execute();
 }
+// Check if the user_id exists in tbl_invoices
+function userIdExists($userId) {
+    global $conn;
+    $query = "SELECT COUNT(*) FROM tbl_invoices WHERE invoice_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $stmt->bind_result($count);
+    $stmt->fetch();
+    $stmt->close();
+    return $count > 0;
+}
+
+
+
 
 /**
  * fetchClients - Fetches all clients from the tbl_clients table

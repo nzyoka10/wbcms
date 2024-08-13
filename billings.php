@@ -1,46 +1,47 @@
 <?php
-
-
 include("./config/functions.php");
 
 // Check if the user is logged in, if not redirect to the login page
 if (!isset($_SESSION['user_id'])) {
-  header("Location: index.php");
-  exit();
+    header("Location: index.php");
+    exit();
 }
-// $previous_reading = fetchPreviousReading($_POST['user_id']);
+
 // Fetch the clients
 $clients = fetchClients();
 
-
+// Initialize error and success messages
+$error_message = '';
+$success_message = '';
 
 // Check if the form has been submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  try {
-    // Extract form data
-    $userId = $_POST['user_id'];
-    $readingDate = $_POST['reading_date'];
-    $dueDate = $_POST['due_date'];
-    $currentReading = $_POST['current_reading'];
-    $previousReading = $_POST['previous_reading'];
-    $rate = $_POST['rate'];
-    $totalBill = $_POST['total'];
-    $status = $_POST['status'];
+    try {
+        // Extract form data and provide default values if keys are not set
+        $userId = isset($_POST['user_id']) ? $_POST['user_id'] : '';
+        $readingDate = isset($_POST['reading_date']) ? $_POST['reading_date'] : '';
+        $dueDate = isset($_POST['due_date']) ? $_POST['due_date'] : '';
+        $currentReading = isset($_POST['current_reading']) ? $_POST['current_reading'] : '';
+        $previousReading = isset($_POST['previous_reading']) ? $_POST['previous_reading'] : '';
+        $rate = isset($_POST['rate']) ? $_POST['rate'] : '';
+        $totalBill = isset($_POST['total']) ? $_POST['total'] : '';
+        $status = isset($_POST['status']) ? $_POST['status'] : '';
 
-    // Call the billing function
-    $billingResult = billClient($userId, $readingDate, $previousReading, $currentReading, $rate, $dueDate, $status);
-    if ($billingResult) {
-      echo "Client billed successfully.";
-    } else {
-      echo "Failed to bill client.";
+        // Call the billing function
+        $billingResult = billClient($userId, $readingDate, $dueDate, $currentReading, $previousReading, $rate, $totalBill, $status);
+        if ($billingResult) {
+            $success_message = 'Client billed successfully!';
+            // echo "Client billed successfully.";
+        } else {
+          $error_message = 'Failed to bill client!';
+        }
+    } catch (Exception $e) {
+        $error_message = 'An error occurred: ' . $e->getMessage();
+        echo $error_message;
     }
-  } catch (Exception $e) {
-    $error_message = 'An error occurred: ' . $e->getMessage();
-    echo $error_message;
-  }
 }
-
 ?>
+
 
 
 
@@ -186,7 +187,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <tbody>
 
                   <tr>
-                    <td colspan='7' class='text-center text-danger'>No clients billing found.</td>
+                    <td colspan='7' class='text-center text-danger'>
+                      <strong>No clients billing found.</strong>
+                    </td>
                   </tr>
 
                 </tbody>
@@ -259,7 +262,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           </div>
 
           <div class="col-md-6">
-            <label for="total_bill" class="text-dark col-form-label">Total bill</label>
+            <label for="total_bill" class="text-dark col-form-label">Total bill<sup class="text-success">(Kes)</sup></label>
             <div class="col-sm-12">
               <input type="text" name="total_bill" id="total_bill" class="form-control" placeholder="calculated value" disabled>
             </div>
