@@ -269,7 +269,7 @@ function billClient($userId, $readingDate, $dueDate, $currentReading, $previousR
     $rate = floatval($rate);
 
     // Calculate the total bill based on the difference in meter readings and the rate
-    $totalBill = ($currentReading - $previousReading) * $rate;
+    $totalBill = floatval($currentReading - $previousReading * $rate);
 
     // Prepare the SQL query to insert the bill into the database
     $query = "INSERT INTO tbl_billinglist (user_id, reading_date, due_date, current_reading, previous_reading, rate, total, status) 
@@ -345,6 +345,35 @@ function fetchPreviousReading($user_id) {
 }
 
 // $previous_reading = fetchPreviousReading($_POST['user_id']);
+
+/**
+ * fetchBilledClients - Retrieve all billed clients from the database along with client names.
+ * @return array - An associative array of billed clients with their details.
+ */
+function fetchBilledClients() {
+    global $conn;
+    
+    // Join tbl_billinglist with tbl_clients to get client names
+    $query = "
+        SELECT b.*, c.client_name
+        FROM tbl_billinglist AS b
+        JOIN tbl_clients AS c ON b.user_id = c.user_id
+    ";
+    $result = $conn->query($query);
+    
+    if (!$result) {
+        throw new Exception('Database query failed: ' . $conn->error);
+    }
+    
+    $billedClients = [];
+    while ($row = $result->fetch_assoc()) {
+        $billedClients[] = $row;
+    }
+    
+    return $billedClients;
+}
+
+
 
 
 

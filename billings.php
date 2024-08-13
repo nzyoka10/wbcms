@@ -40,6 +40,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $error_message;
     }
 }
+
+// Fetch billed clients
+try {
+  $billedClients = fetchBilledClients();
+} catch (Exception $e) {
+  echo "An error occurred: " . $e->getMessage();
+  exit();
+}
 ?>
 
 
@@ -187,6 +195,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <tbody>
 
                   <tr>
+                  <?php if (empty($billedClients)) : ?>
+                    <tr>
+                      <td colspan="7" class="text-center text-danger">
+                        <strong>No billing records found.</strong>
+                      </td>
+                    </tr>
+                  <?php else: ?>
+                    <?php foreach ($billedClients as $client): ?>
+                      <tr>
+                        <td><?php echo htmlspecialchars($client['user_id']); ?></td>
+                        <td><?php echo htmlspecialchars($client['reading_date']); ?></td>
+                        <td><?php echo htmlspecialchars($client['client_name']); ?></td>
+                        <td><?php echo htmlspecialchars($client['total']); ?></td>
+                        <td><?php echo htmlspecialchars($client['due_date']); ?></td>
+                        <td><?php echo htmlspecialchars($client['status']); ?></td>
+                        <td><!-- Actions here, e.g., Edit, Delete --></td>
+                      </tr>
+                    <?php endforeach; ?>
+                  <?php endif; ?>
                     <td colspan='7' class='text-center text-danger'>
                       <strong>No clients billing found.</strong>
                     </td>
@@ -300,23 +327,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    * Function to refresh the client table.
    * Makes an AJAX request to fetch the latest client data and updates the table.
    */
-  function refreshClientTable() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'fetch_billing.php', true);
+  // function refreshClientTable() {
+  //   var xhr = new XMLHttpRequest();
+  //   xhr.open('GET', 'fetch_billing.php', true);
 
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          // Update the table body with the fetched HTML
-          document.querySelector('table tbody').innerHTML = xhr.responseText;
-        } else {
-          console.error('Failed to fetch client data. Status:', xhr.status);
-        }
-      }
-    };
+  //   xhr.onreadystatechange = function() {
+  //     if (xhr.readyState === 4) {
+  //       if (xhr.status === 200) {
+  //         // Update the table body with the fetched HTML
+  //         document.querySelector('table tbody').innerHTML = xhr.responseText;
+  //       } else {
+  //         console.error('Failed to fetch client data. Status:', xhr.status);
+  //       }
+  //     }
+  //   };
 
-    xhr.send();
-  }
+  //   xhr.send();
+  // }
 
   // Set the interval to refresh the table every 5 seconds (5000 ms)
   setInterval(refreshClientTable, 5000);
