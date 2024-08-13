@@ -11,7 +11,6 @@ if (!isset($_SESSION['user_id'])) {
 // $previous_reading = fetchPreviousReading($_POST['user_id']);
 // Fetch the clients
 $clients = fetchClients();
-// $rate = fetchRate();
 
 
 
@@ -21,11 +20,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Extract form data
     $userId = $_POST['user_id'];
     $readingDate = $_POST['reading_date'];
-    $previousReading = $_POST['previous_reading'];
-    $currentReading = $_POST['current_reading'];
-    $rate = $_POST['rate'];
     $dueDate = $_POST['due_date'];
-    $status = $_POST['bill_status'];
+    $currentReading = $_POST['current_reading'];
+    $previousReading = $_POST['previous_reading'];
+    $rate = $_POST['rate'];
+    $totalBill = $_POST['total'];
+    $status = $_POST['status'];
 
     // Call the billing function
     $billingResult = billClient($userId, $readingDate, $previousReading, $currentReading, $rate, $dueDate, $status);
@@ -201,7 +201,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- End Main section -->
   </div>
 
-<!-- Create new billing modal -->
+ <!-- Create new billing modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -351,16 +351,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     var rate = parseFloat(document.getElementById("rate").value) || 0;
 
     // Calculate the total bill
-    var totalBill = (currentReading - previousReading) * rate;
+    var totalBill = (currentReading - previousReading) * 14;
 
     // Update the total bill field
     document.getElementById("total_bill").value = totalBill.toFixed(2); // Two decimal places
   }
 </script>
-
-
-
-
 
 
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>

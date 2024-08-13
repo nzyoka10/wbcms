@@ -258,7 +258,7 @@ try {
  * @status: The payment status (Pending/Active)
  * Return: true if the billing is successful, false otherwise
  */
-function billClient($userId, $readingDate, $previousReading, $currentReading, $rate, $dueDate, $status)
+function billClient($userId, $readingDate, $dueDate, $currentReading, $previousReading, $rate, $totalBill, $status)
 {
     global $conn;
 
