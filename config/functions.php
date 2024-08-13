@@ -284,21 +284,6 @@ function billClient($userId, $readingDate, $dueDate, $currentReading, $previousR
     // Return true if the insertion is successful
     return $stmt->execute();
 }
-// Check if the user_id exists in tbl_invoices
-function userIdExists($userId) {
-    global $conn;
-    $query = "SELECT COUNT(*) FROM tbl_invoices WHERE invoice_id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $userId);
-    $stmt->execute();
-    $stmt->bind_result($count);
-    $stmt->fetch();
-    $stmt->close();
-    return $count > 0;
-}
-
-
-
 
 /**
  * fetchClients - Fetches all clients from the tbl_clients table
