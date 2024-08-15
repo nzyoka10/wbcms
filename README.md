@@ -1,7 +1,20 @@
-## Water Billing and Customer Management System
+## WBCMS
 
-- This is a web-based application designed to streamline water usage `tracking`, `billing`, and `customer management` processes.
-- It allows users to register for water connections, record monthly meter readings, generate bills, process payments, and generate detailed reports.
+###### **`Water Billing and Customer Management`** (Web-based application)
+
+- **`WBCMS`** is a robust system designed to facilitate the management of water billing and customer data for utility companies. 
+- The application automates the entire billing process, from client registration to the generation of detailed reports, making it easier to `manage and track water usage and payments`.
+
+### Features
+- **Create New Client**: The system supports full CRUD operations, allowing administrators to easily manage client data, including adding, updating, and deleting client records.
+- **Create New Billing**: Users can generate water bills based on client meter readings, with the system automatically calculating total charges to minimize manual errors.
+- **Generate Reports**: Users can create detailed reports that summarize client billing data for a selected month, offering valuable insights into billing trends and aiding in financial analysis.
+
+### Tools
+- **Backend Development**: The application’s backend is built using **PHP** *`(vanilla)`* to handle logic, 
+    - while **MySQL** is used for secure and efficient data storage and retrieval.
+- **Frontend Development**: The frontend interface is developed using HTML, CSS (Bootstrap), and JavaScript, ensuring a responsive and user-friendly experience across different devices and screen sizes.
+
 
 <details>
   <summary style="font-weight: bold; font-size: 1.2em; color: red;">Application Screenshots</summary>
@@ -36,19 +49,4 @@
 
 
 
-### Features
 
-- **User Registration:** User create account to access the system, (``Admin``, ``Staff``).
-- **Meter Management:** Tracks water meters, their installation dates, and statuses.
-- **Billing:** Generates monthly bills for customers based on meter readings.
-- **Payment Processing:** Accepts payments via various methods like M-Pesa.
-- **Notification:** Sends billing receipts via SMS to customers.
-- **Reporting:** Provides detailed reports on usage trends and financial performance.
-
-### Technologies Used
-
-- `Frontend`: **HTML**, **CSS**, **JavaScript**.
-- `Backend`: **PHP**
-- `Database`: **MySQL**
-- `Payment Integration`: **M-Pesa API**
-- `SMS Gateway`: **Africa’s Talking**
