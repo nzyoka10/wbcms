@@ -193,8 +193,7 @@ try {
                     <th scope="col">Amount<sup class="text-success">(Kes.)</sup></th>
                     <th scope="col">Due date</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Actions</th>
-                    <!-- <th scope="col"></th> -->
+                    <th scope="col">Actions</th>                    
                   </tr>
                 </thead>
                 <tbody>
