@@ -248,44 +248,6 @@ try {
 }
 
 /**
- * billClient - Bill a client based on the current meter reading and other details.
- * @param int $userId - The ID of the client being billed
- * @param string $readingDate - The date of the current meter reading
- * @param string $dueDate - The due date for the bill payment
- * @param float $currentReading - The current meter reading input by the user
- * @param float $previousReading - The previous meter reading (from the database)
- * @param float $rate - The rate per cubic meter of water
- * @param float $totalBill - The total amount to be billed
- * @param string $status - The payment status (Pending/Active)
- * @return bool - Return true if the billing is successful, false otherwise
- */
-function billClient($userId, $readingDate, $dueDate, $currentReading, $previousReading, $rate, $totalBill, $status)
-{
-    global $conn;
-
-    // Convert inputs to float to ensure numeric operations
-    $currentReading = floatval($currentReading);
-    $previousReading = floatval($previousReading);
-    $rate = floatval($rate);
-
-    // Calculate the total bill based on the difference in meter readings and the rate
-    $totalBill = floatval($currentReading - $previousReading * $rate);
-
-    // Prepare the SQL query to insert the bill into the database
-    $query = "INSERT INTO tbl_billinglist (user_id, reading_date, due_date, current_reading, previous_reading, rate, total, status) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
-    if (!$stmt) {
-        throw new Exception('Database query preparation failed: ' . $conn->error);
-    }
-    // Adjust bind_param to match the expected data types
-    $stmt->bind_param("ssddssss", $userId, $readingDate, $previousReading, $currentReading, $rate, $totalBill, $dueDate, $status);
-
-    // Return true if the insertion is successful
-    return $stmt->execute();
-}
-
-/**
  * fetchClients - Fetches all clients from the tbl_clients table
  * Return: An array of clients
  */
@@ -310,52 +272,159 @@ function fetchClients() {
 }
 
 /**
- * fetchPreviousReading - Fetches the previous meter reading for a given client
- * @param int $user_id - The user's ID to fetch the reading for
- * Return: The previous meter reading value
+ * Fetch the previous reading for a client
+ * @param int $userId
+ * @return float
  */
-function fetchPreviousReading($user_id) {
+function fetchPreviousReading($user_id)
+{
     global $conn;
-
-    // SQL query to fetch the previous meter reading for the specific client
     $query = "SELECT meter_reading FROM tbl_clients WHERE user_id = ?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $user_id);  // Bind the user ID as an integer
-    $stmt->execute();
-    $stmt->bind_result($previous_reading);
-    $stmt->fetch();
-    $stmt->close();
+    if (!$stmt) {
+        throw new Exception('Database query preparation failed: ' . $conn->error);
+    }
 
-    return $previous_reading;
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 0) {
+        throw new Exception('No previous reading found for the given user ID.');
+    }
+
+    $row = $result->fetch_assoc();
+    return (float) $row['meter_reading'];
 }
 
-// $previous_reading = fetchPreviousReading($_POST['user_id']);
+/**
+ * Create or update a billing record
+ * @param int $userId
+ * @param string $readingDate
+ * @param string $dueDate
+ * @param float $currentReading
+ * @param float $rate
+ * @param float $totalBill
+ * @param string $status
+ * @return bool
+ */
+function billClient($userId, $readingDate, $dueDate, $currentReading, $rate, $totalBill, $status)
+{
+    global $conn;
+
+    // Fetch previous reading from tbl_clients
+    try {
+        $previousReading = fetchPreviousReading($userId);
+    } catch (Exception $e) {
+        throw new Exception('Error fetching previous reading: ' . $e->getMessage());
+    }
+
+    // Calculate the total bill
+    $totalBill = ($currentReading - $previousReading) * $rate;
+
+    // Map status to tinyint (0 for pending, 1 for paid)
+    $statusTinyInt = ($status === 'inactive') ? 0 : 1;
+
+    // Prepare SQL statement for insert or update
+    $query = "
+        INSERT INTO tbl_billinglist 
+        (user_id, reading_date, due_date, current_reading, previous_reading, rate, total, status) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+        reading_date = VALUES(reading_date),
+        due_date = VALUES(due_date),
+        current_reading = VALUES(current_reading),
+        previous_reading = VALUES(previous_reading),
+        rate = VALUES(rate),
+        total = VALUES(total),
+        status = VALUES(status)
+    ";
+
+    $stmt = $conn->prepare($query);
+    if (!$stmt) {
+        throw new Exception('Database query preparation failed: ' . $conn->error);
+    }
+
+    // Map status text to tinyint value
+    $statusValue = ($status == 'Paid') ? 1 : 0;
+
+    // Bind parameters: 'i' for integer, 's' for string, 'd' for double
+    $stmt->bind_param("issddidi", $userId, $readingDate, $dueDate, $currentReading, $previousReading, $rate, $totalBill, $statusTinyInt);
+
+    // Execute query
+    return $stmt->execute();
+}
 
 /**
- * fetchBilledClients - Retrieve all billed clients from the database along with client names.
- * @return array - An associative array of billed clients with their details.
+ * Fetch all billed clients with status text
+ * @return array
  */
-function fetchBilledClients() {
+function fetchBilledClients()
+{
     global $conn;
-    
-    // Join tbl_billinglist with tbl_clients to get client names
-    $query = "
-        SELECT b.*, c.client_name
-        FROM tbl_billinglist AS b
-        JOIN tbl_clients AS c ON b.user_id = c.user_id
-    ";
+
+    $query = "SELECT b.bill_id, c.user_id, c.client_name, b.reading_date, b.due_date, b.current_reading, b.previous_reading, b.rate, b.total, b.status
+              FROM tbl_billinglist b
+              JOIN tbl_clients c ON b.user_id = c.user_id";
     $result = $conn->query($query);
-    
+
     if (!$result) {
         throw new Exception('Database query failed: ' . $conn->error);
     }
-    
+
     $billedClients = [];
     while ($row = $result->fetch_assoc()) {
+        // Map the numeric status to text
+        $statusText = ($row['status'] == 0) ? 'Pending' : 'Paid';
+        $row['status'] = $statusText;
         $billedClients[] = $row;
     }
-    
+
     return $billedClients;
+}
+
+/**
+ * Fetch the details of a specific bill using bill_id
+ * @param int $billId
+ * @return array
+ * @throws Exception
+ */
+function getBillDetails($billId)
+{
+    global $conn;
+
+    // Validate bill_id
+    if (!is_int($billId) || $billId <= 0) {
+        throw new InvalidArgumentException('Invalid bill_id provided.');
+    }
+
+    // Prepare SQL query to fetch bill details
+    $query = "SELECT b.bill_id, c.user_id, c.client_name, b.reading_date, b.due_date, b.current_reading, b.previous_reading, b.rate, b.total, b.status
+              FROM tbl_billinglist b
+              JOIN tbl_clients c ON b.user_id = c.user_id
+              WHERE b.bill_id = ?";
+
+    // Prepare statement
+    $stmt = $conn->prepare($query);
+    if (!$stmt) {
+        throw new Exception('Database query preparation failed: ' . $conn->error);
+    }
+
+    // Bind parameters
+    $stmt->bind_param("i", $billId);
+
+    // Execute query
+    if (!$stmt->execute()) {
+        throw new Exception('Database query execution failed: ' . $stmt->error);
+    }
+
+    // Fetch result
+    $result = $stmt->get_result();
+    if ($result->num_rows === 0) {
+        throw new Exception('No record found for the given bill_id.');
+    }
+
+    return $result->fetch_assoc();
 }
 
 
@@ -363,123 +432,6 @@ function fetchBilledClients() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
- * Function: createBill
- * --------------------
- * Creates a new bill for a client.
- * 
- * Parameters:
- *  clientId        - The ID of the client.
- *  readingDate     - The date when the meter reading was taken.
- *  currentReading  - The current meter reading.
- *  rate            - The rate per unit of consumption.
- *  dueDate         - The due date for the bill payment.
- *  status          - The status of the bill (e.g., 'Pending', 'Paid').
- *
- * Returns:
- *  True if the bill was successfully created; otherwise, throws an exception.
- */
-// function createBill($clientId, $readingDate, $currentReading, $rate, $dueDate, $status)
-// {
-//     global $conn;
-
-//     /*
-//      * Fetch the previous meter reading for the client
-//      * ------------------------------------------------
-//      * Queries the database to retrieve the last recorded
-//      * meter reading for the specified client ID.
-//      */
-//     $query = "SELECT meter_reading FROM tbl_clients WHERE user_id = ?";
-//     $stmt = $conn->prepare($query);
-//     if (!$stmt) {
-//         throw new Exception('Database query preparation failed: ' . $conn->error);
-//     }
-//     $stmt->bind_param("i", $clientId);
-//     $stmt->execute();
-//     $result = $stmt->get_result();
-
-//     /*
-//      * Handle case where client is not found
-//      * --------------------------------------
-//      * If no result is found, an exception is thrown to indicate
-//      * that the specified client does not exist in the database.
-//      */
-//     if ($result->num_rows == 0) {
-//         throw new Exception('Client not found.');
-//     }
-
-//     $row = $result->fetch_assoc();
-//     $previousReading = $row['meter_reading'];
-
-//     /*
-//      * Calculate the total bill
-//      * -------------------------
-//      * The consumption is calculated by subtracting the previous reading
-//      * from the current reading, and the total bill is determined by
-//      * multiplying the consumption by the rate.
-//      */
-//     $consumption = ($currentReading - $previousReading);
-//     $totalBill = ($consumption * $rate);
-
-//     /*
-//      * Insert the billing information into the database
-//      * ------------------------------------------------
-//      * The new billing details are inserted into the 'tbl_bills' table.
-//      */
-//     $query = "INSERT INTO tbl_billinglist (client_id, reading_date, previous_reading, current_reading, consumption, rate, total_bill, due_date, status) 
-//               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-//     $stmt = $conn->prepare($query);
-//     if (!$stmt) {
-//         throw new Exception('Database query preparation failed: ' . $conn->error);
-//     }
-//     $stmt->bind_param("isddiddss", $clientId, $readingDate, $previousReading, $currentReading, $consumption, $rate, $totalBill, $dueDate, $status);
-
-//     /*
-//      * Execute the insertion and update client meter reading
-//      * ------------------------------------------------------
-//      * If the bill insertion is successful, the client's meter reading
-//      * is updated in the 'tbl_clients' table.
-//      */
-//     if ($stmt->execute()) {
-//         $updateQuery = "UPDATE tbl_clients SET meter_reading = ? WHERE user_id = ?";
-//         $updateStmt = $conn->prepare($updateQuery);
-//         $updateStmt->bind_param("di", $currentReading, $clientId);
-//         $updateStmt->execute();
-
-//         return true;
-//     } else {
-//         throw new Exception('Failed to create bill.');
-//     }
-// }
 
 
 

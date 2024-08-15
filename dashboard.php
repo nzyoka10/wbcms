@@ -56,7 +56,7 @@
         <span class="material-icons-outlined text-red">notification_important</span>
       </div>
       <span class="text-red font-weight-bold">
-        <strong>2</strong>
+        <strong>0</strong>
       </span>
     </div>
 

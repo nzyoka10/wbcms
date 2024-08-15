@@ -111,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="#">
           <span class="material-icons-outlined">email</span>
         </a>
-        <a href="#">
+        <a href="./logout.php">
           <span class="material-icons-outlined">account_circle</span>
         </a>
       </div>

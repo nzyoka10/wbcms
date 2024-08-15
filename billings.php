@@ -21,25 +21,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $userId = isset($_POST['user_id']) ? $_POST['user_id'] : '';
     $readingDate = isset($_POST['reading_date']) ? $_POST['reading_date'] : '';
     $dueDate = isset($_POST['due_date']) ? $_POST['due_date'] : '';
-    $currentReading = isset($_POST['current_reading']) ? $_POST['current_reading'] : '';
-    $previousReading = isset($_POST['previous_reading']) ? $_POST['previous_reading'] : '';
-    $rate = isset($_POST['rate']) ? $_POST['rate'] : '';
-    $totalBill = isset($_POST['total']) ? $_POST['total'] : '';
+    $currentReading = isset($_POST['current_reading']) ? $_POST['current_reading'] : 0;
+    $previousReading = isset($_POST['previous_reading']) ? $_POST['previous_reading'] : 0;
+    $rate = isset($_POST['rate']) ? $_POST['rate'] : 0; // Default to 0 if not set
     $status = isset($_POST['status']) ? $_POST['status'] : '';
+
+    // Ensure rate is fetched and passed correctly
+    $rate = floatval($rate);
+
+    // Calculate the total bill
+    $totalBill = ($currentReading - $previousReading) * $rate;
 
     // Call the billing function
     $billingResult = billClient($userId, $readingDate, $dueDate, $currentReading, $previousReading, $rate, $totalBill, $status);
     if ($billingResult) {
       $success_message = 'Client billed successfully!';
-      // echo "Client billed successfully.";
     } else {
       $error_message = 'Failed to bill client!';
     }
   } catch (Exception $e) {
     $error_message = 'An error occurred: ' . $e->getMessage();
-    echo $error_message;
   }
 }
+
+
 
 // Fetch billed clients
 try {
@@ -49,7 +54,6 @@ try {
   exit();
 }
 ?>
-
 
 
 
@@ -101,7 +105,7 @@ try {
         <a href="#">
           <span class="material-icons-outlined">email</span>
         </a>
-        <a href="#">
+        <a href="./logout.php">
           <span class="material-icons-outlined">account_circle</span>
         </a>
       </div>
@@ -209,8 +213,20 @@ try {
                       <td><?php echo htmlspecialchars($client['client_name']); ?></td>
                       <td><?php echo htmlspecialchars($client['total']); ?></td>
                       <td><?php echo htmlspecialchars($client['due_date']); ?></td>
-                      <td><?php echo htmlspecialchars($client['status']); ?></td>
-                      <td><!-- Actions here, e.g., Edit, Delete --></td>
+                      <td><?php echo $client['status'] == 1 ? 'Paid' : 'Pending'; ?></td>
+                      <td>
+                        <!-- View Button -->
+                        <a href="viewBill.php?bill_id=<?php echo urlencode($client['bill_id']); ?>" class="btn btn-info btn-sm">View</a>
+
+                        <!-- Edit Button -->
+                        <a href="edit_bill.php?bill_id=<?php echo urlencode($client['bill_id']); ?>" class="btn btn-warning btn-sm">Edit</a>
+
+                        <!-- Delete Button -->
+                        <form action="delete_bill.php" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this bill?');">
+                          <input type="hidden" name="bill_id" value="<?php echo htmlspecialchars($client['bill_id']); ?>">
+                          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                      </td>
                     </tr>
                   <?php endforeach; ?>
                 <?php endif; ?>
@@ -223,7 +239,7 @@ try {
               </table>
 
             </div>
-          </div>
+          </div>          
         </div>
 
       </div>
@@ -268,9 +284,7 @@ try {
             <div class="col-md-6">
               <label for="previous_reading" class="text-dark col-form-label">Previous reading</label>
               <div class="col-sm-12">
-                <!-- Display the previous reading fetched from the database -->
-                <input type="number" name="previous_reading" id="previous_reading" class="form-control"
-                  value="<?php echo htmlspecialchars($previous_reading); ?>" placeholder="0.0" disabled>
+                <input type="number" name="previous_reading" id="previous_reading" class="form-control" placeholder="0.0" disabled>
               </div>
             </div>
 
@@ -291,7 +305,7 @@ try {
             <div class="col-md-6">
               <label for="total_bill" class="text-dark col-form-label">Total bill<sup class="text-success">(Kes)</sup></label>
               <div class="col-sm-12">
-                <input type="number" name="total_bill" id="total_bill" class="form-control" placeholder="0.0" disabled>
+                <input type="number" name="total" id="total_bill" class="form-control" placeholder="0.0" value="<?php echo isset($_POST['total']) ? htmlspecialchars($_POST['total']) : ''; ?>" required>
               </div>
             </div>
 
@@ -303,7 +317,7 @@ try {
             </div>
 
             <div class="col-md-6">
-              <label for="bill_status" class="form-label">Status</label>
+              <label for="status" class="form-label">Status</label>
               <select name="status" id="status" class="form-select" required>
                 <option value="" disabled selected>Select</option>
                 <option value="inactive" class="text-danger">Pending</option>
@@ -316,39 +330,14 @@ try {
               <button type="submit" class="btn btn-sm btn-primary">Save</button>
             </div>
           </form>
+
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Script files -->
+  <!-- custom js file -->
   <script>
-    /**
-     * Function to refresh the client table.
-     * Makes an AJAX request to fetch the latest client data and updates the table.
-     */
-    // function refreshClientTable() {
-    //   var xhr = new XMLHttpRequest();
-    //   xhr.open('GET', 'fetch_billing.php', true);
-
-    //   xhr.onreadystatechange = function() {
-    //     if (xhr.readyState === 4) {
-    //       if (xhr.status === 200) {
-    //         // Update the table body with the fetched HTML
-    //         document.querySelector('table tbody').innerHTML = xhr.responseText;
-    //       } else {
-    //         console.error('Failed to fetch client data. Status:', xhr.status);
-    //       }
-    //     }
-    //   };
-
-    //   xhr.send();
-    // }
-
-    // Set the interval to refresh the table every 5 seconds (5000 ms)
-    setInterval(refreshClientTable, 5000);
-    refreshClientTable();
-
     /**
      * Function to fetch the previous reading for a specific user.
      * Makes an AJAX request to fetch the previous reading value and updates the input field.
@@ -381,14 +370,14 @@ try {
       var rate = parseFloat(document.getElementById("rate").value) || 0;
 
       // Calculate the total bill
+      // const rate = 14;
+      // var totalBill = (currentReading - previousReading) * rate;
       var totalBill = (currentReading - previousReading) * 14;
 
       // Update the total bill field
       document.getElementById("total_bill").value = totalBill.toFixed(2); // Two decimal places
     }
   </script>
-
-
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>
   <script src="js/bill.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
