@@ -184,7 +184,7 @@ try {
                                     Back
                                 </a>
 
-                                <a href="edit_bill.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-dark me-2">
+                                <a href="editBill.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-dark me-2">
                                     <i class='fas fa-edit text-white'></i>&nbsp;
                                     Edit
                                 </a>

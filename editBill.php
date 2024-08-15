@@ -197,8 +197,11 @@ try {
                                 </div>
 
                                 <div class="d-flex justify-content-start">
-                                    <button type="submit" class="btn btn-primary me-2">Update</button>
-                                    <a href="billings.php" class="btn btn-secondary">Cancel</a>
+                                    <button type="submit" class="btn btn-sm btn-dark me-2">
+                                        <i class='fas fa-edit text-white'></i>&nbsp;
+                                        Update
+                                    </button>
+                                    <a href="billings.php" class="btn btn-sm btn-danger">Close</a>
                                 </div>
                             </form>
                         </div>
