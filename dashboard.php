@@ -17,10 +17,10 @@
     <!-- Cards -->
     <div class="card">
       <div class="card-inner">
-        <p class="text-primary">Total Clients</p>
+        <p class="text-primary font-weight-bold">Total Clients</p>
         <span class="material-icons-outlined text-blue">group</span>
       </div>
-      <span class="text-primary font-weight-bold">
+      <span class="font-weight-bold text-blue">
         <strong>
           <?php
             // display number of registered clients
@@ -32,31 +32,31 @@
 
     <div class="card">
       <div class="card-inner">
-        <p class="text-primary">Reports</p>
+        <p class="text-primary font-weight-bold">Reports</p>
         <span class="material-icons-outlined text-orange">receipt_long</span>
       </div>
-      <span class="text-primary font-weight-bold">
+      <span class="text-orange font-weight-bold">
         <strong>0</strong>
       </span>
     </div>
 
     <div class="card">
       <div class="card-inner">
-        <p class="text-primary">Total Revenue</p>
-        <span class="material-icons-outlined text-green">paid</span>
+        <p class="text-primary font-weight-bold">Total Revenue</p>
+        <span class="material-icons-outlined text-success">payments</span>
       </div>
-      <span class="text-primary font-weight-bold">
+      <span class="text-green font-weight-bold">
         <strong>Kes.&nbsp;</strong>0
       </span>
     </div>
 
     <div class="card">
       <div class="card-inner">
-        <p class="text-primary">Pending Payments</p>
+        <p class="text-primary font-weight-bold">Pending Bills</p>
         <span class="material-icons-outlined text-red">notification_important</span>
       </div>
-      <span class="text-primary font-weight-bold">
-        <strong>0</strong>
+      <span class="text-red font-weight-bold">
+        <strong>2</strong>
       </span>
     </div>
 
