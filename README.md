@@ -89,7 +89,7 @@
 1. **Clone the Repository**:
    - Open a terminal, navigate to the *`htdocs`* directory inside your *`xampp`* directory, and run:
     ```bash
-     git clone https://github.com/username/WBCMS.git
+     git clone https://github.com/Your-Username/wbcms.git
     ```
 
 2. **Import the Database**:
