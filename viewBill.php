@@ -37,6 +37,7 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -62,6 +63,7 @@ try {
     <link rel="stylesheet" href="css/customer.css">
     <link rel="stylesheet" href="css/bill.css">
 </head>
+
 <body>
     <div class="grid-container">
 
@@ -141,7 +143,7 @@ try {
                     <div class="card">
                         <div class="card-body">
                             <h3 class="mb-3 text-dark">Billing Details</h3>
-                            
+
                             <table class="table table-bordered">
                                 <tr class="col">
                                     <th>Client</th>
@@ -181,7 +183,7 @@ try {
                                     <i class="fa fa-backward" aria-hidden="true"></i>&nbsp;
                                     Back
                                 </a>
-                                
+
                                 <a href="edit_bill.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-dark me-2">
                                     <i class='fas fa-edit text-white'></i>&nbsp;
                                     Edit
@@ -190,10 +192,10 @@ try {
                                 <a href="billing_history.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-warning me-2">
                                     <i class="fa fa-history" aria-hidden="true"></i>&nbsp;
                                     History
-                                </a>                          
-                                                                
+                                </a>
+
                                 <a href="delete_bill.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this bill?')">
-                                    <i class='fas fa-trash'></i>&nbsp;    
+                                    <i class='fas fa-trash'></i>&nbsp;
                                     Delete
                                 </a>
                             </div>
