@@ -27,7 +27,7 @@
       <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Listing of Clients</p>
     </div>
     <div style="flex: 1;">
-      <img src="img/cl-listing.png" alt="Listing of Billings" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
+      <img src="img/billing.png" alt="Listing of Billings" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
       <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Listing of Billings</p>
     </div>
   </div>
