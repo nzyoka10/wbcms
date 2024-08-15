@@ -258,7 +258,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo "</tr>";
                       }
                     } else {
-                      echo "<tr><td colspan='8' class='text-center text-danger'>No clients found.</td></tr>";
+                      echo "<tr><td colspan='8' class='text-center text-danger'><strong>No clients found.</strong></td></tr>";
                     }
                   } catch (Exception $e) {
                     echo "<tr><td colspan='8' class='text-center'>An error occurred: " . htmlspecialchars($e->getMessage()) . "</td></tr>";
@@ -364,13 +364,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <!-- View client details modal -->
   <div class="modal fade" id="viewClientModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="viewClientModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="viewClientModalLabel">Client Details</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+
+          <!-- Display data on a table -->         
           <p><strong>Name&nbsp;:</strong>&nbsp;<span id="modalClientName"></span></p>
           <p><strong>Contact&nbsp;:</strong>&nbsp;<span id="modalClientContact"></span></p>
           <p><strong>Address&nbsp;:</strong>&nbsp;<span id="modalClientAddress"></span></p>

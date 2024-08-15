@@ -1,44 +1,101 @@
+# Caesar Cipher
 
-### Project Modules/Features
+## Overview
 
-1. **User Management**
-   - **Registration:** Allow users (customers and admins) to register with username, email, password, phone number, and address.
-   - **Login:** Provide authentication for users to access their accounts securely.
-   - **Profile Management:** Allow users to view and update their profile information.
+- This project implements a program that encrypts messages using ``Caesar's cipher``. 
+- Caesar's cipher is a simple encryption technique where each letter in the plaintext is shifted by a fixed number of positions down the alphabet. 
+- **Example:-** with a key of 1, 
+    - **`'A'`** becomes **`'B'`**, 
+    - **`'B'`** becomes **`'C'`**, and so on, 
+    - wrapping around from 'Z' to 'A'.
 
-2. **Meter Management**
-   - **Meter Registration:** Enable customers to register new water meters associated with their account.
-   - **Meter Reading:** Record and manage meter readings periodically to track water consumption.
-   - **Meter Information:** Display meter details such as meter number, location, and last reading.
+## Files
 
-3. **Billing and Invoicing**
-   - **Invoice Generation:** Automatically generate monthly bills based on meter readings and tariff rates.
-   - **Payment Integration:** Accept payments via mobile money services like M-pesa or card payments.
-   - **Payment Confirmation:** Automatically update account status upon successful payment.
+- `caesar.c`: The main program file that contains the implementation of Caesar's cipher.
+- `README.md`: This file, providing an overview and instructions for the project.
 
-4. **Notifications**
-   - **Email Notifications:** Send email notifications for important updates such as invoice generation and payment confirmation.
-   - **SMS Notifications:** Optionally, send SMS notifications using an SMS gateway for urgent messages like payment reminders.
+## Compilation and Execution
 
-5. **Reporting and Analytics**
-   - **Dashboard:** Provide a dashboard for admins to view key metrics such as total revenue, active users, and overdue payments.
-   - **Custom Reports:** Generate detailed reports based on queries such as monthly usage trends, customer payments, and outstanding balances.
+### Requirements
 
-6. **Security and Access Control**
-   - **Role-based Access:** Implement role-based access control (e.g., admin and customer roles) to restrict functionalities based on user roles.
-   - **Data Encryption:** Ensure sensitive data like passwords and payment information are stored securely using encryption techniques.
+- CS50 Library
+- GCC (GNU Compiler Collection)
 
-7. **System Administration**
-   - **Admin Dashboard:** Provide admins with tools to manage users, meters, invoices, and payments.
-   - **System Settings:** Allow configuration of system settings such as tariff rates, payment methods, and notification preferences.
+### Compilation
 
-8. **Responsive Design**
-   - Ensure the application is fully responsive across different devices (desktops, tablets, and mobile phones) using Bootstrap or similar responsive frameworks.
+- To compile the program, navigate to the directory containing `caesar.c` and run the following command:
 
-### Next Steps
+```bash
+    gcc -o caesar caesar.c -lcs50
+```
+- This will create an executable file named `caesar`.
 
-- **Database Design:** Design and implement the database schema to store user data, meter readings, invoices, payments, and other relevant information.
-- **Backend Development:** Implement the backend logic using PHP and MySQL to handle user authentication, meter management, billing, invoicing, and notifications.
-- **Frontend Development:** Build the frontend interfaces using HTML, CSS (with Bootstrap), and JavaScript to create a seamless user experience.
-- **Integration and Testing:** Integrate all modules, perform thorough testing, and ensure the application functions correctly under different scenarios.
+### Execution
 
+- To run the program, use the following command:
+
+```bash
+    ./caesar key
+```
+
+Here, `key` is a non-negative integer representing the number of positions each letter in the plaintext should be shifted.
+
+Example usage:
+
+```bash
+./caesar 3
+plaintext:  HELLO
+ciphertext: KHOOR
+```
+
+## How It Works
+
+1. **Command-line Argument Parsing**: The program expects exactly one command-line argument, which is the encryption key. If the argument is missing or if there are multiple arguments, the program displays an error message and exits.
+
+2. **Validation of Key**: The program checks if the provided key contains only digits. If it contains non-digit characters, the program displays an error message and exits.
+
+3. **Encryption**: The program prompts the user for plaintext input. It then encrypts the plaintext by shifting each alphabetical character by the specified key. Non-alphabetical characters remain unchanged. The program preserves the case of each letter (uppercase letters remain uppercase, and lowercase letters remain lowercase).
+
+4. **Output**: The program outputs the ciphertext, which is the encrypted version of the plaintext.
+
+## Functions
+
+### `main`
+
+- Entry point for the program.
+- Validates command-line arguments.
+- Prompts the user for plaintext.
+- Encrypts the plaintext using Caesar's cipher.
+- Prints the resulting ciphertext.
+
+### `only_digits`
+
+- Checks if a given string contains only digits.
+- Returns `true` if the string contains only digits, `false` otherwise.
+
+### `rotate`
+
+- Rotates a given character by the specified key.
+- If the character is an uppercase letter, it wraps around from 'Z' to 'A'.
+- If the character is a lowercase letter, it wraps around from 'z' to 'a'.
+- Non-alphabetical characters are returned unchanged.
+
+## Example
+
+Here's an example of how the program works:
+
+```bash
+$ ./caesar 2
+plaintext:  Hello, World!
+ciphertext: Jgnnq, Yqtnf!
+```
+
+In this example, the key is 2, so each letter in the plaintext is shifted by 2 positions in the alphabet, resulting in the ciphertext `Jgnnq, Yqtnf!`.
+
+## Author
+
+This program is a part of the CS50 course, a computer science course offered by Harvard University.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

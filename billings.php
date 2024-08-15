@@ -214,9 +214,9 @@ try {
                     </tr>
                   <?php endforeach; ?>
                 <?php endif; ?>
-                <td colspan='7' class='text-center text-danger'>
+                <!-- <td colspan='7' class='text-center text-danger'>
                   <strong>No clients billing found.</strong>
-                </td>
+                </td> -->
                 </tr>
 
                 </tbody>
@@ -291,7 +291,7 @@ try {
             <div class="col-md-6">
               <label for="total_bill" class="text-dark col-form-label">Total bill<sup class="text-success">(Kes)</sup></label>
               <div class="col-sm-12">
-                <input type="number" name="total_bill" id="total_bill" class="form-control" placeholder="calculated value" disabled>
+                <input type="number" name="total_bill" id="total_bill" class="form-control" placeholder="0.0" disabled>
               </div>
             </div>
 
