@@ -53,6 +53,7 @@ try {
   echo "An error occurred: " . $e->getMessage();
   exit();
 }
+
 ?>
 
 
@@ -335,8 +336,8 @@ try {
               <label for="status" class="form-label">Status</label>
               <select name="status" id="status" class="form-select" required>
                 <option value="" disabled selected>Select</option>
-                <option value="inactive" class="text-danger">Pending</option>
-                <option value="active" class="text-success">Paid</option>
+                <option value="0" class="text-danger">Pending</option>
+                <option value="1" class="text-success">Paid</option>
               </select>
             </div>
 

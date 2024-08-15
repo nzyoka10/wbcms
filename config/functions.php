@@ -427,6 +427,33 @@ function getBillDetails($billId)
     return $result->fetch_assoc();
 }
 
+/**
+ * Count the number of pending bills
+ * @return int
+ */
+function countPendingBills()
+{
+    global $conn;
+
+    // Query to count pending bills where status = 0 (Pending)
+    $query = "SELECT COUNT(*) as pending_count FROM tbl_billinglist WHERE status = 0";
+    $result = $conn->query($query);
+
+    if ($result) {
+        $row = $result->fetch_assoc();
+        return intval($row['pending_count']);
+    } else {
+        throw new Exception('Database query failed: ' . $conn->error);
+    }
+}
+
+// Get the count of pending bills
+try {
+    $pendingBillsCount = countPendingBills();
+  } catch (Exception $e) {
+    $pendingBillsCount = 'N/A'; // Default value if an error occurs
+    // Optionally, you can log the error or display a message
+  }
 
 
 

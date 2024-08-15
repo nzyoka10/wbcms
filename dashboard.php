@@ -56,7 +56,9 @@
         <span class="material-icons-outlined text-red">notification_important</span>
       </div>
       <span class="text-red font-weight-bold">
-        <strong>3</strong>
+        <strong>
+          <?php echo $pendingBillsCount; ?>
+        </strong>
       </span>
     </div>
 
