@@ -4,24 +4,37 @@
 - It allows users to register for water connections, record monthly meter readings, generate bills, process payments, and generate detailed reports.
 
 <details>
-<summary>App Screenshots</summary>
+  <summary style="font-weight: bold; font-size: 1.2em;">Application Screenshots</summary>
 
-<h3>Desktop View</h3>
-<div style="margin: 10px 0;">
-    <!-- <h5>Account Login Page</h5> -->
-    <img src="img/login.png" alt="Login form" width="250px" style="float: left; margin-right: 10px; margin-bottom: 8px;">
-    <img src="img/dashboard.png" alt="Dashboard" width="250px" style="float: right;">
-</div>
+  <h3 style="margin-top: 20px; font-size: 1.5em; color: #333;">Desktop View</h3>
 
-<div style="clear: both; margin: 10px 0;"></div>
+  <!-- First Row -->
+  <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+    <div style="flex: 1; margin-right: 10px;">
+      <img src="img/login.png" alt="Login form" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
+      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Account Login Page</p>
+    </div>
+    <div style="flex: 1;">
+      <img src="img/dashboard.png" alt="Dashboard" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
+      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Dashboard</p>
+    </div>
+  </div>
 
-<div style="margin: 10px 0;">
-    <img src="img/cl-add.png" alt="Register" width="250px" style="float: left; margin-right: 10px;">
-    <img src="img/cl-listing.png" alt="Dashboard" width="250px" style="float: right;">
-</div>
+  <!-- Second Row -->
+  <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+    <div style="flex: 1; margin-right: 10px;">
+      <img src="img/cl-add.png" alt="Register" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
+      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Client Registration</p>
+    </div>
+    <div style="flex: 1;">
+      <img src="img/cl-listing.png" alt="Client Listing" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
+      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Client Listing</p>
+    </div>
+  </div>
 
-<div style="clear: both;"></div>
 </details>
+
+
 
 ### Features
 
