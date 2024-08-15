@@ -6,9 +6,11 @@
 - The application automates the entire billing process, from client registration to the generation of detailed reports, making it easier to `manage and track water usage and payments`.
 
 ### Features
-- **Create New Client**: The system supports full CRUD operations, allowing administrators to easily manage client data, including adding, updating, and deleting client records.
-- **Create New Billing**: Users can generate water bills based on client meter readings, with the system automatically calculating total charges to minimize manual errors.
-- **Generate Reports**: Users can create detailed reports that summarize client billing data for a selected month, offering valuable insights into billing trends and aiding in financial analysis.
+1. **Create account User**: Add new user accounts with customizable access levels.
+2. **Create new Client**: Manage client data with full CRUD operations.
+3. **Create new Billing**: Generate water bills with automatic charge calculations.
+4. **Generate Reports**: Summarize billing data for selected months with detailed reports.
+
 
 ### Tools
 - **Backend Development**: The application’s backend is built using **PHP** *`(vanilla)`* to handle logic, 
