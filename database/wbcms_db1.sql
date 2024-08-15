@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 15, 2024 at 06:40 PM
+-- Generation Time: Aug 09, 2024 at 11:39 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -38,35 +38,6 @@ CREATE TABLE `meter_readings` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_billinglist`
---
-
-CREATE TABLE `tbl_billinglist` (
-  `bill_id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `reading_date` date DEFAULT NULL,
-  `due_date` date NOT NULL,
-  `current_reading` float(12,2) NOT NULL DEFAULT 0.00,
-  `previous_reading` float(12,2) NOT NULL DEFAULT 0.00,
-  `rate` float(12,2) NOT NULL DEFAULT 0.00,
-  `total` float(12,2) NOT NULL DEFAULT 0.00,
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0= pending,\r\n1= paid',
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tbl_billinglist`
---
-
-INSERT INTO `tbl_billinglist` (`bill_id`, `user_id`, `reading_date`, `due_date`, `current_reading`, `previous_reading`, `rate`, `total`, `status`, `created_at`, `updated_at`) VALUES
-(44, 122, '2024-08-15', '2024-08-20', 12.00, 5.00, 14.00, 98.00, 0, '2024-08-15 12:37:32', '2024-08-15 19:38:50'),
-(45, 138, '2024-08-15', '2024-08-20', 10.00, 5.00, 14.00, 70.00, 0, '2024-08-15 12:45:07', '2024-08-15 19:39:09'),
-(47, 126, '2024-08-15', '2024-08-20', 17.00, 7.00, 14.00, 140.00, 0, '2024-08-15 19:02:59', '2024-08-15 19:39:12');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tbl_clients`
 --
 
@@ -87,16 +58,8 @@ CREATE TABLE `tbl_clients` (
 --
 
 INSERT INTO `tbl_clients` (`user_id`, `client_name`, `contact_number`, `address`, `meter_number`, `meter_reading`, `status`, `created_at`, `updated_at`) VALUES
-(122, 'Test User', '0719314567', 'Katani', 10001011, 5, 'active', '2024-08-09 08:18:03', '2024-08-13 06:41:43'),
-(126, 'Aimee York', '0789123564', 'Syokimau', 10001012, 7, 'active', '2024-08-09 08:40:21', '2024-08-15 08:30:07'),
-(127, 'Sam Nyamwea', '0726784912', '100, Test Address', 10001013, 0, 'inactive', '2024-08-09 13:41:34', '2024-08-10 08:40:57'),
-(128, 'Leilani Holcomb', '0789341833', 'Kawala', 10001014, 0, 'inactive', '2024-08-09 14:03:38', '2024-08-10 08:41:13'),
-(129, 'Omollo Julio', '0721456728', '208, Syokimau', 10001015, 5, 'active', '2024-08-09 14:09:22', '2024-08-13 06:42:18'),
-(130, 'Lilian Chebet', '0722456754', '208, Kisaju', 10001016, 0, 'inactive', '2024-08-09 14:38:54', '2024-08-10 08:41:56'),
-(135, 'Risa Mally', '01145677123', '208, Kitengela', 10001017, 2, 'inactive', '2024-08-10 06:59:34', '2024-08-10 08:42:08'),
-(136, 'Denise Ayers', '0723149603', 'Sed nostrud perferen', 10001018, 0, 'inactive', '2024-08-10 07:21:06', '2024-08-10 08:42:24'),
-(137, 'Isaiah Kennedy', '0112784119', '56, Tulia', 10001019, 0, 'inactive', '2024-08-10 08:58:55', '2024-08-12 05:26:10'),
-(138, 'Stephen Munene', '0714930919', '208, Selu', 10001020, 5, 'active', '2024-08-10 09:11:14', '2024-08-13 06:41:56');
+(122, 'Test User', '0719314567', 'Katani', 1001, 0, 'inactive', '2024-08-09 08:18:03', '2024-08-09 09:05:11'),
+(126, 'Aimee York', '0789123564', 'Syokimau', 1002, 0, 'inactive', '2024-08-09 08:40:21', '2024-08-09 09:04:47');
 
 -- --------------------------------------------------------
 
@@ -148,22 +111,32 @@ CREATE TABLE `tbl_notifications` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_payments`
+--
+
+CREATE TABLE `tbl_payments` (
+  `payment_id` int(11) NOT NULL,
+  `invoice_id` int(11) DEFAULT NULL,
+  `payment_date` date DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `payment_method` varchar(50) DEFAULT NULL,
+  `transaction_id` varchar(100) DEFAULT NULL,
+  `status` enum('confirmed','pending') DEFAULT 'pending'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_tariffrates`
 --
 
 CREATE TABLE `tbl_tariffrates` (
   `tariff_id` int(11) NOT NULL,
-  `rate` decimal(10,2) NOT NULL,
+  `tariff_name` varchar(100) NOT NULL,
+  `rate_per_unit` decimal(10,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tbl_tariffrates`
---
-
-INSERT INTO `tbl_tariffrates` (`tariff_id`, `rate`, `created_at`, `updated_at`) VALUES
-(1, 15.00, '2024-08-13 07:08:27', '2024-08-13 07:21:37');
 
 -- --------------------------------------------------------
 
@@ -175,19 +148,16 @@ CREATE TABLE `tbl_users` (
   `user_id` int(11) NOT NULL,
   `user_name` varchar(150) NOT NULL,
   `user_email` varchar(150) NOT NULL,
-  `user_password` varchar(150) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL
+  `user_password` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_users`
 --
 
-INSERT INTO `tbl_users` (`user_id`, `user_name`, `user_email`, `user_password`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@app.com', '$2y$10$E5GluGsB.afNcEC0mf/kFObJUtGbhsCgJrUO9oNP5Afyh4DufT91e', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(2, 'test', 'test@user.com', '$2y$10$ZjWBP/FcCKmYIRGbVubL0eosP5EngoHijnM1Pvm0bAhPrStYr5ebi', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(3, 'Test', 'tes@app.com', '$2y$10$tmJ05xePQP7JYfiyQ1EMJuqwQkbF4PMh1I6.S5lr01xmpoAnnLa9.', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `tbl_users` (`user_id`, `user_name`, `user_email`, `user_password`) VALUES
+(1, 'admin', 'admin@app.com', '$2y$10$E5GluGsB.afNcEC0mf/kFObJUtGbhsCgJrUO9oNP5Afyh4DufT91e'),
+(2, 'test', 'test@user.com', '$2y$10$ZjWBP/FcCKmYIRGbVubL0eosP5EngoHijnM1Pvm0bAhPrStYr5ebi');
 
 --
 -- Indexes for dumped tables
@@ -199,13 +169,6 @@ INSERT INTO `tbl_users` (`user_id`, `user_name`, `user_email`, `user_password`, 
 ALTER TABLE `meter_readings`
   ADD PRIMARY KEY (`reading_id`),
   ADD KEY `meter_id` (`meter_id`);
-
---
--- Indexes for table `tbl_billinglist`
---
-ALTER TABLE `tbl_billinglist`
-  ADD PRIMARY KEY (`bill_id`),
-  ADD UNIQUE KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `tbl_clients`
@@ -238,10 +201,19 @@ ALTER TABLE `tbl_notifications`
   ADD KEY `user_id` (`user_id`);
 
 --
+-- Indexes for table `tbl_payments`
+--
+ALTER TABLE `tbl_payments`
+  ADD PRIMARY KEY (`payment_id`),
+  ADD UNIQUE KEY `transaction_id` (`transaction_id`),
+  ADD KEY `invoice_id` (`invoice_id`);
+
+--
 -- Indexes for table `tbl_tariffrates`
 --
 ALTER TABLE `tbl_tariffrates`
-  ADD PRIMARY KEY (`tariff_id`);
+  ADD PRIMARY KEY (`tariff_id`),
+  ADD UNIQUE KEY `tariff_name` (`tariff_name`);
 
 --
 -- Indexes for table `tbl_users`
@@ -260,16 +232,10 @@ ALTER TABLE `meter_readings`
   MODIFY `reading_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `tbl_billinglist`
---
-ALTER TABLE `tbl_billinglist`
-  MODIFY `bill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
-
---
 -- AUTO_INCREMENT for table `tbl_clients`
 --
 ALTER TABLE `tbl_clients`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
 
 --
 -- AUTO_INCREMENT for table `tbl_invoices`
@@ -290,16 +256,22 @@ ALTER TABLE `tbl_notifications`
   MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `tbl_payments`
+--
+ALTER TABLE `tbl_payments`
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tbl_tariffrates`
 --
 ALTER TABLE `tbl_tariffrates`
-  MODIFY `tariff_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `tariff_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -329,6 +301,12 @@ ALTER TABLE `tbl_meters`
 --
 ALTER TABLE `tbl_notifications`
   ADD CONSTRAINT `tbl_notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_clients` (`user_id`);
+
+--
+-- Constraints for table `tbl_payments`
+--
+ALTER TABLE `tbl_payments`
+  ADD CONSTRAINT `tbl_payments_ibfk_1` FOREIGN KEY (`invoice_id`) REFERENCES `tbl_invoices` (`invoice_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
