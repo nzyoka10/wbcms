@@ -221,7 +221,7 @@ try {
                           </button>
                           <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="viewBill.php?bill_id=<?php echo urlencode($client['bill_id']); ?>" class="btn btn-info btn-sm"><i class='fas fa-eye'></i>&nbsp;View</a></li>
-                            <li><a class="dropdown-item" href="edit_bill.php?bill_id=<?php echo urlencode($client['bill_id']); ?>" class="btn btn-warning btn-sm"><i class='fas fa-edit text-primary'></i>&nbsp;Edit</a></li>
+                            <li><a class="dropdown-item" href="editBill.php?bill_id=<?php echo urlencode($client['bill_id']); ?>" class="btn btn-warning btn-sm"><i class='fas fa-edit text-primary'></i>&nbsp;Edit</a></li>
                             <li><a class="dropdown-item" href="delete_bill.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this bill?')"><i class='fas fa-trash text-danger'></i>&nbsp;Delete</a></li>
                           </ul>
                         </div>

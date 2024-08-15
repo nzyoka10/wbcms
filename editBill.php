@@ -142,63 +142,65 @@ try {
                 <div class="container mt-0">
                     <div class="card">
                         <div class="card-body">
-                            <h3 class="mb-3 text-dark">Billing Details</h3>
+                            <h2>Edit Bill</h2>
+                            <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) . '?bill_id=' . $bill_id; ?>" method="POST" class="row g-4">
+                                <div class="col-md-6">
+                                    <label for="client_id" class="form-label">Client</label>
+                                    <select name="client_id" id="client_id" class="form-select" required>
+                                        <!-- Populate the clients -->
+                                        <?php
+                                        $clientsQuery = "SELECT user_id, client_name FROM tbl_clients";
+                                        $clientsResult = $conn->query($clientsQuery);
+                                        while ($client = $clientsResult->fetch_assoc()) {
+                                            echo "<option value='" . htmlspecialchars($client['user_id']) . "' " . ($client['user_id'] == $bill['user_id'] ? 'selected' : '') . ">" . htmlspecialchars($client['client_name']) . "</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
 
-                            <table class="table table-bordered">
-                                <tr class="col">
-                                    <th>Client</th>
-                                    <td><?php echo htmlspecialchars($bill['client_name']); ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Reading Date</th>
-                                    <td><?php echo htmlspecialchars($bill['reading_date']); ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Due Date</th>
-                                    <td><?php echo htmlspecialchars($bill['due_date']); ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Previous Reading</th>
-                                    <td><?php echo htmlspecialchars($bill['previous_reading']); ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Current Reading</th>
-                                    <td><?php echo htmlspecialchars($bill['current_reading']); ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Rate per m<sup>3</sup></th>
-                                    <td><?php echo htmlspecialchars($bill['rate']); ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Total</th>
-                                    <td><?php echo htmlspecialchars($bill['total']); ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Status</th>
-                                    <td><?php echo $bill['status'] == 1 ? 'Paid' : 'Pending'; ?></td>
-                                </tr>
-                            </table>
-                            <div class="d-flex justify-content-start">
-                                <a href="billings.php" class="btn btn-sm btn-primary me-2">
-                                    <i class="fa fa-backward" aria-hidden="true"></i>&nbsp;
-                                    Back
-                                </a>
+                                <div class="col-md-6">
+                                    <label for="reading_date" class="form-label">Reading Date</label>
+                                    <input type="date" name="reading_date" id="reading_date" class="form-control" value="<?php echo htmlspecialchars($bill['reading_date']); ?>" required>
+                                </div>
 
-                                <a href="edit_bill.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-dark me-2">
-                                    <i class='fas fa-edit text-white'></i>&nbsp;
-                                    Edit
-                                </a>
+                                <div class="col-md-6">
+                                    <label for="due_date" class="form-label">Due Date</label>
+                                    <input type="date" name="due_date" id="due_date" class="form-control" value="<?php echo htmlspecialchars($bill['due_date']); ?>" required>
+                                </div>
 
-                                <a href="billing_history.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-warning me-2">
-                                    <i class="fa fa-history" aria-hidden="true"></i>&nbsp;
-                                    History
-                                </a>
+                                <div class="col-md-6">
+                                    <label for="current_reading" class="form-label">Current Reading</label>
+                                    <input type="number" name="current_reading" id="current_reading" class="form-control" value="<?php echo htmlspecialchars($bill['current_reading']); ?>" required>
+                                </div>
 
-                                <a href="delete_bill.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this bill?')">
-                                    <i class='fas fa-trash'></i>&nbsp;
-                                    Delete
-                                </a>
-                            </div>
+                                <div class="col-md-6">
+                                    <label for="previous_reading" class="form-label">Previous Reading</label>
+                                    <input type="number" name="previous_reading" id="previous_reading" class="form-control" value="<?php echo htmlspecialchars($bill['previous_reading']); ?>" readonly>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="rate" class="form-label">Rate per m<sup>3</sup></label>
+                                    <input type="number" name="rate" id="rate" class="form-control" value="<?php echo htmlspecialchars($bill['rate']); ?>" readonly>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="rate" class="form-label">Bill Amount</label>
+                                    <input type="number" name="total" id="rate" class="form-control" value="<?php echo htmlspecialchars($bill['total']); ?>" readonly>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select name="status" id="status" class="form-select" required>
+                                        <option value="0" <?php echo $bill['status'] == 0 ? 'selected' : ''; ?>>Pending</option>
+                                        <option value="1" <?php echo $bill['status'] == 1 ? 'selected' : ''; ?>>Paid</option>
+                                    </select>
+                                </div>
+
+                                <div class="d-flex justify-content-start">
+                                    <button type="submit" class="btn btn-primary me-2">Update</button>
+                                    <a href="billings.php" class="btn btn-secondary">Cancel</a>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -215,4 +217,5 @@ try {
     <script type="text/javascript" src="js/dt-1.10.25datatables.min.js"></script>
     <script src="js/scripts.js"></script>
 </body>
+
 </html>
