@@ -215,18 +215,33 @@ try {
                       <td><?php echo htmlspecialchars($client['due_date']); ?></td>
                       <td><?php echo $client['status'] == 1 ? 'Paid' : 'Pending'; ?></td>
                       <td>
+                        <div class="dropdown">
+                          <button class="btn btn-success btn-sm  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Action
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="viewBill.php?bill_id=<?php echo urlencode($client['bill_id']); ?>" class="btn btn-info btn-sm"><i class='fas fa-eye'></i>&nbsp;View</a></li>
+                            <li><a class="dropdown-item" href="edit_bill.php?bill_id=<?php echo urlencode($client['bill_id']); ?>" class="btn btn-warning btn-sm"><i class='fas fa-edit text-primary'></i>&nbsp;Edit</a></li>
+                            <li><a class="dropdown-item" href="delete_bill.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this bill?')"><i class='fas fa-trash text-danger'></i>&nbsp;Delete</a></li>
+                          </ul>
+                        </div>
+                      </td>                 
+
+
+                     
+
                         <!-- View Button -->
-                        <a href="viewBill.php?bill_id=<?php echo urlencode($client['bill_id']); ?>" class="btn btn-info btn-sm">View</a>
+                        
 
                         <!-- Edit Button -->
-                        <a href="edit_bill.php?bill_id=<?php echo urlencode($client['bill_id']); ?>" class="btn btn-warning btn-sm">Edit</a>
+                        
 
                         <!-- Delete Button -->
-                        <form action="delete_bill.php" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this bill?');">
+                        <!-- <form action="delete_bill.php" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this bill?');">
                           <input type="hidden" name="bill_id" value="<?php echo htmlspecialchars($client['bill_id']); ?>">
                           <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
-                      </td>
+                        </form> -->
+                  
                     </tr>
                   <?php endforeach; ?>
                 <?php endif; ?>
