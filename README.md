@@ -4,7 +4,7 @@
 - It allows users to register for water connections, record monthly meter readings, generate bills, process payments, and generate detailed reports.
 
 <details>
-  <summary style="font-weight: bold; font-size: 1.2em;">Application Screenshots</summary>
+  <summary style="font-weight: bold; font-size: 1.2em; color: red;">Application Screenshots</summary>
 
   <h3 style="margin-top: 20px; font-size: 1.5em; color: #333;">Desktop View</h3>
 
@@ -12,19 +12,19 @@
   <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
     <div style="flex: 1; margin-right: 10px;">
       <img src="img/login.png" alt="Login form" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
-      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Account Login Page</p>
+      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Login Page</p>
     </div>
     <div style="flex: 1;">
       <img src="img/dashboard.png" alt="Dashboard" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
-      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Dashboard</p>
+      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Main Dashboard</p>
     </div>
   </div>
 
   <!-- Second Row -->
   <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
     <div style="flex: 1; margin-right: 10px;">
-      <img src="img/cl-add.png" alt="Register" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
-      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Client Registration</p>
+      <img src="img/clients.png" alt="Register" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
+      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Listing of Clients</p>
     </div>
     <div style="flex: 1;">
       <img src="img/cl-listing.png" alt="Client Listing" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
