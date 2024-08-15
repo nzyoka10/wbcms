@@ -47,6 +47,33 @@
 
 </details>
 
+### Setup & Run Project
+
+#### Prerequisites
+1. *`XAMPP`*: Install a local server environment to run PHP and MySQL.
+2. *`Git`*: Install Git to clone the project repository.
+3. *`Web browser`*: Use a modern web browser like ``Chrome``.
+
+#### Installation Steps
+
+1. **Clone the Repository**:
+   - Open a terminal, navigate to the *`htdocs`* directory inside your *`xampp`* directory, and run:
+    ```bash
+     git clone https://github.com/username/WBCMS.git
+    ```
+
+2. **Import the Database**:
+   - Open *`phpMyAdmin`* in your browser.
+   - Create a new database named *`wbcms_db`*.
+   - Import the SQL file located in the project's `database` folder.
+
+3. **Run the Project**:
+   - Open your browser and navigate to:
+    ```bash
+     http://localhost/wbcms/
+    ```
+
+
 
 
 
