@@ -46,6 +46,32 @@
       <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Listing of Billings</p>
     </div>
   </div>
+   <h3 style="margin-top: 20px; font-size: 1.5em; color: #333;">Tablet View</h3>
+  <!-- First Row -->
+  <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+    <div style="flex: 1; margin-right: 10px;">
+      <img src="img/dashboard-tablet.png" alt="Login form" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
+      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Dashboard View</p>
+    </div>
+    <div style="flex: 1;">
+      <img src="img/clients-tablet.png" alt="Dashboard" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
+      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Listing of clients</p>
+    </div>
+  </div>
+
+   <h3 style="margin-top: 20px; font-size: 1.5em; color: #333;">Mobile View</h3>
+
+   <!-- Second Row -->
+  <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+    <div style="flex: 1; margin-right: 10px;">
+      <img src="img/dashboard-mobile.png" alt="Register" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
+      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Mobile view</p>
+    </div>
+    <div style="flex: 1;">
+      <img src="img/dashboard-mobile2.png" alt="Listing of Billings" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
+      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Mobile view </p>
+    </div>
+  </div>
 
 </details>
 
