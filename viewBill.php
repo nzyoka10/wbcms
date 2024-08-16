@@ -175,7 +175,7 @@ try {
                                 </tr>
                                 <tr>
                                     <th>Status</th>
-                                    <td><?php echo $bill['status'] == 1 ? 'Paid' : 'Pending'; ?></td>
+                                    <td><?php echo $bill['status'] == 0 ? 'Paid' : 'Pending'; ?></td>
                                 </tr>
                             </table>
                             <div class="d-flex justify-content-start">

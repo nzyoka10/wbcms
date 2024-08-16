@@ -141,7 +141,7 @@ try {
           </a>
         </li>
         <li class="sidebar-list-item">
-          <a href="#reports.php">
+          <a href="./report.php">
             <span class="material-icons-outlined">receipt_long</span>&nbsp;&nbsp;Monthly Report
           </a>
         </li>
@@ -164,6 +164,8 @@ try {
     <main class="main-container">
       <div class="row">
         <div class="container mt-0">
+
+
           <!-- Card Container -->
           <div class="card">
             <div class="d-flex justify-content-between align-items-center">
@@ -254,7 +256,11 @@ try {
               </table>
 
             </div>
-          </div>          
+          </div> 
+          
+          
+
+          
         </div>
 
       </div>
