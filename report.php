@@ -64,47 +64,47 @@ function generateCSV($data)
 
 if (isset($_POST['export_csv'])) {
     header('Content-Type: text/csv');
-    header('Content-Disposition: attachment; filename="billed_accounts_report.csv"');
+    header('Content-Disposition: attachment; filename="Monthly_Report.csv"');
     generateCSV($billedAccounts);
     exit;
 }
 
 // Function to generate PDF content (requires FPDF library)
-function generatePDF($data)
-{
-    require('fpdf/fpdf.php');
-    $pdf = new FPDF();
-    $pdf->AddPage();
-    $pdf->SetFont('Arial', 'B', 12);
+// function generatePDF($data)
+// {
+//     require('docs/fpdf/fpdf.php');
+//     $pdf = new FPDF();
+//     $pdf->AddPage();
+//     $pdf->SetFont('Arial', 'B', 12);
 
-    // Table header
-    $header = ['Bill ID', 'Client', 'Reading Date', 'Due Date', 'Previous Reading', 'Current Reading', 'Rate', 'Total', 'Status'];
-    foreach ($header as $col) {
-        $pdf->Cell(24, 7, $col, 1);
-    }
-    $pdf->Ln();
+//     // Table header
+//     $header = ['Sn#', 'Client', 'Reading Date', 'Due Date', 'Previous Reading', 'Current Reading', 'Rate', 'Total', 'Status'];
+//     foreach ($header as $col) {
+//         $pdf->Cell(24, 7, $col, 1);
+//     }
+//     $pdf->Ln();
 
-    // Table data
-    $pdf->SetFont('Arial', '', 12);
-    foreach ($data as $row) {
-        $pdf->Cell(24, 6, $row['bill_id'], 1);
-        $pdf->Cell(24, 6, $row['client_name'], 1);
-        $pdf->Cell(24, 6, $row['reading_date'], 1);
-        $pdf->Cell(24, 6, $row['due_date'], 1);
-        $pdf->Cell(24, 6, $row['previous_reading'], 1);
-        $pdf->Cell(24, 6, $row['current_reading'], 1);
-        $pdf->Cell(24, 6, $row['rate'], 1);
-        $pdf->Cell(24, 6, $row['total'], 1);
-        $pdf->Cell(24, 6, $row['status'] == 1 ? 'Paid' : 'Pending', 1);
-        $pdf->Ln();
-    }
-    $pdf->Output('D', 'billed_accounts_report.pdf');
-}
+//     // Table data
+//     $pdf->SetFont('Arial', '', 12);
+//     foreach ($data as $row) {
+//         $pdf->Cell(24, 6, $row['bill_id'], 1);
+//         $pdf->Cell(24, 6, $row['client_name'], 1);
+//         $pdf->Cell(24, 6, $row['reading_date'], 1);
+//         $pdf->Cell(24, 6, $row['due_date'], 1);
+//         $pdf->Cell(24, 6, $row['previous_reading'], 1);
+//         $pdf->Cell(24, 6, $row['current_reading'], 1);
+//         $pdf->Cell(24, 6, $row['rate'], 1);
+//         $pdf->Cell(24, 6, $row['total'], 1);
+//         $pdf->Cell(24, 6, $row['status'] == 1 ? 'Paid' : 'Pending', 1);
+//         $pdf->Ln();
+//     }
+//     $pdf->Output('D', 'Monthly_Report.pdf');
+// }
 
-if (isset($_POST['export_pdf'])) {
-    generatePDF($billedAccounts);
-    exit;
-}
+// if (isset($_POST['export_pdf'])) {
+//     generatePDF($billedAccounts);
+//     exit;
+// }
 ?>
 
 <!DOCTYPE html>
@@ -210,49 +210,107 @@ if (isset($_POST['export_pdf'])) {
         <!-- End Sidebar -->
 
         <!-- Main section -->
+      
+        <!-- Main section -->
         <main class="main-container">
             <div class="row">
                 <div class="container mt-0">
                     <div class="card">
-                    <div class="container mt-5">
-                        <h2>Billed Accounts Report</h2>
+                        <div class="card-body">
+                            <h2 class="text-dark">Generate Report</h2>
 
-                        <!-- Filter Form -->
-                        <form class="row g-3 mb-4" method="GET" action="report.php">
-                            <div class="col-md-3">
-                                <label for="month" class="form-label">Month</label>
-                                <input type="month" name="month" id="month" class="form-control" value="<?php echo htmlspecialchars($filterMonth); ?>">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="status" class="form-label">Status</label>
-                                <select name="status" id="status" class="form-select">
-                                    <option value="">All</option>
-                                    <option value="0" <?php echo $filterStatus === 0 ? 'selected' : ''; ?>>Pending</option>
-                                    <option value="1" <?php echo $filterStatus === 1 ? 'selected' : ''; ?>>Paid</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <button type="submit" class="btn btn-primary mt-4">Filter</button>
-                            </div>
-                        </form>
+                            <!-- Filter Form -->
+                            <form class="row g-3 mb-4 mt-2" method="GET" action="report.php">
+                                <div class="col-md-3">
+                                    <label for="month" class="form-label">Month</label>
+                                    <input type="month" name="month" id="month" class="form-control" value="<?php echo htmlspecialchars($filterMonth); ?>">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select name="status" id="status" class="form-select">
+                                        <option value="">All</option>
+                                        <option value="0" <?php echo $filterStatus === 0 ? 'selected' : ''; ?>>Pending</option>
+                                        <option value="1" <?php echo $filterStatus === 1 ? 'selected' : ''; ?>>Paid</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-primary mt-4">Filter</button>
+                                </div>
+                            </form>
 
-                        <!-- Display Results -->
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Bill ID</th>
-                                    <th>Client</th>
-                                    <th>Reading Date</th>
-                                    <th>Due Date</th>
-                                    <th>Previous Reading</th>
-                                    <th>Current Reading</th>
-                                    <th>Rate</th>
-                                    <th>Total</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (!empty($billedAccounts)) : ?>
+                            <!-- Display Results -->
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Sn#</th>
+                                        <th>Client</th>
+                                        <th>Reading Date</th>
+                                        <th>Due Date</th>
+                                        <th>Previous Reading</th>
+                                        <th>Current Reading</th>
+                                        <th>Rate</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                               
+                                    <?php if (!empty($billedAccounts)) : ?>
+                                        <?php foreach ($billedAccounts as $index => $bill) : ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($index + 1); ?></td>                                                
+                                                <td><?php echo htmlspecialchars($bill['client_name']); ?></td>
+                                                <td><?php echo htmlspecialchars($bill['reading_date']); ?></td>
+                                                <td><?php echo htmlspecialchars($bill['due_date']); ?></td>
+                                                <td><?php echo htmlspecialchars($bill['previous_reading']); ?></td>
+                                                <td><?php echo htmlspecialchars($bill['current_reading']); ?></td>
+                                                <td><?php echo htmlspecialchars($bill['rate']); ?></td>
+                                                <td><?php echo htmlspecialchars($bill['total']); ?></td>
+                                                <td><?php echo htmlspecialchars($bill['status'] == 1 ? 'Paid' : 'Pending'); ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else : ?>
+                                        <tr>
+                                            <td colspan="9" class="text-center text-danger">
+                                                <strong>No records found.</strong>
+                                            </td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+
+                            <!-- Print, Export to CSV and PDF Buttons -->
+                            <form method="POST" action="report.php">
+                                <button type="button" class="btn btn-sm btn-success me-2" onclick="printReceipt()">
+                                    <i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print PDF
+                                </button>
+                                <button type="submit" name="export_csv" class="btn btn-sm btn-warning me-2">
+                                    <i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;Export CSV
+                                </button>
+                                <!-- <button type="submit" name="export_pdf" class="btn btn-sm btn-warning me-2">
+                                    <i class="fa fa-file-pdf" aria-hidden="true"></i>&nbsp;&nbsp;Export PDF
+                                </button> -->
+                            </form>
+
+                            <!-- Receipt Section -->
+                            <div id="receipt-section" style="display:none;">
+                                <div class="reaceipt-header text-center">
+                                    <h3>Monthly Receipt</h3>
+                                    <p>P.O Box 56</p>
+
+                                </div>
+                                <table class="table cell-border">
+                                    <tr>
+                                        <th>Bill ID</th>
+                                        <th>Client</th>
+                                        <th>Reading Date</th>
+                                        <th>Due Date</th>
+                                        <th>Previous Reading</th>
+                                        <th>Current Reading</th>
+                                        <th>Rate</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                    </tr>
                                     <?php foreach ($billedAccounts as $bill) : ?>
                                         <tr>
                                             <td><?php echo htmlspecialchars($bill['bill_id']); ?></td>
@@ -266,27 +324,12 @@ if (isset($_POST['export_pdf'])) {
                                             <td><?php echo htmlspecialchars($bill['status'] == 1 ? 'Paid' : 'Pending'); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
-                                <?php else : ?>
-                                    <tr>
-                                        <td colspan="9" class="text-center">No records found.</td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
+                                </table>
+                            </div>
 
-                        <!-- Export Buttons -->
-                        <form method="POST" action="report.php">
-                            <input type="hidden" name="month" value="<?php echo htmlspecialchars($filterMonth); ?>">
-                            <input type="hidden" name="status" value="<?php echo htmlspecialchars($filterStatus); ?>">
-                            <button type="submit" name="export_csv" class="btn btn-success">Export to CSV</button>
-                            <button type="submit" name="export_pdf" class="btn btn-danger">Export to PDF</button>
-                            <button onclick="window.print();" class="btn btn-info">Print Report</button>
-                        </form>
-
-                    </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
         </main>
         <!-- End Main section -->
@@ -294,44 +337,12 @@ if (isset($_POST['export_pdf'])) {
 
     <!-- custom js file -->
     <script>
-        /**
-         * Function to fetch the previous reading for a specific user.
-         * Makes an AJAX request to fetch the previous reading value and updates the input field.
-         * @param {number} user_id - The ID of the user whose previous reading is to be fetched.
-         */
-        function fetchPreviousReading(user_id) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "fetch_previous_reading.php", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        // Update the previous reading input with the fetched value
-                        document.getElementById("previous_reading").value = xhr.responseText;
-                        // Optionally update the rate field here if needed
-                    } else {
-                        console.error('Failed to fetch previous reading. Status:', xhr.status);
-                    }
-                }
-            };
-            xhr.send("user_id=" + encodeURIComponent(user_id));
-        }
-
-        /**
-         * Function to calculate and update the total bill based on the current reading and rate.
-         */
-        function updateTotalBill() {
-            var currentReading = parseFloat(document.getElementById("current_reading").value) || 0;
-            var previousReading = parseFloat(document.getElementById("previous_reading").value) || 0;
-            var rate = parseFloat(document.getElementById("rate").value) || 0;
-
-            // Calculate the total bill
-            // const rate = 14;
-            // var totalBill = (currentReading - previousReading) * rate;
-            var totalBill = (currentReading - previousReading) * 14;
-
-            // Update the total bill field
-            document.getElementById("total_bill").value = totalBill.toFixed(2); // Two decimal places
+        function printReceipt() {
+            var printContents = document.getElementById('receipt-section').innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
         }
     </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>

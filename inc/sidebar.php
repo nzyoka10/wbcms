@@ -26,7 +26,7 @@
           </a>
         </li>
         <li class="sidebar-list-item">
-          <a href="#">
+          <a href="./report.php">
             <span class="material-icons-outlined">receipt_long</span>&nbsp;&nbsp;Monthly Report
           </a>
         </li>

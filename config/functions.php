@@ -455,6 +455,61 @@ try {
     // Optionally, you can log the error or display a message
   }
 
+//   // Function to generate CSV content
+// function generateCSV($data)
+// {
+//     $output = fopen('php://output', 'w');
+//     fputcsv($output, ['Bill ID', 'Client', 'Reading Date', 'Due Date', 'Previous Reading', 'Current Reading', 'Rate', 'Total', 'Status']);
+//     foreach ($data as $row) {
+//         fputcsv($output, $row);
+//     }
+//     fclose($output);
+// }
+
+// if (isset($_POST['export_csv'])) {
+//     header('Content-Type: text/csv');
+//     header('Content-Disposition: attachment; filename="Monthly_Report.csv"');
+//     generateCSV($billedAccounts);
+//     exit;
+// }
+
+// // Function to generate PDF content (requires FPDF library)
+// function generatePDF($data)
+// {
+//     require('docs/fpdf/fpdf.php');
+//     $pdf = new FPDF();
+//     $pdf->AddPage();
+//     $pdf->SetFont('Arial', 'B', 12);
+
+//     // Table header
+//     $header = ['Bill ID', 'Client', 'Reading Date', 'Due Date', 'Previous Reading', 'Current Reading', 'Rate', 'Total', 'Status'];
+//     foreach ($header as $col) {
+//         $pdf->Cell(24, 7, $col, 1);
+//     }
+//     $pdf->Ln();
+
+//     // Table data
+//     $pdf->SetFont('Arial', '', 12);
+//     foreach ($data as $row) {
+//         $pdf->Cell(24, 6, $row['bill_id'], 1);
+//         $pdf->Cell(24, 6, $row['client_name'], 1);
+//         $pdf->Cell(24, 6, $row['reading_date'], 1);
+//         $pdf->Cell(24, 6, $row['due_date'], 1);
+//         $pdf->Cell(24, 6, $row['previous_reading'], 1);
+//         $pdf->Cell(24, 6, $row['current_reading'], 1);
+//         $pdf->Cell(24, 6, $row['rate'], 1);
+//         $pdf->Cell(24, 6, $row['total'], 1);
+//         $pdf->Cell(24, 6, $row['status'] == 1 ? 'Paid' : 'Pending', 1);
+//         $pdf->Ln();
+//     }
+//     $pdf->Output('D', 'Monthly_Report.pdf');
+// }
+
+// if (isset($_POST['export_pdf'])) {
+//     generatePDF($billedAccounts);
+//     exit;
+// }
+
 
 
 

@@ -210,7 +210,7 @@ try {
                 <?php else: ?>
                   <?php foreach ($billedClients as $index => $client): ?>
                     <tr>
-                      <td><?php echo htmlspecialchars($index + 1); ?></td>;                      
+                      <td><?php echo htmlspecialchars($index + 1); ?></td>                      
                       <td><?php echo htmlspecialchars($client['reading_date']); ?></td>
                       <td><?php echo htmlspecialchars($client['client_name']); ?></td>
                       <td><?php echo htmlspecialchars($client['total']); ?></td>
@@ -260,7 +260,7 @@ try {
           
           
 
-          
+
         </div>
 
       </div>
