@@ -47,7 +47,7 @@ $settings = $result->fetch_assoc();
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>WBCMS | Billing</title>
+    <title>WBCMS | System Settings</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
@@ -125,7 +125,7 @@ $settings = $result->fetch_assoc();
                 </li>
                 <li class="sidebar-list-item">
                     <a href="./report.php">
-                        <span class="material-icons-outlined">receipt_long</span>&nbsp;&nbsp;Monthly Report
+                        <span class="material-icons-outlined">receipt_long</span>&nbsp;&nbsp;Report
                     </a>
                 </li>
                 <li class="sidebar-list-item">
