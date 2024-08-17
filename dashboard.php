@@ -46,7 +46,7 @@
         <span class="material-icons-outlined text-success">payments</span>
       </div>
       <span class="text-green font-weight-bold">
-        <strong>Kes.&nbsp;</strong>0
+        <strong>Kes.&nbsp;</strong><?php echo htmlspecialchars(number_format($total_revenue, 2)); ?>
       </span>
     </div>
 

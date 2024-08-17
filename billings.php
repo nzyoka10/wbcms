@@ -195,7 +195,7 @@ try {
                     <th scope="col">Amount<sup class="text-success">(Kes.)</sup></th>
                     <th scope="col">Due date</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Actions</th>                    
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -210,12 +210,12 @@ try {
                 <?php else: ?>
                   <?php foreach ($billedClients as $index => $client): ?>
                     <tr>
-                      <td><?php echo htmlspecialchars($index + 1); ?></td>                      
+                      <td><?php echo htmlspecialchars($index + 1); ?></td>
                       <td><?php echo htmlspecialchars($client['reading_date']); ?></td>
                       <td><?php echo htmlspecialchars($client['client_name']); ?></td>
                       <td><?php echo htmlspecialchars($client['total']); ?></td>
                       <td><?php echo htmlspecialchars($client['due_date']); ?></td>
-                      <td><?php echo $client['status'] == 1 ? 'Paid' : 'Pending'; ?></td>
+                      <td><?php echo $client['status'] == 0 ? 'Paid' : 'Pending'; ?></td>
                       <td>
                         <div class="dropdown">
                           <button class="btn btn-success btn-sm  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -227,23 +227,23 @@ try {
                             <li><a class="dropdown-item" href="delete_bill.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this bill?')"><i class='fas fa-trash text-danger'></i>&nbsp;Delete</a></li>
                           </ul>
                         </div>
-                      </td>                 
+                      </td>
 
 
-                     
 
-                        <!-- View Button -->
-                        
 
-                        <!-- Edit Button -->
-                        
+                      <!-- View Button -->
 
-                        <!-- Delete Button -->
-                        <!-- <form action="delete_bill.php" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this bill?');">
+
+                      <!-- Edit Button -->
+
+
+                      <!-- Delete Button -->
+                      <!-- <form action="delete_bill.php" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this bill?');">
                           <input type="hidden" name="bill_id" value="<?php echo htmlspecialchars($client['bill_id']); ?>">
                           <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form> -->
-                  
+
                     </tr>
                   <?php endforeach; ?>
                 <?php endif; ?>
@@ -256,9 +256,9 @@ try {
               </table>
 
             </div>
-          </div> 
-          
-          
+          </div>
+
+
 
 
         </div>

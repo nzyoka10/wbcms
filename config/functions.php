@@ -201,6 +201,27 @@ function deleteClient($userId) {
     $stmt->execute();
 }
 
+$total_paid_bills = 0;
+$total_revenue = 0;
+
+try {
+    // Create SQL query to count and sum paid bills
+    $sql = "SELECT COUNT(*) AS total_paid_bills, SUM(total) AS total_revenue
+            FROM tbl_billinglist
+            WHERE status = 1";
+    
+    // Prepare and execute the query
+    $result = $conn->query($sql);
+
+    // Fetch result
+    if ($result) {
+        $row = $result->fetch_assoc();
+        $total_paid_bills = $row['total_paid_bills'];
+        $total_revenue = $row['total_revenue'];
+    }
+} catch (Exception $e) {
+    echo "An error occurred: " . $e->getMessage();
+}
 
 
 
