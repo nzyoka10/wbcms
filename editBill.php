@@ -108,7 +108,7 @@ try {
 
                 <li class="sidebar-list-item">
                     <a href="./customer.php">
-                        <span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;List of Clients
+                        <span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;Clients
                     </a>
                 </li>
 
@@ -197,11 +197,12 @@ try {
                                 </div>
 
                                 <div class="d-flex justify-content-start">
-                                    <button type="submit" class="btn btn-sm btn-dark me-2">
-                                        <i class='fas fa-edit text-white'></i>&nbsp;
-                                        Update
+                                    <button type="submit" class="btn btn-sm btn-success me-2">
+                                        <i class='fas fa-edit text-white'></i>&nbsp;&nbsp;Update
                                     </button>
-                                    <a href="billings.php" class="btn btn-sm btn-danger">Close</a>
+                                    <a href="billings.php" class="btn btn-sm btn-danger">
+                                        <i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Close
+                                    </a>
                                 </div>
                             </form>
                         </div>

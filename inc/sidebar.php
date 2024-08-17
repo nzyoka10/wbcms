@@ -16,7 +16,7 @@
 
         <li class="sidebar-list-item">
           <a href="./customer.php">
-            <span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;List of Clients
+            <span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;Clients
           </a>
         </li>
 
@@ -27,11 +27,11 @@
         </li>
         <li class="sidebar-list-item">
           <a href="./report.php">
-            <span class="material-icons-outlined">receipt_long</span>&nbsp;&nbsp;Monthly Report
+            <span class="material-icons-outlined">receipt_long</span>&nbsp;&nbsp;Report
           </a>
         </li>
         <li class="sidebar-list-item">
-          <a href="#">
+          <a href="./settings.php">
             <span class="material-icons-outlined">settings</span>&nbsp;&nbsp;Settings
           </a>
         </li>

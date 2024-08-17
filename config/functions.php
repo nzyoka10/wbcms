@@ -209,7 +209,7 @@ function editClient($userId, $fullName, $pNumber, $address, $meterId, $firstRead
 function getClients()
 {
     global $conn;
-    
+
     $query = "SELECT * FROM tbl_clients";
     $result = $conn->query($query);
 
@@ -251,7 +251,8 @@ try {
  * fetchClients - Fetches all clients from the tbl_clients table
  * Return: An array of clients
  */
-function fetchClients() {
+function fetchClients()
+{
     global $conn;
 
     // SQL query to fetch all clients
@@ -450,10 +451,55 @@ function countPendingBills()
 // Get the count of pending bills
 try {
     $pendingBillsCount = countPendingBills();
-  } catch (Exception $e) {
+} catch (Exception $e) {
     $pendingBillsCount = 'N/A'; // Default value if an error occurs
     // Optionally, you can log the error or display a message
-  }
+}
+
+
+
+/**
+ * update_settings - Updates the settings in the database based on user input.
+ *
+ * @param object $conn The database connection object.
+ * @param array $form_data The form data submitted by the user.
+ *
+ * @return bool Returns true if the update was successful, false otherwise.
+ */
+function update_settings($conn, $form_data)
+{
+    // Sanitize user inputs
+    $company_name = htmlspecialchars($form_data['company_name']);
+    $company_email = htmlspecialchars($form_data['company_email']);
+    $billing_rate = floatval($form_data['billing_rate']);
+    $enable_notifications = isset($form_data['enable_notifications']) ? 1 : 0;
+
+    // Prepare the SQL query to update settings
+    $query = "UPDATE tbl_settings 
+              SET company_name = ?, company_email = ?, billing_rate = ?, enable_notifications = ? 
+              WHERE id = 1"; // Assuming there's only one settings row
+
+    // Initialize a prepared statement
+    $stmt = $conn->prepare($query);
+
+    // Check if the statement was successfully prepared
+    if (!$stmt) {
+        // Log the error or handle it appropriately
+        return false;
+    }
+
+    // Bind the sanitized inputs to the prepared statement
+    $stmt->bind_param("ssdi", $company_name, $company_email, $billing_rate, $enable_notifications);
+
+    // Execute the prepared statement
+    $result = $stmt->execute();
+
+    // Close the statement after execution
+    $stmt->close();
+
+    // Return the result of the execution
+    return $result;
+}
 
 //   // Function to generate CSV content
 // function generateCSV($data)
@@ -509,13 +555,5 @@ try {
 //     generatePDF($billedAccounts);
 //     exit;
 // }
-
-
-
-
-
-
-
-
 
 ?>

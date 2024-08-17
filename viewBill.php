@@ -108,7 +108,7 @@ try {
 
                 <li class="sidebar-list-item">
                     <a href="./customer.php">
-                        <span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;List of Clients
+                        <span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;Clients
                     </a>
                 </li>
 
@@ -119,11 +119,11 @@ try {
                 </li>
                 <li class="sidebar-list-item">
                     <a href="#reports.php">
-                        <span class="material-icons-outlined">receipt_long</span>&nbsp;&nbsp;Monthly Report
+                        <span class="material-icons-outlined">receipt_long</span>&nbsp;&nbsp;Report
                     </a>
                 </li>
                 <li class="sidebar-list-item">
-                    <a href="#settings.php">
+                    <a href="./settings.php">
                         <span class="material-icons-outlined">settings</span>&nbsp;&nbsp;Settings
                     </a>
                 </li>
@@ -179,25 +179,23 @@ try {
                                 </tr>
                             </table>
                             <div class="d-flex justify-content-start">
-                                <a href="billings.php" class="btn btn-sm btn-primary me-2">
-                                    <i class="fa fa-backward" aria-hidden="true"></i>&nbsp;
-                                    Back
-                                </a>
-
+                                
                                 <a href="editBill.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-dark me-2">
-                                    <i class='fas fa-edit text-white'></i>&nbsp;
-                                    Edit
+                                    <i class='fas fa-edit text-white'></i>&nbsp;Edit
                                 </a>
 
                                 <a href="billing_history.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-warning me-2">
-                                    <i class="fa fa-history" aria-hidden="true"></i>&nbsp;
-                                    History
+                                    <i class="fa fa-history" aria-hidden="true"></i>&nbsp;History
                                 </a>
 
-                                <a href="delete_bill.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this bill?')">
+                                <a href="billings.php" class="btn btn-sm btn-danger me-2">
+                                    <i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;Close
+                                </a>
+
+                                <!-- <a href="delete_bill.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this bill?')">
                                     <i class='fas fa-trash'></i>&nbsp;
                                     Delete
-                                </a>
+                                </a> -->
                             </div>
                         </div>
                     </div>
