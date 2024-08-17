@@ -169,7 +169,7 @@ try {
           <!-- Card Container -->
           <div class="card">
             <div class="d-flex justify-content-between align-items-center">
-              <h5 class="mb-0 text-dark">Listing of Billings</h5>
+              <h5 class="mb-0 text-dark">Listing of Billing</h5>
               <!-- Button trigger modal -->
               <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                 <i class='fas fa-plus'></i>&nbsp;Create Bill

@@ -181,11 +181,11 @@ try {
                             <div class="d-flex justify-content-start">
                                 
                                 <a href="editBill.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-dark me-2">
-                                    <i class='fas fa-edit text-white'></i>&nbsp;Edit
+                                    <i class='fas fa-edit text-white'></i>&nbsp;Edit Record
                                 </a>
 
-                                <a href="billing_history.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-warning me-2">
-                                    <i class="fa fa-history" aria-hidden="true"></i>&nbsp;History
+                                <a href="billingHistory.php?bill_id=<?php echo $bill_id; ?>" class="btn btn-sm btn-warning me-2">
+                                    <i class="fa fa-history" aria-hidden="true"></i>&nbsp;Billing History
                                 </a>
 
                                 <a href="billings.php" class="btn btn-sm btn-danger me-2">

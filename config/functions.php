@@ -166,43 +166,42 @@ function registerClient($fullName, $pNumber, $address, $meterId, $firstReading, 
 }
 
 /**
- * editClient - Edit an existing client's details in the database
- * @userId: The ID of the client to edit
- * @fullName: The updated name of the client
- * @pNumber: The updated phone number of the client
- * @address: The updated address of the client
- * @meterId: The updated meter number of the client
- * @firstReading: The updated meter reading
- * @status: The updated status of the client (active/inactive)
- * Return: true if the update is successful, false otherwise
+ * updateClient - Updates client details by user_id
+ * @param int $userId - The ID of the client
+ * @param string $client_name - The client's full name
+ * @param string $phone_number - The client's contat number
+ * @param string $address - The client's address
+ * @param string $meter_number - The meter number
+ * @param string $meter_reading - The first meter reading
+ * @param string $status - The status of the client
  */
-function editClient($userId, $fullName, $pNumber, $address, $meterId, $firstReading, $status)
-{
+function updateClient($userId, $client_name, $phone_number, $address, $meter_number, $meter_reading, $status) {
     global $conn;
 
-    // Check if the meter number or contact number is already in use by another client,
-    // excluding the current client
-    if (clientExists($meterId, $pNumber, $userId)) {
-        throw new Exception('A client with the same meter number or contact number already exists.');
-    }
-
-    // Prepare the SQL query to update the client's information
-    $sql = "UPDATE tbl_clients SET client_name = ?, contact_number = ?, address = ?, meter_number = ?, meter_reading = ?, status = ? WHERE user_id = ?";
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        throw new Exception('Database query preparation failed: ' . $conn->error);
-    }
-
-    // Bind the parameters to the SQL query
-    $stmt->bind_param("ssssssi", $fullName, $pNumber, $address, $meterId, $firstReading, $status, $userId);
-
-    // Execute the query and return true if the update is successful
-    if ($stmt->execute()) {
-        return true; // Success
-    } else {
-        return false; // Failure
-    }
+    // SQL query to update client details
+    $stmt = $conn->prepare("
+        UPDATE tbl_clients 
+        SET client_name = ?, contact_number = ?, address = ?, meter_number = ?, meter_reading = ?, status = ? 
+        WHERE user_id = ?
+    ");
+    $stmt->bind_param("ssssssi", $client_name, $phone_number, $address, $meter_number, $meter_reading, $status, $userId);
+    $stmt->execute();
 }
+
+/**
+ * deleteClient - Deletes a client record by user_id
+ * @param int $userId - The ID of the client
+ */
+function deleteClient($userId) {
+    global $conn;
+
+    // SQL query to delete a client
+    $stmt = $conn->prepare("DELETE FROM tbl_clients WHERE user_id = ?");
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+}
+
+
 
 
 // Function to fetch all clients from the database
@@ -271,6 +270,23 @@ function fetchClients()
 
     return $clients;
 }
+/**
+ * getClientById - Fetches client details by user_id
+ * @param int $userId - The ID of the client
+ * @return array|null - An associative array of client details or null if not found
+ */
+function getClientById($userId) {
+    global $conn;
+
+    // SQL query to fetch client details by user_id
+    $stmt = $conn->prepare("SELECT client_name, contact_number, address, meter_number, meter_reading, status, created_at FROM tbl_clients WHERE user_id = ?");
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    return $result->fetch_assoc();
+}
+
 
 /**
  * Fetch the previous reading for a client

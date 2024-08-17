@@ -36,30 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 }
 
-// Edit existing client details
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-  // get form data
-  $userId = $_POST['user_id'];
-  $fullName = htmlspecialchars($_POST['fullName']);
-  $pNumber = htmlspecialchars($_POST['pNumber']);
-  $address = htmlspecialchars($_POST['address']);
-  $meterId = htmlspecialchars($_POST['meter_id']);
-  $firstReading = htmlspecialchars($_POST['first_reading']);
-  $status = htmlspecialchars($_POST['status']);
-
-  // try to edit details
-  try {
-    if (editClient($userId, $fullName, $pNumber, $address, $meterId, $firstReading, $status)) {
-      $success_message = 'Client details updated successfully!';
-    } else {
-      $error_message = 'Failed to update client details!';
-    }
-  } catch (Exception $e) {
-    $error_message = 'An error occurred: ' . $e->getMessage();
-  }
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -172,11 +148,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="container mt-0">
           <!-- Card Container -->
           <div class="card">
+
             <div class="d-flex justify-content-between align-items-center">
               <h5 class="mb-0 text-dark">Listing of Clients</h5>
               <!-- Button trigger modal -->
               <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              <i class='fas fa-plus'></i>&nbsp;New Client
+                <i class='fas fa-plus'></i>&nbsp;Create New
               </button>
             </div>
 
@@ -220,41 +197,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         // echo "<td>" . htmlspecialchars($client['meter_number']) . "</td>";
                         // echo "<td>" . htmlspecialchars($client['meter_reading']) . "</td>";
                         echo "<td class='text-capitalize text-bold'><small>" . htmlspecialchars($client['status']) . "</small></td>";
-                        echo "<td>
-                  <div class='dropdown'>
-                      <button class='btn btn-success btn-sm dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-expanded='false'>Click</button>
-                      <ul class='dropdown-menu'>
-                          <li>
-                              <button type='button' class='btn btn-sm' data-bs-toggle='modal' data-bs-target='#viewClientModal' onclick=\"populateViewModal(
-                                  '" . htmlspecialchars($client['client_name']) . "', 
-                                  '" . htmlspecialchars($client['contact_number']) . "', 
-                                  '" . htmlspecialchars($client['address']) . "', 
-                                  '" . htmlspecialchars($client['meter_number']) . "', 
-                                  '" . htmlspecialchars($client['meter_reading']) . "', 
-                                  '" . htmlspecialchars($client['status']) . "')\">
-                                  <i class='fas fa-eye'></i>&nbsp;View
-                              </button>
-                          </li>
-                          <li>
-                              <button type='button' class='btn btn-sm text-primary' data-bs-toggle='modal' data-bs-target='#editClientModal' onclick=\"populateEditModal(
-                                  '" . urlencode($client['user_id']) . "', 
-                                  '" . htmlspecialchars($client['client_name']) . "', 
-                                  '" . htmlspecialchars($client['contact_number']) . "', 
-                                  '" . htmlspecialchars($client['address']) . "', 
-                                  '" . htmlspecialchars($client['meter_number']) . "', 
-                                  '" . htmlspecialchars($client['meter_reading']) . "', 
-                                  '" . htmlspecialchars($client['status']) . "')\">
-                                  <i class='fas fa-edit text-primary'></i>&nbsp;Edit
-                              </button>
-                          </li>
-                          <li>
-                              <a href='delete_client.php?id=" . urlencode($client['user_id']) . "' class='btn btn-sm text-danger' title='Delete' onclick=\"return confirm('Are you sure you want to delete this Client Record?');\">
-                                  <i class='fas fa-trash'></i>&nbsp;Delete
-                              </a>
-                          </li>
-                      </ul>
-                  </div>
-                </td>";
+                        echo "
+                            <td>
+                              <div class='dropdown'>
+                                <button class='btn btn-success btn-sm dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                                  Action
+                                </button>
+                                <ul class='dropdown-menu'>
+                                  <li><a class='dropdown-item' href='viewClient.php?user_id=" . urlencode($client['user_id']) . "' class='btn btn-info btn-sm'><i class='fas fa-eye'></i>&nbsp;View</a></li>
+                                  <li><a class='dropdown-item' href='editClient.php?user_id=" . urlencode($client['user_id']) . "' class='btn btn-warning btn-sm'><i class='fas fa-edit text-primary'></i>&nbsp;Edit</a></li>
+                                  <li><a class='dropdown-item' href='deleteClient.php?user_id=" . urlencode($client['user_id']) . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this Client?\")'><i class='fas fa-trash text-danger'></i>&nbsp;Delete</a></li>
+                                </ul>
+                              </div>
+                            </td>";
+
+
+
                         echo "</tr>";
                       }
                     } else {
@@ -264,7 +222,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     echo "<tr><td colspan='8' class='text-center'>An error occurred: " . htmlspecialchars($e->getMessage()) . "</td></tr>";
                   }
 
-                 ?>
+                  ?>
 
                 </tbody>
               </table>
@@ -362,101 +320,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
   </div>
 
-  <!-- View client details modal -->
-  <div class="modal fade" id="viewClientModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="viewClientModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="viewClientModalLabel">Client Details</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-
-          <!-- Display data on a table -->         
-          <p><strong>Name&nbsp;:</strong>&nbsp;<span id="modalClientName"></span></p>
-          <p><strong>Contact&nbsp;:</strong>&nbsp;<span id="modalClientContact"></span></p>
-          <p><strong>Address&nbsp;:</strong>&nbsp;<span id="modalClientAddress"></span></p>
-          <p><strong>A/c No&nbsp;:</strong>&nbsp;<span id="modalClientMeterNumber"></span></p>
-          <p><strong>Reading&nbsp;:</strong>&nbsp;<span id="modalClientMeterReading"></span></p>
-          <p><strong>Status&nbsp;:</strong>&nbsp;<span id="modalClientStatus"></span></p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Edit client details modal -->
-  <div class="modal fade" id="editClientModal" tabindex="-1" aria-labelledby="editClientModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editClientModalLabel">Edit Client</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" id="editClientForm" class="row g-4">
-            <input type="hidden" id="editClientId" name="user_id">
-            <div class="col-md-6">
-              <label for="editFullName" class="form-label">Full Name</label>
-              <input type="text" class="form-control" id="editFullName" name="fullName" required>
-            </div>
-            <div class="col-md-6">
-              <label for="editPhoneNumber" class="form-label">Phone Number</label>
-              <input type="text" class="form-control" id="editPhoneNumber" name="pNumber" required>
-            </div>
-            <div class="col-md-6">
-              <label for="editAddress" class="form-label">Address</label>
-              <input type="text" class="form-control" id="editAddress" name="address" required>
-            </div>
-            <div class="col-md-6">
-              <label for="editMeterNumber" class="form-label">Meter Number</label>
-              <input type="text" class="form-control" id="editMeterNumber" name="meter_id" required>
-            </div>
-            <div class="col-md-6">
-              <label for="editFirstReading" class="form-label">First Reading</label>
-              <input type="number" class="form-control" id="editFirstReading" name="first_reading" required>
-            </div>
-            <div class="col-md-6">
-              <label for="editStatus" class="form-label">Status</label>
-              <select class="form-select" id="editStatus" name="status" required>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-sm btn-success">Save</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // display client details
-    function populateViewModal(name, contact, address, meterNumber, meterReading, status) {
-      document.getElementById('modalClientName').textContent = name;
-      document.getElementById('modalClientContact').textContent = contact;
-      document.getElementById('modalClientAddress').textContent = address;
-      document.getElementById('modalClientMeterNumber').textContent = meterNumber;
-      document.getElementById('modalClientMeterReading').textContent = meterReading;
-      document.getElementById('modalClientStatus').textContent = status;
-    }
-
-    // edit client details
-    function populateEditModal(id, fullName, phoneNumber, address, meterNumber, firstReading, status) {
-      document.getElementById('editClientId').value = id;
-      document.getElementById('editFullName').value = fullName;
-      document.getElementById('editPhoneNumber').value = phoneNumber;
-      document.getElementById('editAddress').value = address;
-      document.getElementById('editMeterNumber').value = meterNumber;
-      document.getElementById('editFirstReading').value = firstReading;
-      document.getElementById('editStatus').value = status;
-    }
-  </script>
 
 
 </body>

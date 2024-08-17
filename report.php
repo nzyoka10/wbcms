@@ -234,7 +234,9 @@ if (isset($_POST['export_csv'])) {
                                     </select>
                                 </div>
                                 <div class="col-md-3">
-                                    <button type="submit" class="btn btn-primary mt-4">Filter</button>
+                                    <button type="submit" class="btn btn-sm btn-success mt-4">
+                                        <i class="fa fa-filter" aria-hidden="true"></i>&nbsp;&nbsp;Filter
+                                    </button>
                                 </div>
                             </form>
 
@@ -248,9 +250,9 @@ if (isset($_POST['export_csv'])) {
                                         <th>Due Date</th>
                                         <th>Previous Reading</th>
                                         <th>Current Reading</th>
-                                        <th>Rate</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
+                                        <!-- <th>Rate</th> -->
+                                        <th>Total Amount</th>
+                                        <!-- <th>Status</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -264,9 +266,9 @@ if (isset($_POST['export_csv'])) {
                                                 <td><?php echo htmlspecialchars($bill['due_date']); ?></td>
                                                 <td><?php echo htmlspecialchars($bill['previous_reading']); ?></td>
                                                 <td><?php echo htmlspecialchars($bill['current_reading']); ?></td>
-                                                <td><?php echo htmlspecialchars($bill['rate']); ?></td>
+                                                <!-- <td><?php echo htmlspecialchars($bill['rate']); ?></td> -->
                                                 <td><?php echo htmlspecialchars($bill['total']); ?></td>
-                                                <td><?php echo htmlspecialchars($bill['status'] == 1 ? 'Paid' : 'Pending'); ?></td>
+                                                <!-- <td><?php echo htmlspecialchars($bill['status'] == 1 ? 'Paid' : 'Pending'); ?></td> -->
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else : ?>
@@ -281,7 +283,7 @@ if (isset($_POST['export_csv'])) {
 
                             <!-- Print, Export to CSV and PDF Buttons -->
                             <form method="POST" action="report.php">
-                                <button type="button" class="btn btn-sm btn-success me-2" onclick="printReceipt()">
+                                <button type="button" class="btn btn-sm btn-dark me-2" onclick="printReceipt()">
                                     <i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print PDF
                                 </button>
                                 <button type="submit" name="export_csv" class="btn btn-sm btn-warning me-2">

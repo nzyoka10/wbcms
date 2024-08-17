@@ -1,47 +1,43 @@
 <?php
-// Include the functions file
+// Include database connection and functions
 include("./config/functions.php");
 
-// Initialize error and success messages
+// Initialize variables for client data
+$client = null;
 $error_message = '';
-$success_message = '';
+$user_id = null;
 
-// Check if the user is logged in
-if (!isset($_SESSION['username'])) {
-    header("Location: index.php");
-    exit();
-}
+try {
+    // Check if user_id is passed in the URL
+    if (isset($_GET['user_id']) && !empty($_GET['user_id'])) {
+        $userId = htmlspecialchars($_GET['user_id']);
 
-// Fetch clients for display
-$clients = getClients(); 
+        // Fetch client details by ID
+        $client = getClientById($userId);
 
-// Check if the form was submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $fullName = htmlspecialchars($_POST['fullName']);
-    $pNumber = htmlspecialchars($_POST['pNumber']);
-    $address = htmlspecialchars($_POST['address']);
-    $meterId = htmlspecialchars($_POST['meter_id']);
-    $firstReading = htmlspecialchars($_POST['first_reading']);
-    $status = htmlspecialchars($_POST['status']);
+        // Set $user_id to the fetched client ID
+        $user_id = $client['user_id'] ?? null;
 
-    try {
-        if (registerClient($fullName, $pNumber, $address, $meterId, $firstReading, $status)) {
-            $success_message = 'Client registered successfully.';
-        } else {
-            $error_message = 'Error registering client.';
+        // Check if client data is found
+        if (!$client) {
+            $error_message = "Client not found.";
         }
-    } catch (Exception $e) {
-        $error_message = 'An error occurred: ' . $e->getMessage();
+    } else {
+        $error_message = "Invalid client ID.";
     }
+} catch (Exception $e) {
+    $error_message = "An error occurred: " . $e->getMessage();
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>WBCM | Client Listing</title>
+    <title>WBCMS | Client Details</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
@@ -57,14 +53,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap5.0.1.min.css">
     <link rel="stylesheet" type="text/css" href="css/datatables-1.10.25.min.css" />
+    <link rel="stylesheet" href="css/dataTables.dataTables.css">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/customer.css">
     <link rel="stylesheet" href="css/bill.css">
 </head>
+
 <body>
     <div class="grid-container">
+
         <!-- Header -->
         <header class="header">
             <div class="menu-icon" onclick="openSidebar()">
@@ -74,9 +73,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h6 class="text-secondary">Water Billing & Customer Management System - <small class="text-success">CLIENTS</small></h6>
             </div>
             <div class="header-right text-primary">
-                <a href="#"><span class="material-icons-outlined">notifications</span></a>
-                <a href="#"><span class="material-icons-outlined">email</span></a>
-                <a href="#"><span class="material-icons-outlined">account_circle</span></a>
+                <!-- Message Notification banner -->
+                <a href="#">
+                    <span class="material-icons-outlined">notifications</span>
+                </a>
+                <a href="#">
+                    <span class="material-icons-outlined">email</span>
+                </a>
+                <a href="./logout.php">
+                    <span class="material-icons-outlined">account_circle</span>
+                </a>
             </div>
         </header>
         <!-- End Header -->
@@ -85,18 +91,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <aside id="sidebar">
             <div class="sidebar-title">
                 <div class="sidebar-brand">
-                    <span class="material-icons-outlined">water_drop</span>&nbsp;WBCM
+                    <span class="material-icons-outlined">water_drop</span>&nbsp;WBCMS
                 </div>
                 <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
             </div>
 
             <ul class="sidebar-list">
-                <li class="sidebar-list-item"><a href="./dashboard.php"><span class="material-icons-outlined">speed</span>&nbsp;&nbsp;Dashboard</a></li>
-                <li class="sidebar-list-item"><a href="./customer.php"><span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;List of Clients</a></li>
-                <li class="sidebar-list-item"><a href="./billings.php"><span class="material-icons-outlined">payments</span>&nbsp;&nbsp;Billings</a></li>
-                <li class="sidebar-list-item"><a href="#"><span class="material-icons-outlined">receipt_long</span>&nbsp;&nbsp;Monthly Report</a></li>
-                <li class="sidebar-list-item"><a href="#"><span class="material-icons-outlined">settings</span>&nbsp;&nbsp;Settings</a></li>
-                <li class="sidebar-list-item"><a href="./logout.php"><span class="material-icons-outlined">logout</span>&nbsp;&nbsp;Logout</a></li>
+                <li class="sidebar-list-item">
+                    <a href="./dashboard.php">
+                        <span class="material-icons-outlined">speed</span>&nbsp;&nbsp;Dashboard
+                    </a>
+                </li>
+
+                <li class="sidebar-list-item">
+                    <a href="./customer.php">
+                        <span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;Clients
+                    </a>
+                </li>
+
+                <li class="sidebar-list-item">
+                    <a href="./billings.php">
+                        <span class="material-icons-outlined">payments</span>&nbsp;&nbsp;Billings
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="./report.php">
+                        <span class="material-icons-outlined">receipt_long</span>&nbsp;&nbsp;Report
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="./settings.php">
+                        <span class="material-icons-outlined">settings</span>&nbsp;&nbsp;Settings
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="./logout.php">
+                        <span class="material-icons-outlined">logout</span>&nbsp;&nbsp;Logout
+                    </a>
+                </li>
+
             </ul>
         </aside>
         <!-- End Sidebar -->
@@ -104,109 +137,79 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- Main section -->
         <main class="main-container">
             <div class="row">
-                <div class="container mt-4">
+
+                <div class="container mt-0">
                     <!-- Card Container -->
                     <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Listing of Clients</h5>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Create New</button>
-                        </div>
-                        <!-- Card Body -->
+
                         <div class="card-body">
+                            <h2 class="card-title">Client Details</h2>
+
                             <?php if (!empty($error_message)) : ?>
-                                <div class="alert alert-danger" role="alert"><?php echo htmlspecialchars($error_message); ?></div>
+                                <div class="alert alert-danger" role="alert">
+                                    <?php echo htmlspecialchars($error_message); ?>
+                                </div>
                             <?php endif; ?>
-                            <table class="table table-striped">
-                                <thead>
+
+                            <?php if ($client) : ?>
+                                <table class="table table-bordered">
                                     <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Client Name</th>
-                                        <th scope="col">Contact Number</th>
-                                        <th scope="col">Address</th>
-                                        <th scope="col">Meter Number</th>
-                                        <th scope="col">Meter Reading</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Actions</th>
+                                        <th>Full Name</th>
+                                        <td><?php echo htmlspecialchars($client['client_name']); ?></td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (!empty($clients)) : ?>
-                                        <?php foreach ($clients as $index => $client) : ?>
-                                            <tr>
-                                                <th scope="row"><?php echo htmlspecialchars($index + 1); ?></th>
-                                                <td><?php echo htmlspecialchars($client['client_name']); ?></td>
-                                                <td><?php echo htmlspecialchars($client['contact_number']); ?></td>
-                                                <td><?php echo htmlspecialchars($client['address']); ?></td>
-                                                <td><?php echo htmlspecialchars($client['meter_number']); ?></td>
-                                                <td><?php echo htmlspecialchars($client['meter_reading']); ?></td>
-                                                <td><?php echo htmlspecialchars($client['status']); ?></td>
-                                                <td>
-                                                    <!-- View Button -->
-                                                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" 
-                                                    data-bs-target="#viewClientModal" 
-                                                    onclick="populateModal('<?php echo htmlspecialchars($client['client_name']); ?>', 
-                                                    '<?php echo htmlspecialchars($client['contact_number']); ?>', 
-                                                    '<?php echo htmlspecialchars($client['address']); ?>', 
-                                                    '<?php echo htmlspecialchars($client['meter_number']); ?>', 
-                                                    '<?php echo htmlspecialchars($client['meter_reading']); ?>', 
-                                                    '<?php echo htmlspecialchars($client['status']); ?>')">
-                                                        <i class="fas fa-eye"></i> View
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php else : ?>
-                                        <tr>
-                                            <td colspan="8" class="text-center">No clients found.</td>
-                                        </tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
+                                    <tr>
+                                        <th>Phone Number</th>
+                                        <td><?php echo htmlspecialchars($client['contact_number']); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Address</th>
+                                        <td><?php echo htmlspecialchars($client['address']); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Meter Number</th>
+                                        <td><?php echo htmlspecialchars($client['meter_number']); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>First Reading</th>
+                                        <td><?php echo htmlspecialchars($client['meter_reading']); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status</th>
+                                        <td><?php echo htmlspecialchars($client['status']); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date Created</th>
+                                        <td><?php echo htmlspecialchars($client['created_at']); ?></td>
+                                    </tr>
+                                </table>
+
+                                <div class="d-flex justify-content-start">
+                                
+                                    <a href="editClient.php?user_id=<?php echo urlencode($userId); ?>" class="btn btn-sm btn-dark me-2">
+                                        <i class='fas fa-edit text-white'></i>&nbsp;Edit
+                                    </a>
+
+                                    <a href="customer.php" class="btn btn-sm btn-danger me-2">
+                                        <i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;Close
+                                    </a>
+                                </div>
+                            <?php endif; ?>
                         </div>
+
                     </div>
+
                 </div>
-            </div>
         </main>
         <!-- End Main section -->
-
-        <!-- JS Dependencies -->
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>
-        <script src="js/bootstrap.bundle.min.js"></script>
-        <script src="js/datatables.min.js"></script>
-
-        <!-- View Client Details Modal -->
-        <div class="modal fade" id="viewClientModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="viewClientModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="viewClientModalLabel">Client Details</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p><strong>Name:</strong> <span id="modalClientName"></span></p>
-                        <p><strong>Contact Number:</strong> <span id="modalClientContact"></span></p>
-                        <p><strong>Address:</strong> <span id="modalClientAddress"></span></p>
-                        <p><strong>Meter Number:</strong> <span id="modalClientMeterNumber"></span></p>
-                        <p><strong>Meter Reading:</strong> <span id="modalClientMeterReading"></span></p>
-                        <p><strong>Status:</strong> <span id="modalClientStatus"></span></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            function populateModal(name, contact, address, meterNumber, meterReading, status) {
-                document.getElementById('modalClientName').textContent = name;
-                document.getElementById('modalClientContact').textContent = contact;
-                document.getElementById('modalClientAddress').textContent = address;
-                document.getElementById('modalClientMeterNumber').textContent = meterNumber;
-                document.getElementById('modalClientMeterReading').textContent = meterReading;
-                document.getElementById('modalClientStatus').textContent = status;
-            }
-        </script>
     </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>
+    <script src="js/bill.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+    <script src="js/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/dt-1.10.25datatables.min.js"></script>
+    <script src="js/scripts.js"></script>
 </body>
+
 </html>

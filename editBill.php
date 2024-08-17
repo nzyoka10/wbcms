@@ -197,7 +197,7 @@ try {
                                 </div>
 
                                 <div class="d-flex justify-content-start">
-                                    <button type="submit" class="btn btn-sm btn-success me-2">
+                                    <button type="submit" class="btn btn-sm btn-dark me-2">
                                         <i class='fas fa-edit text-white'></i>&nbsp;&nbsp;Update
                                     </button>
                                     <a href="billings.php" class="btn btn-sm btn-danger">
