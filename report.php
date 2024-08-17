@@ -298,12 +298,13 @@ if (isset($_POST['export_csv'])) {
                             <div id="receipt-section" style="display:none;">
                                 <div class="reaceipt-header text-center">
                                     <h3>Monthly Receipt</h3>
-                                    <p>P.O Box 56</p>
+                                    <p>Water Bill</p>
+                                    <p>P.O Box 0101</p>
 
                                 </div>
                                 <table class="table cell-border">
                                     <tr>
-                                        <th>Bill ID</th>
+                                        <!-- <th>Bill ID</th> -->
                                         <th>Client</th>
                                         <th>Reading Date</th>
                                         <th>Due Date</th>
@@ -315,7 +316,7 @@ if (isset($_POST['export_csv'])) {
                                     </tr>
                                     <?php foreach ($billedAccounts as $bill) : ?>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($bill['bill_id']); ?></td>
+                                            <!-- <td><?php echo htmlspecialchars($bill['bill_id']); ?></td> -->
                                             <td><?php echo htmlspecialchars($bill['client_name']); ?></td>
                                             <td><?php echo htmlspecialchars($bill['reading_date']); ?></td>
                                             <td><?php echo htmlspecialchars($bill['due_date']); ?></td>
