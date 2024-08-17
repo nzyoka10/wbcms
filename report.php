@@ -297,7 +297,7 @@ if (isset($_POST['export_csv'])) {
                             <!-- Receipt Section -->
                             <div id="receipt-section" style="display:none;">
                                 <div class="reaceipt-header text-center">
-                                    <h3>Monthly Receipt</h3>
+                                    <h3>Monthly Report</h3>
                                     <p>Water Bill</p>
                                     <p>P.O Box 0101</p>
 

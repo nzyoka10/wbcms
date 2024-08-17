@@ -36,7 +36,7 @@
         <span class="material-icons-outlined text-orange">receipt_long</span>
       </div>
       <span class="text-orange font-weight-bold">
-        <strong>0</strong>
+        <strong>2</strong>
       </span>
     </div>
 

@@ -215,7 +215,7 @@ try {
                       <td><?php echo htmlspecialchars($client['client_name']); ?></td>
                       <td><?php echo htmlspecialchars($client['total']); ?></td>
                       <td><?php echo htmlspecialchars($client['due_date']); ?></td>
-                      <td><?php echo $client['status'] == 0 ? 'Paid' : 'Pending'; ?></td>
+                      <td><?php echo $client['status'] == 1 ? 'Paid' : 'Pending'; ?></td>
                       <td>
                         <div class="dropdown">
                           <button class="btn btn-success btn-sm  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
