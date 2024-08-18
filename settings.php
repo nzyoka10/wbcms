@@ -113,7 +113,7 @@ $settings = $result->fetch_assoc();
                 </li>
 
                 <li class="sidebar-list-item">
-                    <a href="./customer.php">
+                    <a href="./client.php">
                         <span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;Clients
                     </a>
                 </li>

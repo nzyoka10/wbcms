@@ -107,7 +107,7 @@ try {
                 </li>
 
                 <li class="sidebar-list-item">
-                    <a href="./customer.php">
+                    <a href="./client.php">
                         <span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;Clients
                     </a>
                 </li>
@@ -142,6 +142,7 @@ try {
                 <div class="container mt-0">
                     <div class="card">
                         <div class="card-body">
+
                             <h2>Edit Bill</h2>
                             <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) . '?bill_id=' . $bill_id; ?>" method="POST" class="row g-4">
                                 <div class="col-md-6">
@@ -197,14 +198,17 @@ try {
                                 </div>
 
                                 <div class="d-flex justify-content-start">
+                                    <a href="billings.php" class="btn btn-sm btn-danger me-2">
+                                        <i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;&nbsp;Go Back
+                                    </a>
                                     <button type="submit" class="btn btn-sm btn-dark me-2">
                                         <i class='fas fa-edit text-white'></i>&nbsp;&nbsp;Update
-                                    </button>
-                                    <a href="billings.php" class="btn btn-sm btn-danger">
-                                        <i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Close
-                                    </a>
+                                    </button>                                    
                                 </div>
                             </form>
+
+
+
                         </div>
                     </div>
                 </div>

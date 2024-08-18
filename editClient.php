@@ -118,7 +118,7 @@ if (isset($_GET['user_id']) && !empty($_GET['user_id'])) {
                 </li>
 
                 <li class="sidebar-list-item">
-                    <a href="./customer.php">
+                    <a href="./client.php">
                         <span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;Clients
                     </a>
                 </li>
@@ -156,7 +156,7 @@ if (isset($_GET['user_id']) && !empty($_GET['user_id'])) {
                     <div class="card">
 
                         <div class="card-body">
-                            <h2 class="card-title">Edit Client Details</h2>
+                            <h2 class="card-title text-dark">Edit Client Details</h2>
 
                             <?php if (!empty($error_message)) : ?>
                                 <div class="alert alert-danger" role="alert">
@@ -197,12 +197,12 @@ if (isset($_GET['user_id']) && !empty($_GET['user_id'])) {
                                         <input type="text" id="status" name="status" class="form-control" value="<?php echo htmlspecialchars($client['status']); ?>" required>
                                     </div>
                                     <div class="d-flex justify-content-start">
+                                        <a href="./client.php" class="btn btn-sm btn-danger me-2">                                          
+                                            <i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;&nbsp;Go Back                               
+                                        </a>
                                         <button type="submit" class="btn btn-sm btn-dark me-2">
                                             <i class='fas fa-edit text-white'></i>&nbsp;&nbsp;Update
-                                        </button>
-                                        <a href="customer.php" class="btn btn-sm btn-danger">
-                                            <i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;Close
-                                        </a>
+                                        </button>                                        
                                     </div>
                                 </form>
 

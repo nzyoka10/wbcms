@@ -494,6 +494,51 @@ try {
 }
 
 
+/**
+ * Get the billing history for a specific client, including client name.
+ *
+ * @param int $client_id The ID of the client.
+ * @param object $conn The database connection object.
+ * @return array An associative array containing billing history and client name.
+ * @throws Exception If there is an error with the query execution.
+ */
+function getBillingHistory($client_id, $conn) {
+    // Ensure $client_id is an integer
+    $client_id = intval($client_id);
+
+    try {
+        // Prepare the SQL query to fetch billing history along with client name
+        $query = "SELECT b.bill_id, b.user_id, b.reading_date, b.due_date, b.previous_reading, b.current_reading, b.rate, b.total, b.status, c.client_name
+                  FROM tbl_billinglist b
+                  JOIN tbl_clients c ON b.user_id = c.client_name
+                  WHERE b.user_id = ?
+                  ORDER BY b.reading_date DESC"; // Ordering by most recent first
+
+        $stmt = $conn->prepare($query);
+        if ($stmt === false) {
+            throw new Exception('Failed to prepare query: ' . $conn->error);
+        }
+
+        // Bind the client ID to the query
+        $stmt->bind_param('i', $client_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        // Fetch all billing records for the client
+        $billingHistory = $result->fetch_all(MYSQLI_ASSOC);
+
+        // Free result set and close the statement
+        $stmt->free_result();
+        $stmt->close();
+
+        return $billingHistory;
+
+    } catch (Exception $e) {
+        throw new Exception('An error occurred: ' . $e->getMessage());
+    }
+}
+
+
 
 /**
  * update_settings - Updates the settings in the database based on user input.
@@ -538,59 +583,5 @@ function update_settings($conn, $form_data)
     return $result;
 }
 
-//   // Function to generate CSV content
-// function generateCSV($data)
-// {
-//     $output = fopen('php://output', 'w');
-//     fputcsv($output, ['Bill ID', 'Client', 'Reading Date', 'Due Date', 'Previous Reading', 'Current Reading', 'Rate', 'Total', 'Status']);
-//     foreach ($data as $row) {
-//         fputcsv($output, $row);
-//     }
-//     fclose($output);
-// }
-
-// if (isset($_POST['export_csv'])) {
-//     header('Content-Type: text/csv');
-//     header('Content-Disposition: attachment; filename="Monthly_Report.csv"');
-//     generateCSV($billedAccounts);
-//     exit;
-// }
-
-// // Function to generate PDF content (requires FPDF library)
-// function generatePDF($data)
-// {
-//     require('docs/fpdf/fpdf.php');
-//     $pdf = new FPDF();
-//     $pdf->AddPage();
-//     $pdf->SetFont('Arial', 'B', 12);
-
-//     // Table header
-//     $header = ['Bill ID', 'Client', 'Reading Date', 'Due Date', 'Previous Reading', 'Current Reading', 'Rate', 'Total', 'Status'];
-//     foreach ($header as $col) {
-//         $pdf->Cell(24, 7, $col, 1);
-//     }
-//     $pdf->Ln();
-
-//     // Table data
-//     $pdf->SetFont('Arial', '', 12);
-//     foreach ($data as $row) {
-//         $pdf->Cell(24, 6, $row['bill_id'], 1);
-//         $pdf->Cell(24, 6, $row['client_name'], 1);
-//         $pdf->Cell(24, 6, $row['reading_date'], 1);
-//         $pdf->Cell(24, 6, $row['due_date'], 1);
-//         $pdf->Cell(24, 6, $row['previous_reading'], 1);
-//         $pdf->Cell(24, 6, $row['current_reading'], 1);
-//         $pdf->Cell(24, 6, $row['rate'], 1);
-//         $pdf->Cell(24, 6, $row['total'], 1);
-//         $pdf->Cell(24, 6, $row['status'] == 1 ? 'Paid' : 'Pending', 1);
-//         $pdf->Ln();
-//     }
-//     $pdf->Output('D', 'Monthly_Report.pdf');
-// }
-
-// if (isset($_POST['export_pdf'])) {
-//     generatePDF($billedAccounts);
-//     exit;
-// }
 
 ?>

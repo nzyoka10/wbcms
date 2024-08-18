@@ -104,7 +104,7 @@ try {
                 </li>
 
                 <li class="sidebar-list-item">
-                    <a href="./customer.php">
+                    <a href="./client.php">
                         <span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;Clients
                     </a>
                 </li>
@@ -143,7 +143,7 @@ try {
                     <div class="card">
 
                         <div class="card-body">
-                            <h2 class="card-title">Client Details</h2>
+                            <h2 class="card-title text-dark">View Client Details</h2>
 
                             <?php if (!empty($error_message)) : ?>
                                 <div class="alert alert-danger" role="alert">
@@ -152,7 +152,7 @@ try {
                             <?php endif; ?>
 
                             <?php if ($client) : ?>
-                                <table class="table table-bordered">
+                                <table class="table table-bordered mt-4">
                                     <tr>
                                         <th>Full Name</th>
                                         <td><?php echo htmlspecialchars($client['client_name']); ?></td>
@@ -183,15 +183,13 @@ try {
                                     </tr>
                                 </table>
 
-                                <div class="d-flex justify-content-start">
-                                
+                                <div class="d-flex justify-content-start mt-4">
+                                    <a href="./client.php" class="btn btn-sm btn-danger me-2">                                          
+                                        <i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;&nbsp;Go Back                               
+                                    </a>                                
                                     <a href="editClient.php?user_id=<?php echo urlencode($userId); ?>" class="btn btn-sm btn-dark me-2">
                                         <i class='fas fa-edit text-white'></i>&nbsp;Edit
-                                    </a>
-
-                                    <a href="customer.php" class="btn btn-sm btn-danger me-2">
-                                        <i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;Close
-                                    </a>
+                                    </a>                                    
                                 </div>
                             <?php endif; ?>
                         </div>

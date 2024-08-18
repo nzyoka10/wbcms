@@ -111,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </li>
 
         <li class="sidebar-list-item">
-          <a href="./customer.php">
+          <a href="./client.php">
             <span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;Clients
           </a>
         </li>

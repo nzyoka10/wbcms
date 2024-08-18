@@ -130,7 +130,7 @@ try {
         </li>
 
         <li class="sidebar-list-item">
-          <a href="./customer.php">
+          <a href="./client.php">
             <span class="material-icons-outlined">group_add</span>&nbsp;&nbsp;Clients
           </a>
         </li>
@@ -191,10 +191,10 @@ try {
                   <tr>
                     <th scope="col">Sn#</th>
                     <th scope="col">Reading date</th>
-                    <th scope="col">Client</th>
-                    <th scope="col">Amount<sup class="text-success">(Kes.)</sup></th>
+                    <th scope="col">Client Name</th>
+                    <th scope="col">Total Amount<sup class="text-success">(Kes.)</sup></th>
                     <th scope="col">Due date</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Pay Status</th>
                     <th scope="col">Actions</th>
                   </tr>
                 </thead>
