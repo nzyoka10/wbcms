@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 17, 2024 at 08:36 AM
+-- Generation Time: Aug 19, 2024 at 01:11 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -61,7 +61,7 @@ CREATE TABLE `tbl_billinglist` (
 
 INSERT INTO `tbl_billinglist` (`bill_id`, `user_id`, `reading_date`, `due_date`, `current_reading`, `previous_reading`, `rate`, `total`, `status`, `created_at`, `updated_at`) VALUES
 (44, 122, '2024-08-15', '2024-08-20', 12.00, 5.00, 14.00, 98.00, 0, '2024-08-15 12:37:32', '2024-08-15 19:38:50'),
-(45, 138, '2024-08-15', '2024-08-20', 10.00, 5.00, 14.00, 70.00, 0, '2024-08-15 12:45:07', '2024-08-15 19:39:09'),
+(45, 138, '2024-08-15', '2024-08-20', 10.00, 5.00, 14.00, 70.00, 1, '2024-08-15 12:45:07', '2024-08-17 12:42:30'),
 (47, 126, '2024-08-15', '2024-08-20', 17.00, 7.00, 14.00, 140.00, 1, '2024-08-15 19:02:59', '2024-08-15 19:50:24'),
 (48, 129, '2024-08-15', '2024-08-20', 16.00, 5.00, 14.00, 154.00, 1, '2024-08-15 20:11:41', '2024-08-16 13:24:48'),
 (49, 139, '2024-08-17', '2024-08-21', 12.00, 2.00, 14.00, 140.00, 1, '2024-08-17 09:23:50', '2024-08-17 09:24:40');
@@ -89,13 +89,12 @@ CREATE TABLE `tbl_clients` (
 --
 
 INSERT INTO `tbl_clients` (`user_id`, `client_name`, `contact_number`, `address`, `meter_number`, `meter_reading`, `status`, `created_at`, `updated_at`) VALUES
-(122, 'Test User', '0719314567', 'Katani', 10001011, 5, 'active', '2024-08-09 08:18:03', '2024-08-13 06:41:43'),
-(126, 'Aimee York', '0789123564', 'Syokimau', 10001012, 7, 'active', '2024-08-09 08:40:21', '2024-08-15 08:30:07'),
-(127, 'Sam Nyamwea', '0726784912', '100, Test Address', 10001013, 0, 'inactive', '2024-08-09 13:41:34', '2024-08-10 08:40:57'),
-(128, 'Leilani Holcomb', '0789341833', 'Kawala', 10001014, 0, 'inactive', '2024-08-09 14:03:38', '2024-08-10 08:41:13'),
+(122, 'Test User', '0719314567', '208, Katani', 10001011, 5, 'active', '2024-08-09 08:18:03', '2024-08-18 08:55:56'),
+(126, 'Aimee York', '0789123564', '208, Syokimau', 10001012, 7, 'active', '2024-08-09 08:40:21', '2024-08-18 08:55:34'),
+(128, 'Leilani Holcomb', '0789341833', '012, Kawala', 10001014, 0, 'inactive', '2024-08-09 14:03:38', '2024-08-18 08:55:21'),
 (129, 'Omollo Julio', '0721456728', '208, Syokimau', 10001015, 5, 'active', '2024-08-09 14:09:22', '2024-08-13 06:42:18'),
-(130, 'Lilian Chebet', '0722456754', '208, Kisaju', 10001016, 3, 'active', '2024-08-09 14:38:54', '2024-08-17 06:16:57'),
-(139, 'Hiroko Morrow', '0718543471', '56, Kinoo', 10001017, 2, 'active', '2024-08-17 05:58:50', '2024-08-17 06:13:13');
+(130, 'Lilian Chebet', '0722456754', '210, Kisaju', 10001016, 3, 'active', '2024-08-09 14:38:54', '2024-08-18 08:55:45'),
+(139, 'Hiroko Morrow', '0718543471', '056, Kinoo', 10001017, 2, 'active', '2024-08-17 05:58:50', '2024-08-18 08:56:04');
 
 -- --------------------------------------------------------
 
@@ -163,7 +162,7 @@ CREATE TABLE `tbl_settings` (
 --
 
 INSERT INTO `tbl_settings` (`id`, `company_name`, `company_email`, `billing_rate`, `enable_notifications`) VALUES
-(1, 'Water Billing &amp; Customer Management System ', 'wbcms@sys.mail', 14.00, 1);
+(1, 'Water Billing Customer Management System ', 'wbcms@sys.mail', 14.00, 1);
 
 -- --------------------------------------------------------
 
@@ -196,8 +195,8 @@ CREATE TABLE `tbl_users` (
   `user_name` varchar(150) NOT NULL,
   `user_email` varchar(150) NOT NULL,
   `user_password` varchar(150) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -205,9 +204,8 @@ CREATE TABLE `tbl_users` (
 --
 
 INSERT INTO `tbl_users` (`user_id`, `user_name`, `user_email`, `user_password`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@app.com', '$2y$10$E5GluGsB.afNcEC0mf/kFObJUtGbhsCgJrUO9oNP5Afyh4DufT91e', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(2, 'test', 'test@user.com', '$2y$10$ZjWBP/FcCKmYIRGbVubL0eosP5EngoHijnM1Pvm0bAhPrStYr5ebi', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(3, 'Test', 'tes@app.com', '$2y$10$tmJ05xePQP7JYfiyQ1EMJuqwQkbF4PMh1I6.S5lr01xmpoAnnLa9.', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(1, 'admin', 'admin@app.com', '$2y$10$E5GluGsB.afNcEC0mf/kFObJUtGbhsCgJrUO9oNP5Afyh4DufT91e', '2024-06-27 11:52:32', '2024-08-18 11:52:58'),
+(2, 'test', 'test@user.com', '$2y$10$ZjWBP/FcCKmYIRGbVubL0eosP5EngoHijnM1Pvm0bAhPrStYr5ebi', '2024-07-17 11:53:12', '2024-08-15 11:53:25');
 
 --
 -- Indexes for dumped tables
