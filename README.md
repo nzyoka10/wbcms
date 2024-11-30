@@ -11,13 +11,6 @@
 3. **Create new Billing**: Generate water bills with automatic charge calculations.
 4. **Generate Reports**: Summarize billing data for selected months with detailed reports.
 
-
-### Tools
-- **Backend Development**: The application’s backend is built using **PHP** *`(vanilla)`* to handle logic, 
-    - while **MySQL** is used for secure and efficient data storage and retrieval.
-- **Frontend Development**: The frontend interface is developed using HTML, CSS (Bootstrap), and JavaScript, ensuring a responsive and user-friendly experience across different devices and screen sizes.
-
-
 <details>
     <summary style="font-weight: bold; font-size: 1.2em; color: red;">
        <strong>Application Screenshots</strong>
@@ -76,6 +69,15 @@
   </div>
 
 </details>
+
+
+
+### Tools
+- **Backend Development**: The application’s backend is built using **PHP OOP**  to handle logic, 
+    - while **MySQL** is used for secure and efficient data storage and retrieval.
+- **Frontend Development**: The frontend interface is developed using HTML, CSS (Bootstrap), and JavaScript, ensuring a responsive and user-friendly experience across different devices and screen sizes.
+
+
 
 ### Setup & Run Project
 
