@@ -1,110 +1,111 @@
-## WBCMS
+## 💧 WBCMS – *Water Billing & Customer Management System*
 
-###### **`Water Billing and Customer Management`** (Web-based application)
+WBCMS is a web-based application designed to help water service providers manage customer data, automate billing processes, and generate reports efficiently.  
+- It offers a user-friendly dashboard with full CRUD operations for clients, billing, and user accounts.
 
-- **`WBCMS`** is a robust system designed to facilitate the management of water billing and customer data for utility companies. 
-- The application automates the entire billing process, from client registration to the generation of detailed reports, making it easier to `manage and track water usage and payments`.
+---
 
-### Features
-1. **Create account User**: Add new user accounts with customizable access levels.
-2. **Create new Client**: Manage client data with full CRUD operations.
-3. **Create new Billing**: Generate water bills with automatic charge calculations.
-4. **Generate Reports**: Summarize billing data for selected months with detailed reports.
+### ✨ Key Features
 
-<details>
-    <summary style="font-weight: bold; font-size: 1.2em; color: red;">
-       <strong>Application Screenshots</strong>
-    </summary>
+1. 👤 **User Account Management**  
+   - Create new users with different access roles
 
-  <h3 style="margin-top: 20px; font-size: 1.5em; color: #333;">Desktop View</h3>
+2. 🧾 **Client Management**  
+   - Add, update, view, and delete customer records
 
-  <!-- First Row -->
-  <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-    <div style="flex: 1; margin-right: 10px;">
-      <img src="img/login.png" alt="Login form" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
-      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Login</p>
-    </div>
-    <div style="flex: 1;">
-      <img src="img/dashboard.png" alt="Dashboard" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
-      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Main Dashboard</p>
-    </div>
-  </div>
+3. 💵 **Water Billing**  
+   - Auto-generate monthly bills based on water usage
 
-  <!-- Second Row -->
-  <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-    <div style="flex: 1; margin-right: 10px;">
-      <img src="img/clients.png" alt="Register" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
-      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Listing of Clients</p>
-    </div>
-    <div style="flex: 1;">
-      <img src="img/billing.png" alt="Listing of Billings" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
-      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Listing of Billings</p>
-    </div>
-  </div>
-   <h3 style="margin-top: 20px; font-size: 1.5em; color: #333;">Tablet View</h3>
-  <!-- First Row -->
-  <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-    <div style="flex: 1; margin-right: 10px;">
-      <img src="img/dashboard-tablet.png" alt="Login form" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
-      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Dashboard View</p>
-    </div>
-    <div style="flex: 1;">
-      <img src="img/clients-tablet.png" alt="Dashboard" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
-      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Listing of clients</p>
-    </div>
-  </div>
+4. 📊 **Reporting System**  
+   - Generate detailed billing summaries by month
 
-   <h3 style="margin-top: 20px; font-size: 1.5em; color: #333;">Mobile View</h3>
+---
 
-   <!-- Second Row -->
-  <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-    <div style="flex: 1; margin-right: 10px;">
-      <img src="img/dashboard-mobile.png" alt="Register" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
-      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Mobile view</p>
-    </div>
-    <div style="flex: 1;">
-      <img src="img/dashboard-mobile2.png" alt="Listing of Billings" style="width: 100%; max-width: 250px; border: 1px solid #ddd; border-radius: 4px;">
-      <p style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">Mobile view </p>
-    </div>
-  </div>
+### 📸 Screenshots
 
-</details>
+#### 💻 Desktop View
 
+| Login | Dashboard |
+|-------|-----------|
+| ![Login](img/login.png) | ![Dashboard](img/dashboard.png) |
 
+| Client List | Billing List |
+|-------------|--------------|
+| ![Clients](img/clients.png) | ![Billing](img/billing.png) |
 
-### Tools
-- **Backend Development**: The application’s backend is built using **PHP OOP**  to handle logic, 
-    - while **MySQL** is used for secure and efficient data storage and retrieval.
-- **Frontend Development**: The frontend interface is developed using HTML, CSS (Bootstrap), and JavaScript, ensuring a responsive and user-friendly experience across different devices and screen sizes.
+#### 📱 Tablet View
 
+| Dashboard | Clients |
+|-----------|---------|
+| ![Tablet Dashboard](img/dashboard-tablet.png) | ![Tablet Clients](img/clients-tablet.png) |
 
+#### 📱 Mobile View
 
-### Setup & Run Project
+| Mobile Dashboard 1 | Mobile Dashboard 2 |
+|--------------------|--------------------|
+| ![Mobile1](img/dashboard-mobile.png) | ![Mobile2](img/dashboard-mobile2.png) |
 
-#### Prerequisites
-1. *`XAMPP`*: Install a local server environment to run PHP and MySQL.
-2. *`Git`*: Install Git to clone the project repository.
-3. *`Web browser`*: Use a modern web browser like ``Chrome``.
+---
 
-#### Installation Steps
+### 🛠️ Tech Stack
 
-1. **Clone the Repository**:
-   - Open a terminal, navigate to the *`htdocs`* directory inside your *`xampp`* directory, and run:
-    ```bash
-     git clone https://github.com/Your-Username/wbcms.git
-    ```
+| Layer      | Technology                  |
+|------------|-----------------------------|
+| Backend    | PHP (OOP), MySQL            |
+| Frontend   | HTML, CSS (Bootstrap), JS   |
+| Server     | XAMPP (Apache + MySQL)      |
 
-2. **Import the Database**:
-   - Open *`phpMyAdmin`* in your browser.
-   - Create a new database named *`wbcms_db`*.
-   - Import the SQL file located in the project's `database` folder.
+---
 
-3. **Run the Project**:
-   - Open your browser and navigate to:
-    ```bash
-     http://localhost/wbcms/
-    ```
+### ⚙️ Setup Instructions
 
+#### ✅ Prerequisites
 
+- [XAMPP](https://www.apachefriends.org/index.html)
+- [Git](https://git-scm.com/)
+- [Web browser](https://www.google.com/chrome/?brand=JJTC&ds_kid=43700078658943277&gad_source=1&gbraid=0AAAAAoY3CA5GHUQqNEVj6lSdNG2dl9mfR&gclid=Cj0KCQjwqv2_BhC0ARIsAFb5Ac-Hc71PXrPPmd5Vmgfy1ROmeL0HeAI75YQeXlmgpikaSFs7lIMuKP8aAoj_EALw_wcB&gclsrc=aw.ds)
 
+#### 🔧 Installation Steps
 
+1. **Clone the Project**
+   ```bash
+   cd xampp/htdocs
+   git clone https://github.com/Your-Username/wbcms.git
+   ```
+
+2. **Set Up the Database**
+   - Open [phpMyAdmin](http://localhost/phpmyadmin)
+   - Create a new database: `wbcms_db`
+   - Import `wbcms_db.sql` from the `database` folder
+
+3. **Run the Application**
+   ```bash
+   http://localhost/wbcms/
+   ```
+
+4. **Login Credentials**
+   - Register account to login
+
+---
+
+### ✅ Project Status
+
+- ✅ Functional core modules: user, client, billing, and reports  
+- 🔜 Coming soon: SMS/email notifications and payment integration
+
+---
+
+### 📁 Folder Structure
+
+```
+wbcms/
+├── config/       # Database configuration files
+├── css/          # Stylesheets (CSS)
+├── js/           # JavaScript files
+├── database/     # SQL file(s) for setup
+├── docs/         # Documentation (txt, pdf, word, drawings)
+├── inc/          # PHP includes (classes, logic)
+├── index.php     # Main entry point
+├── README.md     # 
+
+```
