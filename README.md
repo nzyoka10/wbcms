@@ -1,4 +1,4 @@
-## 💧 WBCMS – *Water Billing & Customer Management System*
+## Water Billing & Customer Management System
 
 WBCMS is a web-based application designed to help water service providers manage customer data, automate billing processes, and generate reports efficiently.  
 - It offers a user-friendly dashboard with full CRUD operations for clients, billing, and user accounts.

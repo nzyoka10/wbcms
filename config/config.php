@@ -1,5 +1,8 @@
 <?php
 /**
+ * config.php - Configuration file for the Web-Based Content Management System (WBCMS)
+ * This file contains the database connection settings and a function to establish a connection.
+ * 
  * Database configuration
  * @host: Database host
  * @user: Database username
