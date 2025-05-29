@@ -1,4 +1,10 @@
-  <!-- Sidebar -->
+ <!-- 
+  File: inc/sidebar.php
+    - This file contains the sidebar navigation for the WBCMS dashboard.
+    - It is included in the dashboard.php file.
+
+ -->
+ <!-- Sidebar -->
   <aside id="sidebar">
       <div class="sidebar-title">
         <div class="sidebar-brand">
