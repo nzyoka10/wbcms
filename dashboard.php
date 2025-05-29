@@ -3,6 +3,12 @@
   include("inc/sidebar.php");
 ?>
 
+<!-- 
+  File: dashboard.php
+    - This file is the main dashboard for the WBCMS.
+    - It displays various statistics and charts related to clients, reports, revenue, and pending bills.
+    - It includes the header, sidebar, and footer files.
+-->
 
 
 <!-- Main -->
