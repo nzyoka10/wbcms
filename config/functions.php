@@ -105,6 +105,60 @@ function loginUser($username, $password)
     }
 }
 
+
+/**
+ * Generate account numbers
+ * @return string A unique account number in the format AC-###/YYYY
+ * where ### is a sequential number starting from 001 and YYYY is the current year.
+ */
+function generateAccountNumber() {
+    global $conn;
+
+    // Get the current year, e.g., 2025
+    $year = date("Y");
+
+    // Prepare the query to get the latest account number for the current year
+    $query = "SELECT account_number FROM tbl_clients WHERE meter_number LIKE ? ORDER BY account_number DESC LIMIT 1";
+    $stmt = $conn->prepare($query);
+
+    // Pattern to match account numbers like AC-%/2025
+    $likePattern = "AC-%/" . $year;
+    $stmt->bind_param("s", $likePattern);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    $lastAccountNumber = null;
+    if ($row = $result->fetch_assoc()) {
+        $lastAccountNumber = $row['meter_number'];
+    }
+    $stmt->close();
+
+    // Start numbering from 0 if no account number exists for this year
+    $number = 0;
+
+    if ($lastAccountNumber) {
+        // Extract the numeric part from AC-###/YYYY, e.g., 001 from AC-001/2025
+        preg_match('/AC-(\d+)\/' . $year . '/', $lastAccountNumber, $matches);
+        if (isset($matches[1])) {
+            $number = (int)$matches[1];
+        }
+    }
+
+    // Increment the number for new account
+    $number++;
+
+    // Format the number to 3 digits with leading zeros (e.g., 001, 002)
+    $numberFormatted = str_pad($number, 3, "0", STR_PAD_LEFT);
+
+    // Construct the new account number string
+    $newAccountNumber = "AC-" . $numberFormatted . "/" . $year;
+
+    return $newAccountNumber;
+}
+
+
+
 /**
  * clientExists - Check if a client already exists based on unique fields
  * @meterId: The meter number to check
@@ -152,24 +206,28 @@ function registerClient($fullName, $pNumber, $address, $meterId, $firstReading, 
 {
     global $conn;
 
-    // Check if the client already exists in the database
+    // Check if the client already exists
     if (clientExists($meterId, $pNumber)) {
         throw new Exception('A client with the same meter number or contact number already exists.');
     }
 
-    // Prepare the SQL query to insert the new client's details
-    $query = "INSERT INTO tbl_clients (client_name, contact_number, address, meter_number, meter_reading, status) VALUES (?, ?, ?, ?, ?, ?)";
+    // Generate unique account number
+    $accountNumber = generateAccountNumber();
+
+    // Insert client details including the account number
+    $query = "INSERT INTO tbl_clients (account_number, client_name, contact_number, address, meter_number, meter_reading, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
     if (!$stmt) {
         throw new Exception('Database query preparation failed: ' . $conn->error);
     }
 
-    // Bind the parameters to the SQL query
-    $stmt->bind_param("ssssss", $fullName, $pNumber, $address, $meterId, $firstReading, $status);
+    // Bind all parameters including the account number
+    $stmt->bind_param("sssssss", $accountNumber, $fullName, $pNumber, $address, $meterId, $firstReading, $status);
 
-    // Execute the query and return true if the insertion is successful
+    // Execute the query and return true if successful
     return $stmt->execute();
 }
+
 
 /**
  * updateClient - Updates client details by user_id

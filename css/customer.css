@@ -1,4 +1,36 @@
 
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* CSS Variables for easy theming */
+:root {
+  --color-primary: #246dec;
+  --color-secondary: #f5b74f;
+  --color-success: #367952;
+  --color-danger: #cc3c43;
+  --color-text: #666666;
+  --color-sidebar-bg: #090c14f1;
+  --color-sidebar-hover: rgba(27, 79, 130, 0.6);
+  --font-family-base: 'Poppins', sans-serif;
+  --box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.2);
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global styles */
+body {
+  font-family: var(--font-family-base);
+  font-size: 1rem; /* 16px */
+  background-color: #e6e8ed;
+  color: var(--color-text);
+  overflow-y: scroll;
+}
+
 /* Navbar styles */
 
 nav ul{
