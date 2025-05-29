@@ -9,13 +9,13 @@
 /* Global Styles */
 body {
   font-family: 'Poppins', 'Segoe UI', sans-serif;
-  background-color: #f9f9fb;
-  color: #333;
+  background-color: #333;
+  color: #f9f9fb;
   line-height: 1.6;
 }
 
 h1, h2, h3 {
-  color: #1c1e21;
+  color: #f8fbff;
   font-weight: 600;
 }
 
@@ -45,7 +45,7 @@ a:hover {
 /* Hero Section */
 .hero {
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url('https://source.unsplash.com/1600x900/?technology,login') center/cover no-repeat;
+    url('https://nelsonwater.com/wp-content/uploads/2024/11/tap-water.jpg') center/cover no-repeat;
   color: white;
   height: 100vh;
   display: flex;

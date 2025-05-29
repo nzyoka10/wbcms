@@ -1,5 +1,12 @@
 # Water Billing & Customer Management System
 
+
+![Home page](screenshot/Home1.png)
+
+---- 
+
+![Home page](screenshot/Home2.png)
+
 ## Tech Stack
 - **Backend:** PHP `(vanilla)`, MySQL
 - **Frontend:** HTML, Bootstrap 5, JavaScript
