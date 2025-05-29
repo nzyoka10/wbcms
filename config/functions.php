@@ -1,4 +1,10 @@
 <?php
+/**
+ * functions.php - Contains functions for user authentication, client management and billing operations.
+ *
+ * This file includes functions to register users, log in users, manage clients,
+ * and handle billing operations such as creating bills and fetching billing history.
+ */
 
 // Include the database configuration file
 require 'config.php';
@@ -299,13 +305,26 @@ function fetchClients()
 function getClientById($userId) {
     global $conn;
 
-    // SQL query to fetch client details by user_id
+    // Prepare the SQL query
     $stmt = $conn->prepare("SELECT client_name, contact_number, address, meter_number, meter_reading, status, created_at FROM tbl_clients WHERE user_id = ?");
+    
+    if (!$stmt) {
+        throw new Exception("Failed to prepare statement: " . $conn->error);
+    }
+
+    // Bind parameter and execute
     $stmt->bind_param("i", $userId);
     $stmt->execute();
+
+    // Get result
     $result = $stmt->get_result();
 
-    return $result->fetch_assoc();
+    // Return data if found
+    if ($result->num_rows === 1) {
+        return $result->fetch_assoc();
+    } else {
+        return null;
+    }
 }
 
 
