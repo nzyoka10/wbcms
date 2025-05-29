@@ -1,4 +1,7 @@
-
+<!-- 
+ File: inc/footer.php
+     - This file contains the footer for the WBCMS dashboard.
+-->
 
 
 
