@@ -1,6 +1,6 @@
 <?php
+// header.php - This file includes the necessary configurations and functions for the dashboard page
 
-// include("config.php");
 include("config/functions.php");
 
 // Check if the user is logged in
@@ -18,7 +18,7 @@ if (!isset($_SESSION['username'])) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>WBCMS | Dashboard</title>
+  <title>Dashboard - WBCMS</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
