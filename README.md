@@ -18,10 +18,10 @@
 ## Screenshots
 
 ### 1. App Login
-![App Login](screenshot/login.png)
+![App Login](screenshot/Login.png)
 
 ### 2. Registration
-![Registration](screenshot/register.png)
+![Registration](screenshot/Register.png)
 
 ### 3. Dashboard Overview
 ![Dashboard](screenshot/Dashboard.png)
@@ -36,11 +36,11 @@
 ![View client data](screenshot/viewClient.png)
 
 ### 7. Billing
-![Billing](screenshot/billing.png)
+![Billing](screenshot/Billing.png)
 
 ### 8. Reports
-![Reports](screenshot/reports.png)
+![Reports](screenshot/Reports.png)
 
 ### 9. System settings
-![System settings](screenshot/settings.png)
+![System settings](screenshot/Settings.png)
 
